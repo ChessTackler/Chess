@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chess Tackler — Sign Up</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:        #0a0a0c;
+      --black-card:   #111116;
+      --black-soft:   #18181f;
+      --black-input:  #1e1e27;
+      --white:        #ffffff;
+      --white-dim:    #c8cdd8;
+      --white-muted:  #6b7280;
+      --blue:         #3b82f6;
+      --blue-bright:  #60a5fa;
+      --blue-dark:    #1d4ed8;
+      --blue-glow:    rgba(59,130,246,0.18);
+      --border:       rgba(255,255,255,0.07);
+      --border-focus: rgba(59,130,246,0.6);
+      --error:        #f87171;
+      --success:      #34d399;
+    }
+
+    html, body {
+      min-height: 100vh;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ══ Background: chessboard tiles ══ */
+    .bg-chess {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      display: grid;
+      grid-template-columns: repeat(16, 1fr);
+      grid-template-rows: repeat(10, 1fr);
+      overflow: hidden;
+    }
+    .bg-chess .tile { width: 100%; height: 100%; }
+    .bg-chess .tile.w { background: rgba(255,255,255,0.025); }
+    .bg-chess .tile.b { background: transparent; }
+
+    /* Blue diagonal beam */
+    .bg-beam {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 55% 70% at 75% 50%, rgba(59,130,246,0.09) 0%, transparent 65%),
+        radial-gradient(ellipse 30% 40% at 10% 20%, rgba(59,130,246,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 50% at 50% 100%, rgba(10,10,14,0.9) 0%, transparent 80%);
+    }
+
+    /* ══ Layout ══ */
+    .page {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* ── Left panel (branding) ── */
+    .left-panel {
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      padding: 60px 64px;
+      border-right: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .left-panel::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(59,130,246,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Big decorative chess piece */
+    .deco-piece {
+      position: absolute;
+      bottom: -20px; right: -30px;
+      font-size: 22rem;
+      color: rgba(255,255,255,0.02);
+      line-height: 1;
+      user-select: none;
+      pointer-events: none;
+      font-style: normal;
+    }
+
+    /* Blue accent bar */
+    .accent-bar {
+      width: 48px; height: 4px;
+      background: linear-gradient(90deg, var(--blue), var(--blue-bright));
+      border-radius: 2px;
+      margin-bottom: 28px;
+    }
+
+    .brand-logo-img {
+      height: 52px; width: auto;
+      object-fit: contain;
+      margin-bottom: 32px;
+      filter: brightness(1.1);
+    }
+
+    .left-tagline {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+    .left-tagline .blue { color: var(--blue-bright); }
+
+    .left-sub {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--white-muted);
+      line-height: 1.7;
+      max-width: 320px;
+      margin-bottom: 40px;
+    }
+
+    /* Feature pills */
+    .feature-list { display: flex; flex-direction: column; gap: 14px; }
+    .feature-item {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.9rem; color: var(--white-dim); font-weight: 400;
+    }
+    .feature-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+      background: var(--blue);
+      box-shadow: 0 0 8px var(--blue-glow);
+    }
+
+    /* ── Right panel (form) ── */
+    .right-panel {
+      display: flex; align-items: center; justify-content: center;
+      padding: 60px 48px;
+    }
+
+    .form-wrap {
+      width: 100%; max-width: 420px;
+    }
+
+    /* Form header */
+    .form-header { margin-bottom: 36px; }
+    .form-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.6rem; font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .form-sub {
+      font-size: 0.88rem; font-weight: 300;
+      color: var(--white-muted);
+    }
+    .form-sub a {
+      color: var(--blue-bright); text-decoration: none; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .form-sub a:hover { color: var(--white); }
+
+    /* Divider */
+    .form-divider {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 28px;
+    }
+    .form-divider::before, .form-divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: var(--border);
+    }
+    .form-divider span {
+      font-size: 0.7rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--white-muted);
+      font-family: 'Cinzel', serif;
+    }
+
+    /* Fields */
+    .fields { display: flex; flex-direction: column; gap: 18px; margin-bottom: 24px; }
+
+    .field { position: relative; }
+
+    .field-label {
+      display: block;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--white-muted);
+      margin-bottom: 7px;
+      transition: color 0.2s;
+    }
+    .field:focus-within .field-label { color: var(--blue-bright); }
+
+    .input-row {
+      position: relative; display: flex; align-items: center;
+    }
+    .input-icon {
+      position: absolute; left: 13px;
+      display: flex; align-items: center;
+      color: var(--white-muted);
+      transition: color 0.2s;
+      pointer-events: none; z-index: 1;
+    }
+    .field:focus-within .input-icon { color: var(--blue-bright); }
+
+    .field input {
+      width: 100%;
+      background: var(--black-input);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 40px 12px 40px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 400;
+      color: var(--white);
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+    }
+    .field input::placeholder { color: #3a3a4a; }
+    .field input:focus {
+      border-color: var(--border-focus);
+      background: #1a1a24;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.1), 0 2px 12px rgba(59,130,246,0.08);
+    }
+    .field input.is-error {
+      border-color: rgba(248,113,113,0.5);
+      box-shadow: 0 0 0 3px rgba(248,113,113,0.08);
+    }
+    .field input.is-valid { border-color: rgba(52,211,153,0.35); }
+
+    .field-status {
+      position: absolute; right: 13px;
+      font-size: 0.8rem; pointer-events: none;
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .field input.is-valid  ~ .field-status.ok  { opacity: 1; color: var(--success); }
+    .field input.is-error  ~ .field-status.err { opacity: 1; color: var(--error); }
+
+    .err-text {
+      font-size: 0.75rem; color: var(--error);
+      margin-top: 5px; min-height: 13px;
+      display: block; padding-left: 2px;
+    }
+
+    /* Password toggle */
+    .pw-toggle {
+      position: absolute; right: 13px;
+      background: none; border: none; cursor: pointer;
+      color: var(--white-muted); padding: 4px;
+      display: flex; align-items: center;
+      transition: color 0.2s; z-index: 1;
+    }
+    .pw-toggle:hover { color: var(--blue-bright); }
+
+    /* Strength bar */
+    .strength-row {
+      display: none; margin-top: 8px;
+      flex-direction: column; gap: 5px;
+    }
+    .strength-row.visible { display: flex; }
+    .strength-bars { display: flex; gap: 5px; }
+    .sbar {
+      flex: 1; height: 3px; border-radius: 2px;
+      background: rgba(255,255,255,0.07);
+      transition: background 0.3s;
+    }
+    .strength-label { font-size: 0.72rem; color: var(--white-muted); }
+
+    /* ── Submit button ── */
+    .submit-btn {
+      position: relative; overflow: hidden;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 50%, var(--blue-dark) 100%);
+      background-size: 200% 100%;
+      background-position: 100% 0;
+      border: none; border-radius: 10px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: #ffffff;
+      cursor: pointer;
+      transition: background-position 0.4s ease, transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 4px 20px rgba(59,130,246,0.3);
+    }
+    .submit-btn:hover {
+      background-position: 0% 0;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(59,130,246,0.45);
+    }
+    .submit-btn:active { transform: translateY(0); }
+    /* Shimmer */
+    .submit-btn::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 50%, transparent 100%);
+      transform: translateX(-100%);
+      transition: transform 0.5s ease;
+    }
+    .submit-btn:hover::after { transform: translateX(100%); }
+
+    /* Terms */
+    .terms {
+      margin-top: 16px;
+      font-size: 0.75rem; color: #3e3e52;
+      text-align: center; line-height: 1.6;
+    }
+    .terms a { color: #4b5568; text-decoration: underline; }
+    .terms a:hover { color: var(--blue-bright); }
+
+    /* ── Success overlay ── */
+    .success-overlay {
+      display: none;
+      position: absolute; inset: 0;
+      background: var(--black-card);
+      border-radius: inherit;
+      flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 40px; z-index: 20;
+    }
+    .success-overlay.show { display: flex; animation: fadeUp 0.5s ease forwards; }
+    .success-icon-wrap {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; margin-bottom: 20px;
+      box-shadow: 0 0 40px rgba(59,130,246,0.4);
+      animation: pulsate 2s ease-in-out infinite;
+    }
+    @keyframes pulsate {
+      0%,100% { box-shadow: 0 0 30px rgba(59,130,246,0.35); }
+      50%      { box-shadow: 0 0 55px rgba(59,130,246,0.6); }
+    }
+    .success-title {
+      font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700;
+      color: var(--white); letter-spacing: 0.06em; margin-bottom: 10px;
+    }
+    .success-msg { font-size: 0.95rem; color: var(--white-muted); line-height: 1.6; }
+
+    /* ── Entrance animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .left-panel  { animation: fadeUp 0.7s ease 0.1s both; }
+    .form-wrap   { animation: fadeUp 0.7s ease 0.2s both; }
+    .field { opacity: 0; animation: fadeUp 0.45s ease forwards; }
+    .field:nth-child(1) { animation-delay: 0.4s; }
+    .field:nth-child(2) { animation-delay: 0.5s; }
+    .field:nth-child(3) { animation-delay: 0.6s; }
+    .field:nth-child(4) { animation-delay: 0.7s; }
+    .submit-btn { opacity: 0; animation: fadeUp 0.45s ease 0.82s forwards; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .page { grid-template-columns: 1fr; }
+      .left-panel { display: none; }
+      .right-panel { padding: 48px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background -->
+  <div class="bg-chess" id="bgChess"></div>
+  <div class="bg-beam"></div>
+
+  <div class="page">
+
+    <!-- ── Left branding panel ── -->
+    <div class="left-panel">
+      <div class="deco-piece">♟</div>
+
+      <img src="CT logo.png" alt="Chess Tackler" class="brand-logo-img" onerror="this.style.display='none'"/>
+
+      <div class="accent-bar"></div>
+
+      <h2 class="left-tagline">
+        Your move.<br>
+        Your <span class="blue">arena.</span><br>
+        Your legacy.
+      </h2>
+      <p class="left-sub">
+        Join thousands of players mastering tactics, studying grandmaster games, and sharpening their strategy — for free.
+      </p>
+
+      <div class="feature-list">
+        <div class="feature-item"><div class="feature-dot"></div> Tactical puzzles &amp; analysis tools</div>
+        <div class="feature-item"><div class="feature-dot"></div> World top player rankings</div>
+        <div class="feature-item"><div class="feature-dot"></div> Mini games &amp; chess fun zone</div>
+        <div class="feature-item"><div class="feature-dot"></div> 100% free — always</div>
+      </div>
+    </div>
+
+    <!-- ── Right form panel ── -->
+    <div class="right-panel">
+      <div class="form-wrap" style="position:relative;">
+
+        <!-- Success overlay -->
+        <div class="success-overlay" id="successOverlay">
+          <div class="success-icon-wrap">✓</div>
+          <div class="success-title">Welcome Aboard!</div>
+          <p class="success-msg">Your account is ready.<br>Taking you to your dashboard…</p>
+        </div>
+
+        <div class="form-header">
+          <h1 class="form-title">Create Account</h1>
+          <p class="form-sub">Already registered? <a href="authenticated.html">Log in →</a></p>
+        </div>
+
+        <div class="form-divider"><span>Sign Up</span></div>
+
+        <form id="signupForm" novalidate>
+          <div class="fields">
+
+            <!-- Username -->
+            <div class="field">
+              <label class="field-label" for="username">Username</label>
+              <div class="input-row">
+                <span class="input-icon">
+                  <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0"/>
+                  </svg>
+                </span>
+                <input type="text" id="username" placeholder="e.g. GrandmasterX" autocomplete="username"/>
+                <span class="field-status ok">✓</span>
+                <span class="field-status err">✕</span>
+              </div>
+              <span class="err-text" id="username-err"></span>
+            </div>
+
+            <!-- Email -->
+            <div class="field">
+              <label class="field-label" for="email">E-mail Address</label>
+              <div class="input-row">
+                <span class="input-icon">
+                  <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+                  </svg>
+                </span>
+                <input type="email" id="email" placeholder="you@example.com" autocomplete="email"/>
+                <span class="field-status ok">✓</span>
+                <span class="field-status err">✕</span>
+              </div>
+              <span class="err-text" id="email-err"></span>
+            </div>
+
+            <!-- Contact -->
+            <div class="field">
+              <label class="field-label" for="contact">Contact Number <span style="font-size:0.65rem;color:#3a3a52;font-family:'DM Sans',sans-serif;text-transform:none;letter-spacing:0;font-weight:400;">(optional)</span></label>
+              <div class="input-row">
+                <span class="input-icon">
+                  <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/>
+                  </svg>
+                </span>
+                <input type="tel" id="contact" placeholder="+91 98765 43210" autocomplete="tel"/>
+                <span class="field-status ok">✓</span>
+                <span class="field-status err">✕</span>
+              </div>
+              <span class="err-text" id="contact-err"></span>
+            </div>
+
+            <!-- Password -->
+            <div class="field">
+              <label class="field-label" for="password">Password</label>
+              <div class="input-row">
+                <span class="input-icon">
+                  <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+                  </svg>
+                </span>
+                <input type="password" id="password" placeholder="Min. 8 characters" autocomplete="new-password"/>
+                <button type="button" class="pw-toggle" id="togglePw" aria-label="Toggle password">
+                  <svg id="eyeIcon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="strength-row" id="strengthRow">
+                <div class="strength-bars">
+                  <div class="sbar" id="sb1"></div>
+                  <div class="sbar" id="sb2"></div>
+                  <div class="sbar" id="sb3"></div>
+                  <div class="sbar" id="sb4"></div>
+                </div>
+                <span class="strength-label" id="strengthLabel"></span>
+              </div>
+              <span class="err-text" id="password-err"></span>
+            </div>
+
+          </div><!-- /fields -->
+
+          <button type="submit" class="submit-btn">Create Account</button>
+
+          <p class="terms">
+            By signing up you agree to our <a href="T&C.html">Terms of Service</a> &amp; <a href="Policy.html">Privacy Policy</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+  </div><!-- /page -->
+
+  <script>
+    /* ── Build chessboard bg ── */
+    const bg = document.getElementById('bgChess');
+    for (let row = 0; row < 10; row++) {
+      for (let col = 0; col < 16; col++) {
+        const t = document.createElement('div');
+        t.className = 'tile ' + ((row + col) % 2 === 0 ? 'w' : 'b');
+        bg.appendChild(t);
+      }
+    }
+
+    /* ── Validation helpers ── */
+    function markValid(id) {
+      const el = document.getElementById(id);
+      el.classList.remove('is-error'); el.classList.add('is-valid');
+      document.getElementById(id + '-err').textContent = '';
+    }
+    function markError(id, msg) {
+      const el = document.getElementById(id);
+      el.classList.remove('is-valid'); el.classList.add('is-error');
+      document.getElementById(id + '-err').textContent = msg;
+    }
+    function clearMark(id) {
+      const el = document.getElementById(id);
+      el.classList.remove('is-valid','is-error');
+      document.getElementById(id + '-err').textContent = '';
+    }
+
+    /* ── Live validation ── */
+    const username = document.getElementById('username');
+    const email    = document.getElementById('email');
+    const contact  = document.getElementById('contact');
+    const password = document.getElementById('password');
+
+    username.addEventListener('input', () => {
+      const v = username.value.trim();
+      if (!v) return clearMark('username');
+      if (v.length < 3) markError('username', 'At least 3 characters required');
+      else if (!/^[a-zA-Z0-9_]+$/.test(v)) markError('username', 'Letters, numbers and underscores only');
+      else markValid('username');
+    });
+
+    email.addEventListener('input', () => {
+      const v = email.value.trim();
+      if (!v) return clearMark('email');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) markError('email', 'Enter a valid email address');
+      else markValid('email');
+    });
+
+    contact.addEventListener('input', () => {
+      const v = contact.value.trim().replace(/[\s\-()]/g,'');
+      if (!v) return clearMark('contact');
+      if (!/^\+?[0-9]{7,15}$/.test(v)) markError('contact', 'Enter a valid phone number (7–15 digits)');
+      else markValid('contact');
+    });
+
+    password.addEventListener('input', () => {
+      const v = password.value;
+      const row = document.getElementById('strengthRow');
+      if (!v) { clearMark('password'); row.classList.remove('visible'); return; }
+      row.classList.add('visible');
+
+      let score = 0;
+      if (v.length >= 8)          score++;
+      if (/[A-Z]/.test(v))        score++;
+      if (/[0-9]/.test(v))        score++;
+      if (/[^A-Za-z0-9]/.test(v)) score++;
+
+      const colors = ['#f87171','#fb923c','#3b82f6','#34d399'];
+      const labels = ['Weak — add more variety','Fair — try uppercase or numbers','Good — almost there','Strong ✓'];
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById('sb'+i).style.background =
+          i <= score ? colors[score-1] : 'rgba(255,255,255,0.07)';
+      }
+      const lbl = document.getElementById('strengthLabel');
+      lbl.textContent = labels[score-1] || '';
+      lbl.style.color = colors[score-1] || 'var(--white-muted)';
+
+      if (v.length < 8) markError('password','Must be at least 8 characters');
+      else markValid('password');
+    });
+
+    /* ── Password show/hide ── */
+    document.getElementById('togglePw').addEventListener('click', () => {
+      const isText = password.type === 'text';
+      password.type = isText ? 'password' : 'text';
+      document.getElementById('eyeIcon').innerHTML = isText
+        ? '<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><circle cx="12" cy="12" r="3"/>'
+        : '<path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"/>';
+    });
+
+    /* ── Submit ── */
+    document.getElementById('signupForm').addEventListener('submit', e => {
+      e.preventDefault();
+      let ok = true;
+
+      const u  = username.value.trim();
+      const em = email.value.trim();
+      const co = contact.value.trim().replace(/[\s\-()]/g,'');
+      const pw = password.value;
+
+      // Required: username
+      if (!u || u.length < 3 || !/^[a-zA-Z0-9_]+$/.test(u)) {
+        markError('username', u ? 'Invalid username' : 'Username is required'); ok = false;
+      }
+      // Required: email
+      if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) {
+        markError('email', em ? 'Invalid email' : 'Email is required'); ok = false;
+      }
+      // Optional: contact — only validate if something was typed
+      if (co && !/^\+?[0-9]{7,15}$/.test(co)) {
+        markError('contact', 'Enter a valid phone number (7–15 digits)'); ok = false;
+      }
+      // Required: password
+      if (!pw || pw.length < 8) {
+        markError('password', pw ? 'Password too short' : 'Password is required'); ok = false;
+      }
+
+      if (!ok) return;
+
+      /* ── Save user data to localStorage (append to list) ── */
+      const users = JSON.parse(localStorage.getItem('ct_users') || '[]');
+      users.push({
+        id:        Date.now(),
+        username:  u,
+        email:     em,
+        contact:   co || '—',
+        password:  pw,
+        joinedAt:  new Date().toLocaleString()
+      });
+      localStorage.setItem('ct_users', JSON.stringify(users));
+
+      /* ── Show success, then redirect to index.html ── */
+      document.getElementById('successOverlay').classList.add('show');
+      setTimeout(() => { window.location.href = 'index.html'; }, 2400);
+    });
+  </script>
+</body>
+</html>
