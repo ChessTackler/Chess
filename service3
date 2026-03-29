@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore - Chess Tackler</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/lucide@latest/dist/umd/lucide.css" />
+
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .glow-gold { box-shadow: 0 0 10px rgba(255,215,0,.3), 0 0 20px rgba(255,215,0,.2); }
+    .gold-border { border: 1px solid rgba(255,215,0,.4); }
+    #particles-js { position:fixed; width:100%; height:100%; z-index:-1; top:0; left:0; }
+    .nav-link:hover { color:#facc15; }
+    .btn-premium { background-color:#facc15; color:#0f172a; font-weight:600; transition:background .3s; }
+    .btn-premium:hover { background-color:#eab308; }
+    .badge-premium { background-color:#facc15; color:#1e293b; }
+    .badge-premium:hover { background-color:#fde047; }
+
+    /* Hamburger */
+    #mobile-nav { display:none; flex-direction:column; gap:0; background:#0f172a; border-top:1px solid rgba(202,138,4,.3); padding:12px 2rem; }
+    #mobile-nav.open { display:flex; }
+    #mobile-nav a { padding:10px 0; font-size:.9rem; font-weight:500; color:#fef9c3; text-decoration:none; border-bottom:1px solid rgba(255,255,255,.05); transition:color .2s; }
+    #mobile-nav a:hover { color:#facc15; }
+    .hamburger-btn { display:flex; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; }
+    .hamburger-btn span { display:block; width:22px; height:2px; background:#fef9c3; border-radius:2px; transition:all .25s ease; }
+    .hamburger-btn.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .hamburger-btn.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
+    .hamburger-btn.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+
+    /* Profile pill */
+    .profile-wrap { position:relative; }
+    .profile-pill { display:flex; align-items:center; gap:8px; padding:5px 14px 5px 6px; background:rgba(250,204,21,.1); border:1.5px solid rgba(250,204,21,.4); border-radius:99px; cursor:pointer; transition:background .2s,box-shadow .2s; font-size:.78rem; font-weight:600; color:#facc15; user-select:none; }
+    .profile-pill:hover { background:rgba(250,204,21,.18); box-shadow:0 0 12px rgba(250,204,21,.25); }
+    .profile-avatar { width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#facc15,#ca8a04); display:flex; align-items:center; justify-content:center; font-size:.65rem; font-weight:700; color:#0f172a; flex-shrink:0; }
+    .profile-username { max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .profile-chevron { width:12px; height:12px; color:#facc15; transition:transform .25s; flex-shrink:0; }
+    .profile-wrap.open .profile-chevron { transform:rotate(180deg); }
+    .profile-dropdown { display:none; position:absolute; right:0; top:calc(100% + 8px); background:#141e35; border:1px solid rgba(250,204,21,.25); border-radius:12px; min-width:220px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,.6); z-index:200; animation:dropIn .18s ease; }
+    .profile-wrap.open .profile-dropdown { display:block; }
+    @keyframes dropIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+    .pd-head { padding:14px 16px; background:rgba(250,204,21,.07); border-bottom:1px solid rgba(250,204,21,.12); }
+    .pd-name  { font-weight:700; font-size:.88rem; color:#facc15; }
+    .pd-email { font-size:.7rem; color:#94a3b8; margin-top:2px; }
+    .pd-since { font-size:.65rem; color:rgba(250,204,21,.35); margin-top:4px; }
+    .dd-item { display:flex; align-items:center; gap:9px; padding:10px 16px; font-size:.8rem; font-weight:500; color:#e2d9c5; text-decoration:none; cursor:pointer; transition:background .15s; border:none; background:none; width:100%; text-align:left; }
+    .dd-item svg { color:#94a3b8; flex-shrink:0; }
+    .dd-item:hover { background:rgba(250,204,21,.07); color:#facc15; }
+    .dd-item:hover svg { color:#facc15; }
+    .dd-item.danger { color:#f87171; }
+    .dd-item.danger svg { color:#fca5a5; }
+    .dd-item.danger:hover { background:rgba(248,113,113,.08); }
+    .dd-divider { height:1px; background:rgba(250,204,21,.1); margin:4px 0; }
+    .auth-out-login { background:transparent; border:1.5px solid rgba(250,204,21,.4); color:#facc15; font-size:.78rem; font-weight:600; padding:6px 16px; border-radius:8px; text-decoration:none; transition:background .2s; }
+    .auth-out-login:hover { background:rgba(250,204,21,.1); }
+
+    /* Dashboard */
+    #dashboard-section { max-width:1100px; margin:0 auto; padding:3rem 2rem 5rem; }
+    .dash-section-title { font-size:1.4rem; font-weight:700; color:#facc15; margin-bottom:4px; display:flex; align-items:center; gap:10px; }
+    .dash-section-sub { font-size:.82rem; color:#94a3b8; margin-bottom:2rem; }
+    .dash-guest { text-align:center; padding:3rem 1.5rem; border:1px dashed rgba(250,204,21,.2); border-radius:16px; background:rgba(250,204,21,.03); }
+    .dash-guest .g-icon { font-size:2.8rem; margin-bottom:1rem; }
+    .dash-guest h3 { font-size:1rem; font-weight:700; color:#facc15; margin-bottom:8px; }
+    .dash-guest p  { font-size:.82rem; color:#94a3b8; margin-bottom:1.5rem; }
+    .dash-guest-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    .dg-btn { padding:8px 22px; border-radius:8px; font-weight:600; font-size:.8rem; text-decoration:none; transition:all .2s; }
+    .dg-primary { background:#facc15; color:#0f172a; }
+    .dg-primary:hover { background:#eab308; }
+    .dg-secondary { border:1.5px solid rgba(250,204,21,.35); color:#facc15; }
+    .dg-secondary:hover { background:rgba(250,204,21,.08); }
+    .dash-profile-card { display:flex; align-items:center; gap:16px; background:rgba(250,204,21,.06); border:1px solid rgba(250,204,21,.2); border-radius:14px; padding:18px 22px; margin-bottom:20px; }
+    .dp-avatar { width:54px; height:54px; border-radius:50%; background:linear-gradient(135deg,#facc15,#ca8a04); display:flex; align-items:center; justify-content:center; font-size:1.3rem; font-weight:700; color:#0f172a; flex-shrink:0; box-shadow:0 0 16px rgba(250,204,21,.35); }
+    .dp-info { flex:1; min-width:0; }
+    .dp-name   { font-weight:700; font-size:1rem; color:#facc15; }
+    .dp-email  { font-size:.75rem; color:#94a3b8; margin-top:2px; }
+    .dp-joined { font-size:.68rem; color:rgba(250,204,21,.35); margin-top:4px; }
+    .dp-rank   { display:inline-block; margin-top:6px; background:#facc15; color:#0f172a; font-size:.62rem; font-weight:700; letter-spacing:.08em; padding:2px 10px; border-radius:99px; text-transform:uppercase; }
+    .dash-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px; margin-bottom:20px; }
+    .dash-card { background:#141e35; border:1px solid rgba(250,204,21,.15); border-radius:12px; padding:18px 16px; transition:transform .2s,box-shadow .2s; }
+    .dash-card:hover { transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,0,0,.3); }
+    .dc-icon  { font-size:1.4rem; margin-bottom:8px; }
+    .dc-label { font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:#94a3b8; margin-bottom:4px; }
+    .dc-value { font-size:1.5rem; font-weight:700; color:#facc15; line-height:1; }
+    .dc-sub   { font-size:.68rem; color:#64748b; margin-top:4px; }
+    .dash-panels { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    @media(max-width:720px){.dash-panels{grid-template-columns:1fr;}}
+    .dash-panel { background:#141e35; border:1px solid rgba(250,204,21,.15); border-radius:14px; padding:20px; overflow:hidden; }
+    .panel-title { font-size:.82rem; font-weight:700; color:#facc15; letter-spacing:.06em; text-transform:uppercase; margin-bottom:14px; }
+    .act-list { display:flex; flex-direction:column; gap:8px; }
+    .act-item { display:flex; align-items:center; gap:10px; background:rgba(250,204,21,.04); border:1px solid rgba(250,204,21,.08); border-radius:8px; padding:9px 12px; font-size:.75rem; }
+    .act-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; background:#facc15; }
+    .act-text { flex:1; color:#e2d9c5; }
+    .act-time { font-size:.65rem; color:#64748b; white-space:nowrap; }
+    .bar-list { display:flex; flex-direction:column; gap:12px; }
+    .bar-row  { display:flex; flex-direction:column; gap:4px; }
+    .bar-top  { display:flex; justify-content:space-between; }
+    .bar-name { font-size:.75rem; color:#e2d9c5; }
+    .bar-val  { font-size:.75rem; font-weight:600; color:#facc15; }
+    .bar-track { height:7px; background:rgba(255,255,255,.06); border-radius:99px; overflow:hidden; }
+    @keyframes barGrow { from{width:0;} }
+    .bar-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,#ca8a04,#facc15); animation:barGrow .9s ease both; }
+    .heatmap-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+    .hm-cell { aspect-ratio:1; border-radius:3px; background:rgba(250,204,21,.07); cursor:default; }
+    .hm-cell[data-level="1"]{background:rgba(250,204,21,.18);}
+    .hm-cell[data-level="2"]{background:rgba(250,204,21,.38);}
+    .hm-cell[data-level="3"]{background:rgba(250,204,21,.62);}
+    .hm-cell[data-level="4"]{background:rgba(250,204,21,.88);}
+    .hm-legend { display:flex; align-items:center; gap:5px; margin-top:10px; font-size:.65rem; color:#64748b; }
+    .hm-leg { width:10px; height:10px; border-radius:2px; }
+    .dash-panel.full { grid-column:1/-1; }
+    .dash-reset { background:transparent; border:1px solid rgba(248,113,113,.3); color:#f87171; font-size:.7rem; padding:5px 12px; border-radius:7px; cursor:pointer; transition:all .2s; }
+    .dash-reset:hover { background:rgba(248,113,113,.1); border-color:#f87171; }
+    .section-divider { border:none; border-top:1px solid rgba(250,204,21,.15); margin:0 2rem 3rem; }
+  </style>
+</head>
+<body class="bg-[#0f172a] text-yellow-100 relative overflow-x-hidden">
+
+  <div id="particles-js"></div>
+
+  <!-- HEADER: original structure + profile/hamburger added -->
+  <header class="bg-[#0f172a] border-b border-yellow-700 shadow-md">
+    <div class="flex items-center justify-between px-8 py-4">
+      <div class="flex items-center gap-6">
+        <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center glow-gold ring-2 ring-yellow-300 shadow-lg">
+          <img src="CT logo.png" alt="Chess Tackler Logo" class="h-8 w-8 object-contain" />
+        </div>
+        <nav class="hidden md:flex gap-4 text-sm font-medium text-yellow-100">
+          <a href="Lessons.html"  class="nav-link">Learn</a>
+          <a href="Features.html" class="nav-link">More features</a>
+          <a href="CDCA.html"     class="nav-link">Streaming</a>
+          <a href="Books.html"    class="nav-link">Books</a>
+        </nav>
+      </div>
+      <div class="flex items-center gap-3 text-sm text-yellow-100">
+        <a href="index.html#services" class="nav-link hidden md:inline">Services</a>
+        <a href="CTGive.html"          class="hidden md:block nav-link">Giveaways</a>
+        <a href="index.html#contact"   class="hidden md:block nav-link">Contact us</a>
+        <a href="index.html"           class="btn-premium px-4 py-2 rounded-full shadow hidden md:inline">Home</a>
+        <!-- Profile / auth area -->
+        <div id="headerAuthArea" class="flex items-center gap-2"></div>
+        <!-- Hamburger -->
+        <button class="hamburger-btn md:hidden" id="hamburgerBtn" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile nav -->
+    <div id="mobile-nav">
+      <a href="Lessons.html">Learn</a>
+      <a href="Features.html">More features</a>
+      <a href="CDCA.html">Streaming</a>
+      <a href="Books.html">Books</a>
+      <a href="index.html#services">Services</a>
+      <a href="CTGive.html">Giveaways</a>
+      <a href="index.html#contact">Contact us</a>
+      <a href="index.html" class="btn-premium px-4 py-2 rounded-full shadow text-center mt-2" style="display:block;">Home</a>
+      <div id="mobileAuthArea" style="padding:8px 0;"></div>
+    </div>
+  </header>
+
+  <!-- HERO: original, completely untouched -->
+  <section class="grid grid-cols-1 md:grid-cols-2 gap-12 px-8 py-20 max-w-7xl mx-auto items-center">
+    <div>
+      <a href="Books.html">
+        <span id="highlight-badge" class="inline-block badge-premium text-xs px-3 py-1 rounded-full mb-4 transition font-semibold">
+          New · SOLTIS - How to Choose a Chess Move.pdf
+        </span>
+      </a>
+      <h1 class="text-4xl font-bold mb-4 leading-tight text-yellow-100">
+        Uncover Insights,<br>Dominate the Board.
+      </h1>
+      <p class="text-lg text-yellow-200 mb-6">
+        Unlock smarter moves and sharpen your strategy with our collection of interactive puzzles, AI-powered analysis, and tactical breakdowns. Whether you're a beginner or a master, Chess Tackler helps you see the board—and the game—in a whole new way.
+      </p>
+      <div class="mb-6">
+        <a href="#" id="highlight-trigger" class="btn-premium px-5 py-2 rounded-full shadow">
+          What's new with Us
+        </a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-yellow-200 text-sm font-medium">
+        <a href="CB25.html"     class="hover:underline flex items-center gap-2"><i data-lucide="chess"></i> Chess Board</a>
+        <a href="Lessons.html"  class="hover:underline flex items-center gap-2"><i data-lucide="book-open"></i> Lessons by Grandmasters</a>
+        <a href="service1.html" class="hover:underline flex items-center gap-2"><i data-lucide="puzzle"></i> Puzzles</a>
+        <a href="service2.html" class="hover:underline flex items-center gap-2"><i data-lucide="globe"></i> Global Leaderboard</a>
+      </div>
+    </div>
+    <div class="flex justify-center rounded-xl p-4">
+      <img src="CBoard.png" alt="Chess Board Preview" class="rounded-xl shadow-lg w-full max-w-md float-text gold-border" />
+    </div>
+  </section>
+
+  <!-- DASHBOARD (new, below hero) -->
+  <hr class="section-divider" />
+  <section id="dashboard-section">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:6px;">
+      <div class="dash-section-title">♟ Your Activity Dashboard</div>
+      <button class="dash-reset" id="resetBtn" style="display:none;" onclick="resetDashboard()">Reset Data</button>
+    </div>
+    <div class="dash-section-sub" id="dashSub">Track your journey across Chess Tackler</div>
+    <div id="dashContent"></div>
+  </section>
+
+  <!-- ORIGINAL scripts (untouched) -->
+  <script>
+    document.getElementById("highlight-trigger").addEventListener("click", function (e) {
+      e.preventDefault();
+      const badge = document.getElementById("highlight-badge");
+      badge.classList.add("ring", "ring-yellow-500");
+      setTimeout(() => { badge.classList.remove("ring", "ring-yellow-500"); }, 1000);
+    });
+  </script>
+  <script>
+    particlesJS("particles-js", {
+      particles: { number:{value:50,density:{enable:true,value_area:800}}, color:{value:"#facc15"}, shape:{type:"circle"}, opacity:{value:0.25}, size:{value:3,random:true}, move:{enable:true,speed:0.6,direction:"none",out_mode:"out"} },
+      interactivity: { events:{onhover:{enable:true,mode:"repulse"},onclick:{enable:true,mode:"push"}}, modes:{repulse:{distance:100},push:{particles_nb:4}} },
+      retina_detect: true
+    });
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+
+  <!-- NEW scripts -->
+  <script>
+    /* Hamburger */
+    const hBtn = document.getElementById('hamburgerBtn');
+    const mNav = document.getElementById('mobile-nav');
+    hBtn.addEventListener('click', () => { hBtn.classList.toggle('open'); mNav.classList.toggle('open'); });
+    mNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { hBtn.classList.remove('open'); mNav.classList.remove('open'); }));
+
+    /* Helpers */
+    function initials(n) { return (n||'U').substring(0,2).toUpperCase(); }
+
+    /* Header auth */
+    function renderHeader() {
+      const user  = JSON.parse(localStorage.getItem('ct_current_user') || 'null');
+      const area  = document.getElementById('headerAuthArea');
+      const mArea = document.getElementById('mobileAuthArea');
+      if (!area) return;
+      if (user) {
+        area.innerHTML = `
+          <div class="profile-wrap" id="profileWrap">
+            <div class="profile-pill" onclick="togglePM(event)">
+              <div class="profile-avatar">${initials(user.username)}</div>
+              <span class="profile-username">${user.username}</span>
+              <svg class="profile-chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+            </div>
+            <div class="profile-dropdown">
+              <div class="pd-head">
+                <div class="pd-name">&#9822; ${user.username}</div>
+                <div class="pd-email">${user.email}</div>
+                <div class="pd-since">Member since ${user.joinedAt||'recently'}</div>
+              </div>
+              <a href="index.html" class="dd-item">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+                Home
+              </a>
+              <a href="#dashboard-section" class="dd-item" onclick="closePM()">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5"/></svg>
+                My Dashboard
+              </a>
+              <div class="dd-divider"></div>
+              <button class="dd-item danger" onclick="logOut()">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg>
+                Log Out
+              </button>
+            </div>
+          </div>`;
+        if (mArea) mArea.innerHTML = `
+          <div style="padding:8px 0;border-top:1px solid rgba(250,204,21,.1);margin-top:4px;">
+            <div style="font-size:.8rem;font-weight:700;color:#facc15;">&#9822; ${user.username}</div>
+            <div style="font-size:.68rem;color:#94a3b8;">${user.email}</div>
+            <button onclick="logOut()" style="margin-top:8px;background:transparent;border:1px solid rgba(248,113,113,.35);color:#f87171;font-size:.75rem;padding:5px 14px;border-radius:7px;cursor:pointer;">Log Out</button>
+          </div>`;
+      } else {
+        area.innerHTML = `
+          <a href="authenticated.html" class="auth-out-login">Log In</a>
+          <a href="authentication.html" class="btn-premium px-4 py-2 rounded-full shadow" style="font-size:.78rem;">Sign Up</a>`;
+        if (mArea) mArea.innerHTML = `
+          <div style="display:flex;gap:8px;padding:8px 0;border-top:1px solid rgba(250,204,21,.1);margin-top:4px;">
+            <a href="authenticated.html" class="auth-out-login">Log In</a>
+            <a href="authentication.html" class="btn-premium px-3 py-1 rounded-full" style="font-size:.78rem;">Sign Up</a>
+          </div>`;
+      }
+    }
+    function togglePM(e) { e.stopPropagation(); document.getElementById('profileWrap')?.classList.toggle('open'); }
+    function closePM()   { document.getElementById('profileWrap')?.classList.remove('open'); }
+    document.addEventListener('click', closePM);
+    function logOut() { localStorage.removeItem('ct_current_user'); renderHeader(); renderDashboard(); }
+
+    /* Dashboard */
+    function trackVisit() {
+      const user = JSON.parse(localStorage.getItem('ct_current_user')||'null');
+      if (!user) return;
+      const key = 'ct_activity_'+user.id;
+      const data = JSON.parse(localStorage.getItem(key)||'{}');
+      data.visits     = (data.visits||0)+1;
+      data.lastVisit  = new Date().toLocaleString();
+      data.firstVisit = data.firstVisit||new Date().toLocaleString();
+      data.pages = data.pages||{}; data.pages['Explore'] = (data.pages['Explore']||0)+1;
+      data.feed = data.feed||[]; data.feed.unshift({action:'Visited Explore page',time:new Date().toLocaleString()});
+      data.feed = data.feed.slice(0,20);
+      const day = new Date().toISOString().split('T')[0];
+      data.heatmap = data.heatmap||{}; data.heatmap[day] = (data.heatmap[day]||0)+1;
+      data.sessionStart = Date.now();
+      localStorage.setItem(key, JSON.stringify(data));
+    }
+    window.addEventListener('beforeunload', () => {
+      const user = JSON.parse(localStorage.getItem('ct_current_user')||'null'); if (!user) return;
+      const key = 'ct_activity_'+user.id; const data = JSON.parse(localStorage.getItem(key)||'{}');
+      if (data.sessionStart) { data.totalTime=(data.totalTime||0)+Math.round((Date.now()-data.sessionStart)/1000); delete data.sessionStart; localStorage.setItem(key,JSON.stringify(data)); }
+    });
+    function fmtTime(s) { if(!s||s<60) return (s||0)+'s'; if(s<3600) return Math.round(s/60)+'m'; return (s/3600).toFixed(1)+'h'; }
+    function buildHeatmap(hmap) {
+      let html=''; const today=new Date();
+      for(let i=27;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);const k=d.toISOString().split('T')[0];const c=hmap[k]||0;const lv=c===0?0:c===1?1:c<=3?2:c<=6?3:4;html+=`<div class="hm-cell" data-level="${lv}" title="${k}: ${c} visit(s)"></div>`;}
+      return html;
+    }
+    function renderDashboard() {
+      const user=JSON.parse(localStorage.getItem('ct_current_user')||'null');
+      const content=document.getElementById('dashContent'); const sub=document.getElementById('dashSub'); const rBtn=document.getElementById('resetBtn');
+      if(!content) return;
+      if(!user) {
+        if(rBtn) rBtn.style.display='none';
+        if(sub) sub.textContent='Track your journey across Chess Tackler';
+        content.innerHTML=`<div class="dash-guest"><div class="g-icon">&#9822;</div><h3>Sign in to see your Dashboard</h3><p>Create a free account to track visits, time spent, favourite pages and activity history.</p><div class="dash-guest-btns"><a href="authentication.html" class="dg-btn dg-primary">Create Account</a><a href="authenticated.html" class="dg-btn dg-secondary">Log In</a></div></div>`;
+        return;
+      }
+      if(rBtn) rBtn.style.display='inline-block';
+      if(sub) sub.innerHTML=`Welcome back, <span style="color:#facc15;font-weight:600;">${user.username}</span> — here's your activity.`;
+      const key='ct_activity_'+user.id; const data=JSON.parse(localStorage.getItem(key)||'{}');
+      const visits=data.visits||0; const totalTime=data.totalTime||0; const feed=data.feed||[]; const pages=data.pages||{}; const heatmap=data.heatmap||{};
+      const rank=visits>=50?'Grand Master':visits>=20?'Expert':visits>=10?'Intermediate':visits>=3?'Beginner':'Newcomer';
+      const allPages={Explore:0,Home:0,Puzzles:0,Rankings:0,'Fun Zone':0,Lessons:0,...pages};
+      const maxPV=Math.max(...Object.values(allPages),1);
+      const barsHTML=Object.entries(allPages).map(([name,count])=>`<div class="bar-row"><div class="bar-top"><span class="bar-name">${name}</span><span class="bar-val">${count}</span></div><div class="bar-track"><div class="bar-fill" style="width:${(count/maxPV*100).toFixed(1)}%"></div></div></div>`).join('');
+      const feedHTML=feed.length?feed.slice(0,8).map(f=>`<div class="act-item"><div class="act-dot"></div><span class="act-text">${f.action}</span><span class="act-time">${f.time}</span></div>`).join(''):`<div style="text-align:center;color:#64748b;font-size:.78rem;padding:1rem;">No activity yet. Start exploring!</div>`;
+      content.innerHTML=`
+        <div class="dash-profile-card">
+          <div class="dp-avatar">${initials(user.username)}</div>
+          <div class="dp-info">
+            <div class="dp-name">&#9822; ${user.username}</div>
+            <div class="dp-email">${user.email}</div>
+            <div class="dp-joined">Member since: ${user.joinedAt||'—'} &nbsp;&middot;&nbsp; Contact: ${user.contact||'—'}</div>
+            <div class="dp-rank">${rank}</div>
+          </div>
+        </div>
+        <div class="dash-cards">
+          <div class="dash-card"><div class="dc-icon">&#128065;</div><div class="dc-label">Total Visits</div><div class="dc-value">${visits}</div><div class="dc-sub">All pages</div></div>
+          <div class="dash-card"><div class="dc-icon">&#9201;</div><div class="dc-label">Time Spent</div><div class="dc-value">${fmtTime(totalTime)}</div><div class="dc-sub">Total on site</div></div>
+          <div class="dash-card"><div class="dc-icon">&#128197;</div><div class="dc-label">First Visit</div><div class="dc-value" style="font-size:1rem;">${data.firstVisit?data.firstVisit.split(',')[0]:'—'}</div><div class="dc-sub">When you found us</div></div>
+          <div class="dash-card"><div class="dc-icon">&#128336;</div><div class="dc-label">Last Seen</div><div class="dc-value" style="font-size:1rem;">${data.lastVisit?data.lastVisit.split(',')[0]:'—'}</div><div class="dc-sub">Most recent</div></div>
+          <div class="dash-card"><div class="dc-icon">&#127885;</div><div class="dc-label">Player Rank</div><div class="dc-value" style="font-size:1rem;">${rank}</div><div class="dc-sub">By activity</div></div>
+          <div class="dash-card"><div class="dc-icon">&#128196;</div><div class="dc-label">Pages Explored</div><div class="dc-value">${Object.keys(pages).length}</div><div class="dc-sub">Unique sections</div></div>
+        </div>
+        <div class="dash-panels">
+          <div class="dash-panel"><div class="panel-title">&#9889; Recent Activity</div><div class="act-list">${feedHTML}</div></div>
+          <div class="dash-panel"><div class="panel-title">&#128202; Page Visit Breakdown</div><div class="bar-list">${barsHTML}</div></div>
+          <div class="dash-panel full"><div class="panel-title">&#128197; Visit Heatmap — Last 28 Days</div><div class="heatmap-grid">${buildHeatmap(heatmap)}</div><div class="hm-legend">Less &nbsp;<div class="hm-leg" style="background:rgba(250,204,21,.07)"></div><div class="hm-leg" style="background:rgba(250,204,21,.18)"></div><div class="hm-leg" style="background:rgba(250,204,21,.38)"></div><div class="hm-leg" style="background:rgba(250,204,21,.62)"></div><div class="hm-leg" style="background:rgba(250,204,21,.88)"></div>&nbsp; More</div></div>
+        </div>`;
+    }
+    function resetDashboard() {
+      const user=JSON.parse(localStorage.getItem('ct_current_user')||'null');
+      if(!user||!confirm('Reset all your activity data? This cannot be undone.')) return;
+      localStorage.removeItem('ct_activity_'+user.id); trackVisit(); renderDashboard();
+    }
+    window.addEventListener('DOMContentLoaded', () => { renderHeader(); trackVisit(); renderDashboard(); });
+  </script>
+</body>
+</html>
