@@ -2,29 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up | CDCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <header>
-        <a href="index.html" class="logo"><img src="LogoCDCA.png" alt="CDCA Logo"></a>
-        <nav><a href="login.html">Log In</a></nav>
+        <a href="index.html" class="logo"><img src="LogoCDCA.png" alt="CDCA"></a>
+        <nav><a href="index.html">Back to Home</a></nav>
     </header>
 
-    <div class="container">
-        <div class="card auth-card">
-            <div style="text-align: center; margin-bottom: 1.5rem;">
-                <h2 style="color: var(--primary-blue);">Create Account</h2>
-                <p style="font-size: 0.85rem; color: var(--text-muted);">Accounts must be approved by the Super Admin to edit the database.</p>
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>Create Account</h2>
+                <p>Register to request database edit access.</p>
             </div>
-            
             <form id="signup-form">
-                <div class="form-group"><label>Email Address</label><input type="email" id="email" required></div>
-                <div class="form-group"><label>Password (Min 6 chars)</label><input type="password" id="password" required minlength="6"></div>
-                <button type="submit" class="btn-orange" style="width: 100%; margin-top: 1rem;">Sign Up</button>
-                <p id="msg" style="font-size: 0.85rem; margin-top: 1rem; text-align: center; font-weight: 600;"></p>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Min. 6 characters" required minlength="6">
+                </div>
+                <button type="submit" class="btn-orange" style="width: 100%; margin-top: 1rem;">Register</button>
+                <p id="msg" style="text-align: center; margin-top: 1rem; font-size: 0.9rem; font-weight: 500;"></p>
+                <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
+                    Already have an account? <a href="login.html" style="color: var(--primary-blue); font-weight: 600;">Log In</a>
+                </p>
             </form>
         </div>
     </div>
@@ -33,20 +41,22 @@
     <script>
         document.getElementById('signup-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            document.getElementById('msg').innerText = "Creating account...";
-            document.getElementById('msg').style.color = "black";
+            const msgEl = document.getElementById('msg');
+            msgEl.innerText = "Creating account...";
+            msgEl.style.color = "var(--text-dark)";
             
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            const result = await handleSignUp(
+                document.getElementById('email').value,
+                document.getElementById('password').value
+            );
             
-            const result = await handleSignUp(email, password);
             if(result.success) {
-                document.getElementById('msg').style.color = "green";
-                document.getElementById('msg').innerText = "Success! You can now log in.";
-                setTimeout(() => window.location.href = 'login.html', 2000);
+                msgEl.innerText = "Account created! Redirecting to login...";
+                msgEl.style.color = "#27AE60"; // Green
+                setTimeout(() => window.location.href = 'login.html', 1500);
             } else {
-                document.getElementById('msg').style.color = "red";
-                document.getElementById('msg').innerText = result.error;
+                msgEl.innerText = result.error;
+                msgEl.style.color = "#E74C3C"; // Red
             }
         });
     </script>
