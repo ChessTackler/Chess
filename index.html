@@ -3,41 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CDCA | Player Database</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <title>CDCA | Database</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
     <header>
-        <a href="#" class="logo">CDCA</a>
-        <nav><a href="index.html">Database</a> <a href="admin.html">Admin</a></nav>
+        <a href="index.html" class="logo">
+            <img src="LogoCDCA.png" alt="CDCA Logo">
+        </a>
+        <nav>
+            <a href="#">Tournaments</a>
+            <a href="#">Rankings</a>
+            <a href="admin.html">Admin Portal</a>
+            <a href="login.html" class="login-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                LOG IN
+            </a>
+        </nav>
     </header>
 
-    <main>
-        <h1 style="font-family: var(--font-heading); margin-bottom: 2rem; text-align: center;">Official Player Database</h1>
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>State ID</th>
-                        <th>FIDE ID</th>
-                        <th>Rating</th>
-                        <th>Title</th>
-                    </tr>
-                </thead>
-                <tbody id="public-table-body">
-                    <tr><td colspan="5" style="text-align: center;">Loading players...</td></tr>
-                </tbody>
-            </table>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Official Database of Chess Players</h1>
+            <p>Find district ratings, FIDE IDs, and verified profiles for players in Chapra.</p>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Enter player name or FIDE ID..." onkeyup="filterTable()">
+                <button type="button">Search</button>
+            </div>
+            <p style="font-size: 0.8rem; margin-top: 0.5rem; color: #BBD4F5;">For example: Rahul Kumar, 45098765</p>
         </div>
-    </main>
+        <div class="hero-img"></div>
+    </section>
+
+    <div class="container">
+        <h2 class="section-title">Verified Player Registry</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>State ID</th>
+                    <th>FIDE ID</th>
+                    <th>Rating</th>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody id="public-table-body">
+                <tr><td colspan="5" style="text-align: center;">Loading players...</td></tr>
+            </tbody>
+        </table>
+    </div>
 
     <script src="app.js"></script>
     <script>
-        // Call the fetch function from app.js when page loads
         window.onload = () => fetchPlayers('public-table-body');
+
+        // Simple frontend filter for the search bar
+        function filterTable() {
+            let input = document.getElementById("searchInput").value.toUpperCase();
+            let trs = document.getElementById("public-table-body").getElementsByTagName("tr");
+            for (let i = 0; i < trs.length; i++) {
+                trs[i].style.display = trs[i].innerText.toUpperCase().indexOf(input) > -1 ? "" : "none";
+            }
+        }
     </script>
 </body>
 </html>
