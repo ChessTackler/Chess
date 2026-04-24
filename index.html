@@ -12,14 +12,8 @@
 
     <header>
         <a href="index.html" class="logo"><img src="LogoCDCA.png" alt="CDCA"></a>
-        <nav>
-            <a href="#">Tournaments</a>
-            <a href="#">Rankings</a>
-            <a href="login.html" class="nav-auth-btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                Log In
-            </a>
-        </nav>
+        <nav id="main-nav">
+            </nav>
     </header>
 
     <section class="hero">
@@ -58,7 +52,10 @@
 
     <script src="app.js"></script>
     <script>
-        window.onload = () => fetchPlayers('public-table-body');
+        window.onload = () => {
+            fetchPlayers('public-table-body');
+            updateNavbar(); 
+        };
 
         function filterTable() {
             let input = document.getElementById("searchInput").value.toUpperCase();
