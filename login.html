@@ -47,19 +47,25 @@
             msgEl.innerText = "Authenticating...";
             msgEl.style.color = "var(--text-muted)";
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            try {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
 
-            // Uses the globally available 'supabase' variable from app.js
-            const { error } = await supabase.auth.signInWithPassword({ email, password });
+                if (typeof supabase === 'undefined') {
+                    throw new Error("Cannot connect to server. Check your internet or app.js link.");
+                }
 
-            if (error) {
-                msgEl.innerText = error.message;
-                msgEl.style.color = "#E74C3C";
-            } else {
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                if (error) throw error;
+
                 msgEl.innerText = "Success! Redirecting...";
                 msgEl.style.color = "#27AE60";
-                setTimeout(() => window.location.href = 'index.html', 500); 
+                window.location.href = 'index.html'; 
+                
+            } catch (error) {
+                console.error("Login Error:", error);
+                msgEl.innerText = error.message;
+                msgEl.style.color = "#E74C3C";
             }
         });
     </script>
