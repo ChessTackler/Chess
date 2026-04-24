@@ -5,65 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In | CDCA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <style>
-        :root {
-            --primary-blue: #4A90E2; 
-            --accent-orange: #F5A623; 
-            --accent-hover: #E09612;
-            --bg-white: #FFFFFF;
-            --text-dark: #2C3E50;
-            --text-muted: #7F8C8D;
-            --border-color: #E2E8F0;
-            --font-family: 'Inter', sans-serif;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
-        
-        body { 
-            background: linear-gradient(135deg, #F4F7F6 0%, #E8F0FE 100%);
-            color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; 
-        }
-
-        header {
-            background-color: var(--bg-white); padding: 1rem 5%; display: flex;
-            justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .logo img { height: 40px; }
-        nav a { text-decoration: none; color: var(--text-muted); font-weight: 600; transition: color 0.2s; }
-        nav a:hover { color: var(--primary-blue); }
-
-        .auth-wrapper { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem 5%; }
-        
-        .auth-card {
-            background: var(--bg-white); width: 100%; max-width: 400px; padding: 2.5rem;
-            border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center;
-        }
-
-        .auth-card h2 { color: var(--primary-blue); font-size: 1.8rem; margin-bottom: 0.5rem; }
-        .auth-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; }
-
-        .form-group { margin-bottom: 1.5rem; text-align: left; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
-        .form-group input { 
-            width: 100%; padding: 0.9rem 1rem; border: 1.5px solid var(--border-color); 
-            border-radius: 8px; outline: none; font-size: 1rem; transition: all 0.2s;
-        }
-        .form-group input:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1); }
-
-        .btn-orange {
-            background-color: var(--accent-orange); color: var(--bg-white); border: none; padding: 1rem; 
-            font-size: 1.05rem; font-weight: 600; cursor: pointer; border-radius: 8px; width: 100%; transition: all 0.2s;
-        }
-        .btn-orange:hover { background-color: var(--accent-hover); transform: translateY(-1px); }
-
-        .message-box { margin-top: 1rem; font-size: 0.9rem; font-weight: 600; min-height: 20px; }
-        .switch-page { margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted); }
-        .switch-page a { color: var(--primary-blue); font-weight: 600; text-decoration: none; }
-
-        @media (max-width: 480px) { .auth-card { padding: 2rem 1.5rem; } }
-    </style>
 </head>
 <body>
 
@@ -75,8 +18,8 @@
     <div class="auth-wrapper">
         <div class="auth-card">
             <h2>Welcome Back</h2>
-            <p>Log in to access the admin portal.</p>
-            
+            <p>Log in to access the portal.</p>
+
             <form id="login-form">
                 <div class="form-group">
                     <label>Email Address</label>
@@ -86,7 +29,7 @@
                     <label>Password</label>
                     <input type="password" id="password" placeholder="••••••••" required>
                 </div>
-                <button type="submit" class="btn-orange">Sign In</button>
+                <button type="submit" class="btn-orange" style="width: 100%;">Sign In</button>
                 <div id="msg" class="message-box"></div>
             </form>
 
@@ -96,29 +39,27 @@
         </div>
     </div>
 
+    <script src="app.js"></script>
     <script>
-        const supabaseUrl = 'https://vwzcdfgbqaszhqlvewch.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3emNkZmdicWFzemhxbHZld2NoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwNDc4MTgsImV4cCI6MjA5MjYyMzgxOH0.SBEcDqvAkpvxyVV2eSxuvYt-0Ehst5B0_dxI9u0eTRQ';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const msgEl = document.getElementById('msg');
             msgEl.innerText = "Authenticating...";
             msgEl.style.color = "var(--text-muted)";
-            
+
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
+            // Uses the globally available 'supabase' variable from app.js
             const { error } = await supabase.auth.signInWithPassword({ email, password });
-            
+
             if (error) {
                 msgEl.innerText = error.message;
                 msgEl.style.color = "#E74C3C";
             } else {
                 msgEl.innerText = "Success! Redirecting...";
                 msgEl.style.color = "#27AE60";
-                window.location.href = 'index.html'; 
+                setTimeout(() => window.location.href = 'index.html', 500); 
             }
         });
     </script>
