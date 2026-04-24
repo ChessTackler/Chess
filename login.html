@@ -2,31 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Login | CDCA</title>
+    <title>Log In | CDCA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body style="background-color: var(--bg-light);">
+<body>
+    <header>
+        <a href="index.html" class="logo"><img src="LogoCDCA.png" alt="CDCA"></a>
+        <nav><a href="index.html">Back to Home</a></nav>
+    </header>
 
-    <div class="container">
-        <div class="auth-container" style="background: white;">
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <img src="LogoCDCA.png" alt="CDCA Logo" style="height: 60px;">
-                <h2 style="margin-top: 1rem; color: var(--primary-blue);">Admin Access</h2>
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>Welcome Back</h2>
+                <p>Log in to access the admin portal.</p>
             </div>
-            
             <form id="login-form">
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input type="email" id="email" required>
+                    <input type="email" id="email" placeholder="admin@example.com" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" id="password" required>
+                    <input type="password" id="password" placeholder="••••••••" required>
                 </div>
-                <button type="submit" class="btn-orange" style="width: 100%; margin-top: 1rem; border-radius: 4px;">Sign In</button>
-                <p id="error-msg" style="color: red; font-size: 0.85rem; margin-top: 1rem; text-align: center;"></p>
+                <button type="submit" class="btn-orange" style="width: 100%; margin-top: 1rem;">Sign In</button>
+                <p id="msg" style="text-align: center; margin-top: 1rem; font-size: 0.9rem; font-weight: 500;"></p>
+                <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
+                    Don't have an account? <a href="signup.html" style="color: var(--primary-blue); font-weight: 600;">Sign Up</a>
+                </p>
             </form>
         </div>
     </div>
@@ -35,17 +41,20 @@
     <script>
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorMsg = document.getElementById('error-msg');
+            const msgEl = document.getElementById('msg');
+            msgEl.innerText = "Authenticating...";
+            msgEl.style.color = "var(--text-dark)";
             
-            errorMsg.innerText = "Authenticating...";
-            const success = await handleLogin(email, password);
+            const result = await handleLogin(
+                document.getElementById('email').value,
+                document.getElementById('password').value
+            );
             
-            if(success) {
+            if(result.success) {
                 window.location.href = 'admin.html';
             } else {
-                errorMsg.innerText = "Invalid login credentials.";
+                msgEl.innerText = result.error;
+                msgEl.style.color = "#E74C3C";
             }
         });
     </script>
