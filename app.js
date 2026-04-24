@@ -4,20 +4,12 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 // --- 1. AUTHENTICATION LOGIC ---
-
 async function handleSignUp(email, password) {
     try {
-        // Step 1: Create user in Auth
-        const { data, error } = await supabase.auth.signUp({ email, password });
+        // We only need ONE step now! The database SQL trigger handles the profile creation automatically.
+        const { error } = await supabase.auth.signUp({ email, password });
         if (error) throw error;
         
-        // Step 2: Auto-create basic profile (defaults to normal user)
-        if (data.user) {
-            const { error: profileError } = await supabase.from('profiles').insert([
-                { id: data.user.id, email: email, is_admin: false, is_super_admin: false }
-            ]);
-            if (profileError) console.error("Profile creation delay:", profileError);
-        }
         return { success: true };
     } catch (error) {
         return { success: false, error: error.message };
@@ -36,7 +28,6 @@ async function handleLogout() {
 }
 
 // --- 2. ROLE VERIFICATION ---
-
 async function verifyAdminAccess() {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) return { allowed: false };
@@ -55,7 +46,6 @@ async function verifyAdminAccess() {
 }
 
 // --- 3. DATABASE OPERATIONS (Players) ---
-
 async function fetchPlayers(tableBodyId, isAdmin = false) {
     const { data: players, error } = await supabase
         .from('players')
@@ -65,6 +55,8 @@ async function fetchPlayers(tableBodyId, isAdmin = false) {
     if (error) { console.error('Fetch error:', error); return; }
 
     const tbody = document.getElementById(tableBodyId);
+    if (!tbody) return;
+    
     tbody.innerHTML = ''; 
 
     players?.forEach(player => {
@@ -115,11 +107,10 @@ async function deletePlayer(id) {
 }
 
 // --- 4. SUPER ADMIN FUNCTIONS (Manage Users) ---
-
 async function fetchUsersForSuperAdmin() {
     const { data: profiles } = await supabase.from('profiles').select('*').order('email');
     const tbody = document.getElementById('super-admin-table-body');
-    if (!tbody) return; // Exit if not on the admin page
+    if (!tbody) return; 
     
     tbody.innerHTML = '';
 
@@ -141,5 +132,5 @@ async function fetchUsersForSuperAdmin() {
 
 async function toggleAdmin(id, currentStatus) {
     await supabase.from('profiles').update({ is_admin: !currentStatus }).eq('id', id);
-    fetchUsersForSuperAdmin(); // Refresh the list automatically
+    fetchUsersForSuperAdmin(); 
 }
