@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | CDCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body style="display: none;" id="secure-body"> <header>
+<body style="display: none;" id="secure-body"> 
+    <header>
         <a href="index.html" class="logo"><img src="LogoCDCA.png" alt="CDCA Logo"></a>
         <nav>
             <span id="welcome-text" style="font-weight: 600; color: var(--primary-blue);">Admin Portal</span>
-            <button onclick="handleLogout()" class="btn-orange">Logout</button>
+            <button onclick="handleLogout()" class="btn-orange" style="padding: 0.6rem 1.2rem;">Logout</button>
         </nav>
     </header>
 
@@ -37,7 +39,7 @@
 
             <div class="table-wrapper">
                 <table>
-                    <thead><tr><th>Name</th><th>Rating</th><th>Action</th></tr></thead>
+                    <thead><tr><th>Name</th><th>State ID</th><th>Rating</th><th>Action</th></tr></thead>
                     <tbody id="admin-table-body"></tbody>
                 </table>
             </div>
@@ -58,21 +60,17 @@
     <script>
         window.onload = async () => {
             const access = await verifyAdminAccess();
-            
+
             if (!access.allowed) {
                 alert(access.error || "Please log in first.");
                 window.location.href = 'login.html';
                 return;
             }
 
-            // If allowed, reveal the page
             document.getElementById('secure-body').style.display = 'flex';
             document.getElementById('welcome-text').innerText = `Logged in: ${access.email}`;
-            
-            // Load Database
             fetchPlayers('admin-table-body', true);
 
-            // If it is you (the Super Admin), show the secret control panel
             if (access.is_super_admin) {
                 document.getElementById('super-admin-panel').style.display = 'block';
                 fetchUsersForSuperAdmin();
