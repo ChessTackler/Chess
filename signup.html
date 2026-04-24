@@ -47,19 +47,25 @@
             msgEl.innerText = "Creating account...";
             msgEl.style.color = "var(--text-muted)";
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            try {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
 
-            // Uses the globally available 'supabase' variable from app.js
-            const { error } = await supabase.auth.signUp({ email, password });
+                if (typeof supabase === 'undefined') {
+                    throw new Error("Cannot connect to server. Check your internet or app.js link.");
+                }
 
-            if (error) {
-                msgEl.innerText = error.message;
-                msgEl.style.color = "#E74C3C"; 
-            } else {
+                const { data, error } = await supabase.auth.signUp({ email, password });
+                if (error) throw error;
+
                 msgEl.innerText = "Account created! Redirecting...";
                 msgEl.style.color = "#27AE60"; 
                 setTimeout(() => window.location.href = 'index.html', 1500); 
+
+            } catch (error) {
+                console.error("Signup Error:", error);
+                msgEl.innerText = error.message;
+                msgEl.style.color = "#E74C3C"; 
             }
         });
     </script>
