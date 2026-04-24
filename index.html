@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CDCA | Database</title>
+    <title>CDCA | Player Database</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -11,56 +11,55 @@
 <body>
 
     <header>
-        <a href="index.html" class="logo">
-            <img src="LogoCDCA.png" alt="CDCA Logo">
-        </a>
+        <a href="index.html" class="logo"><img src="LogoCDCA.png" alt="CDCA"></a>
         <nav>
             <a href="#">Tournaments</a>
             <a href="#">Rankings</a>
-            <a href="admin.html">Admin Portal</a>
-            <a href="login.html" class="login-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                LOG IN
+            <a href="login.html" class="nav-auth-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Log In
             </a>
         </nav>
     </header>
 
     <section class="hero">
         <div class="hero-content">
-            <h1>Official Database of Chess Players</h1>
-            <p>Find district ratings, FIDE IDs, and verified profiles for players in Chapra.</p>
+            <h1>Biggest Database of Chess Players</h1>
+            <p>Find district ratings, FIDE IDs, and verified profiles for players associated with the Chapra District Chess Association.</p>
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Enter player name or FIDE ID..." onkeyup="filterTable()">
-                <button type="button">Search</button>
+                <input type="text" id="searchInput" placeholder="Search by player name or ID..." onkeyup="filterTable()">
+                <button type="button">Find Player</button>
             </div>
-            <p style="font-size: 0.8rem; margin-top: 0.5rem; color: #BBD4F5;">For example: Rahul Kumar, 45098765</p>
         </div>
-        <div class="hero-img"></div>
+        <div class="hero-illustration">
+            <img src="https://illustrations.popsy.co/blue/freelancer.svg" alt="Chess Database">
+        </div>
     </section>
 
     <div class="container">
         <h2 class="section-title">Verified Player Registry</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>State ID</th>
-                    <th>FIDE ID</th>
-                    <th>Rating</th>
-                    <th>Title</th>
-                </tr>
-            </thead>
-            <tbody id="public-table-body">
-                <tr><td colspan="5" style="text-align: center;">Loading players...</td></tr>
-            </tbody>
-        </table>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>State ID</th>
+                        <th>FIDE ID</th>
+                        <th>Rating</th>
+                        <th>Title</th>
+                    </tr>
+                </thead>
+                <tbody id="public-table-body">
+                    <tr><td colspan="5" style="text-align: center; padding: 3rem; color: #7F8C8D;">Loading players...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script src="app.js"></script>
     <script>
         window.onload = () => fetchPlayers('public-table-body');
 
-        // Simple frontend filter for the search bar
         function filterTable() {
             let input = document.getElementById("searchInput").value.toUpperCase();
             let trs = document.getElementById("public-table-body").getElementsByTagName("tr");
