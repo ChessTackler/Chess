@@ -2,59 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | CDCA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body>
-    <header>
+<body style="display: none;" id="secure-body"> <header>
         <a href="index.html" class="logo"><img src="LogoCDCA.png" alt="CDCA Logo"></a>
         <nav>
-            <span style="font-weight: 600; color: var(--primary-blue);">Admin Portal</span>
-            <button onclick="handleLogout()" class="btn-orange" style="padding: 0.5rem 1rem; border-radius: 4px;">Logout</button>
+            <span id="welcome-text" style="font-weight: 600; color: var(--primary-blue);">Admin Portal</span>
+            <button onclick="handleLogout()" class="btn-orange">Logout</button>
         </nav>
     </header>
 
-    <div class="container" style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; align-items: start;">
-        
-        <div style="background: white; padding: 2rem; border-radius: 8px; border: 1px solid var(--border-color);">
-            <h3 style="margin-bottom: 1.5rem; color: var(--primary-blue);">Register Player</h3>
-            <form id="add-player-form">
-                <div class="form-group"><label>First Name</label><input type="text" id="first_name" required></div>
-                <div class="form-group"><label>Last Name</label><input type="text" id="last_name" required></div>
-                <div class="form-group"><label>State ID</label><input type="text" id="state_id" required></div>
-                <div class="form-group"><label>FIDE ID</label><input type="text" id="fide_id"></div>
-                <div class="form-group"><label>FIDE Rating</label><input type="number" id="fide_rating"></div>
-                <div class="form-group">
-                    <label>Title</label>
-                    <select id="title">
-                        <option value="">None</option><option value="CM">CM</option><option value="IM">IM</option><option value="GM">GM</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-orange" style="width: 100%; border-radius: 4px;">Save Player</button>
-            </form>
+    <div class="container">
+        <div class="admin-grid">
+            <div class="card">
+                <h3 style="margin-bottom: 1.5rem; color: var(--primary-blue);">Register Player</h3>
+                <form id="add-player-form">
+                    <div class="form-group"><label>First Name</label><input type="text" id="first_name" required></div>
+                    <div class="form-group"><label>Last Name</label><input type="text" id="last_name" required></div>
+                    <div class="form-group"><label>State ID</label><input type="text" id="state_id" required></div>
+                    <div class="form-group"><label>FIDE ID</label><input type="text" id="fide_id"></div>
+                    <div class="form-group"><label>FIDE Rating</label><input type="number" id="fide_rating"></div>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <select id="title">
+                            <option value="">None</option><option value="CM">CM</option><option value="IM">IM</option><option value="GM">GM</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-orange" style="width: 100%;">Save Player</button>
+                </form>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>Name</th><th>Rating</th><th>Action</th></tr></thead>
+                    <tbody id="admin-table-body"></tbody>
+                </table>
+            </div>
         </div>
 
-        <div style="background: white; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color);">
-            <table>
-                <thead><tr><th>Name</th><th>Rating</th><th>Action</th></tr></thead>
-                <tbody id="admin-table-body"></tbody>
-            </table>
+        <div id="super-admin-panel" style="display: none; margin-top: 3rem;">
+            <h2 style="color: var(--accent-orange); margin-bottom: 1rem;">👑 Super Admin: User Role Management</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th>User Email</th><th>Status</th><th>Manage Tag</th></tr></thead>
+                    <tbody id="super-admin-table-body"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <script src="app.js"></script>
     <script>
         window.onload = async () => {
-            // 1. Check if user is logged in
-            const session = await checkSession();
-            if (!session) {
-                window.location.href = 'login.html'; // Redirect if not logged in
+            const access = await verifyAdminAccess();
+            
+            if (!access.allowed) {
+                alert(access.error || "Please log in first.");
+                window.location.href = 'login.html';
                 return;
             }
-            // 2. If logged in, fetch data
+
+            // If allowed, reveal the page
+            document.getElementById('secure-body').style.display = 'flex';
+            document.getElementById('welcome-text').innerText = `Logged in: ${access.email}`;
+            
+            // Load Database
             fetchPlayers('admin-table-body', true);
+
+            // If it is you (the Super Admin), show the secret control panel
+            if (access.is_super_admin) {
+                document.getElementById('super-admin-panel').style.display = 'block';
+                fetchUsersForSuperAdmin();
+            }
         };
 
         document.getElementById('add-player-form').addEventListener('submit', async (e) => {
