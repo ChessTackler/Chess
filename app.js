@@ -9,11 +9,21 @@ if (window.supabase) {
 }
 
 // ==========================================
-// GLOBAL UI & MODAL HELPERS
+// GLOBAL UI & SECURITY HELPERS
 // ==========================================
+window.escapeHTML = function(str) {
+    if (!str) return '';
+    return str.toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+};
+
 window.formatTitlesToBadges = function(titleString) {
     if (!titleString || titleString.trim() === '') return '<span class="badge badge-default" style="background:transparent;box-shadow:none;">None</span>';
-    const titles = titleString.split(',').map(t => t.trim());
+    const titles = window.escapeHTML(titleString).split(',').map(t => t.trim());
     const badgesHtml = titles.map(t => {
         let badgeClass = 'badge-default';
         const upperT = t.toUpperCase();
@@ -33,8 +43,9 @@ window.formatStatusBadge = function(statusString) {
 
 function initModalSystem() {
     if(document.getElementById('custom-modal-overlay')) return;
-    const modalHTML = `<div id="custom-modal-overlay" class="custom-modal-overlay"><div id="custom-modal" class="custom-modal"><div id="custom-modal-header" class="custom-modal-header"><h3 id="custom-modal-title">Notice</h3><button class="close-modal-btn" onclick="closeModal()">×</button></div><div id="custom-modal-body" class="custom-modal-body"></div><div id="custom-modal-footer" class="custom-modal-footer"></div></div></div>`;
+    const modalHTML = `<div id="custom-modal-overlay" class="custom-modal-overlay"><div id="custom-modal" class="custom-modal"><div id="custom-modal-header" class="custom-modal-header"><h3 id="custom-modal-title">Notice</h3><button class="close-modal-btn" id="close-modal-top-btn">×</button></div><div id="custom-modal-body" class="custom-modal-body"></div><div id="custom-modal-footer" class="custom-modal-footer"></div></div></div>`;
     document.body.insertAdjacentHTML('beforeend', modalHTML);
+    document.getElementById('close-modal-top-btn').addEventListener('click', window.closeModal);
 }
 
 window.showModal = function(title, bodyHTML, footerHTML) { 
@@ -54,15 +65,20 @@ window.uiAlert = function(title, message, isError = false) {
     const icon = isError ? '❌' : '✅'; 
     const color = isError ? '#ef4444' : '#10b981'; 
     const body = `<div style="display:flex; align-items:center; gap:12px;"><span style="font-size:1.8rem; line-height:1;">${icon}</span><span style="color:${color}; font-weight:600; font-size:1rem;">${message}</span></div>`; 
-    const footer = `<button class="modal-btn modal-btn-confirm" onclick="closeModal()">Got it</button>`; 
+    const footer = `<button class="modal-btn modal-btn-confirm" id="modal-alert-btn">Got it</button>`; 
     window.showModal(title, body, footer); 
+    document.getElementById('modal-alert-btn').addEventListener('click', window.closeModal);
 }
 
 window.uiConfirm = function(title, message, confirmBtnText, onConfirm) { 
     const body = `<p style="font-size:1rem; color:#334155;">${message}</p>`; 
-    window._tempConfirm = () => { window.closeModal(); if(onConfirm) onConfirm(); }; 
-    const footer = `<button class="modal-btn modal-btn-cancel" onclick="closeModal()">Cancel</button><button class="modal-btn modal-btn-danger" onclick="window._tempConfirm()">${confirmBtnText}</button>`; 
+    const footer = `<button class="modal-btn modal-btn-cancel" id="modal-cancel-btn">Cancel</button><button class="modal-btn modal-btn-danger" id="modal-confirm-btn">${confirmBtnText}</button>`; 
     window.showModal(title, body, footer); 
+    document.getElementById('modal-cancel-btn').addEventListener('click', window.closeModal);
+    document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+        window.closeModal();
+        if(onConfirm) onConfirm();
+    });
 }
 
 // ==========================================
@@ -71,24 +87,23 @@ window.uiConfirm = function(title, message, confirmBtnText, onConfirm) {
 async function updateNavbar() {
     const nav = document.getElementById('main-nav');
     if (!nav) return; 
-    const baseLinks = `<a href="#">Tournaments</a><a href="#">Rankings</a>`;
-    
+
     if (!window.supabaseClient) { 
-        nav.innerHTML = baseLinks + `<div style="display:flex; align-items:center; gap:1rem;"><a href="login.html" class="nav-auth-btn">Log In</a><a href="signup.html" class="btn-orange" style="padding:0.6rem 1.2rem;">Sign Up</a></div>`; 
+        nav.innerHTML = `<div style="display:flex; align-items:center; gap:1rem;"><a href="login.html" class="nav-auth-btn">Log In</a><a href="signup.html" class="btn-orange" style="padding:0.6rem 1.2rem;">Sign Up</a></div>`; 
         return; 
     }
-    
+
     try {
         const { data: { session } } = await window.supabaseClient.auth.getSession();
         if (session) {
             const { data: profile } = await window.supabaseClient.from('profiles').select('is_admin').eq('id', session.user.id).single();
-            let adminLink = profile && profile.is_admin ? `<a href="admin.html" style="color: var(--accent-orange);">Admin Panel</a>` : "";
-            nav.innerHTML = baseLinks + adminLink + `<a href="#" onclick="handleLogout()" class="nav-auth-btn" style="color: #E74C3C; border-left: 1px solid var(--border-color); padding-left: 1.5rem; margin-left: 0.5rem;">Logout</a>`;
+            let adminLink = profile && profile.is_admin ? `<a href="admin.html" style="color: var(--accent-orange); font-weight:700;">Admin Panel</a>` : "";
+            nav.innerHTML = `${adminLink} <a href="#" onclick="handleLogout()" class="nav-auth-btn" style="color: #E74C3C; border-left: 1px solid var(--border-color); padding-left: 1.5rem; margin-left: 0.5rem;">Logout</a>`;
         } else { 
-            nav.innerHTML = baseLinks + `<div style="display:flex; align-items:center; gap:1rem; border-left:1px solid var(--border-color); padding-left:1rem; margin-left:0.5rem;"><a href="login.html" class="nav-auth-btn">Log In</a><a href="signup.html" class="btn-orange" style="padding:0.6rem 1.2rem;">Sign Up</a></div>`; 
+            nav.innerHTML = `<div style="display:flex; align-items:center; gap:1rem; border-left:1px solid var(--border-color); padding-left:1rem; margin-left:0.5rem;"><a href="login.html" class="nav-auth-btn">Log In</a><a href="signup.html" class="btn-orange" style="padding:0.6rem 1.2rem;">Sign Up</a></div>`; 
         }
     } catch (error) { 
-        nav.innerHTML = baseLinks + `<a href="login.html" class="nav-auth-btn">Log In</a>`; 
+        nav.innerHTML = `<a href="login.html" class="nav-auth-btn">Log In</a>`; 
     }
 }
 
@@ -149,10 +164,10 @@ window.renderTable = function() {
     } else {
         paginated.forEach(player => {
             const tr = document.createElement('tr');
-            const fullName = `${player.first_name} ${player.last_name || ''}`.trim();
-            const displayCdcaId = `<span class="data-id" style="color: var(--primary-blue); font-weight: 600;">${player.cdca_id}</span>`;
-            const displayStateId = player.state_id ? `<span class="data-id">${player.state_id}</span>` : '<span class="data-unrated">Pending</span>';
-            const displayFideId = player.fide_id ? `<span class="data-id">${player.fide_id}</span>` : '-';
+            const fullName = window.escapeHTML(`${player.first_name} ${player.last_name || ''}`.trim());
+            const displayCdcaId = `<span class="data-id" style="color: var(--primary-blue); font-weight: 600;">${window.escapeHTML(player.cdca_id)}</span>`;
+            const displayStateId = player.state_id ? `<span class="data-id">${window.escapeHTML(player.state_id)}</span>` : '<span class="data-unrated">Pending</span>';
+            const displayFideId = player.fide_id ? `<span class="data-id">${window.escapeHTML(player.fide_id)}</span>` : '-';
             const displayRating = player.fide_rating ? `<span class="data-rating">${player.fide_rating}</span>` : '<span class="data-unrated">Unrated</span>';
             const displayTitle = window.formatTitlesToBadges(player.title);
             const displayStatus = window.formatStatusBadge(player.id_status);
@@ -221,18 +236,18 @@ window.openEditModal = function(id) {
     const bodyHTML = `
         <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                <div class="form-group" style="margin:0;"><label>First Name</label><input type="text" id="edit_first" value="${player.first_name}"></div>
-                <div class="form-group" style="margin:0;"><label>Last Name</label><input type="text" id="edit_last" value="${player.last_name || ''}"></div>
+                <div class="form-group" style="margin:0;"><label>First Name</label><input type="text" id="edit_first" value="${window.escapeHTML(player.first_name)}"></div>
+                <div class="form-group" style="margin:0;"><label>Last Name</label><input type="text" id="edit_last" value="${window.escapeHTML(player.last_name || '')}"></div>
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                <div class="form-group" style="margin:0;"><label>CDCA ID</label><input type="text" id="edit_cdca" value="${player.cdca_id}" required></div>
-                <div class="form-group" style="margin:0;"><label>State ID</label><input type="text" id="edit_state" value="${player.state_id || ''}"></div>
+                <div class="form-group" style="margin:0;"><label>CDCA ID</label><input type="text" id="edit_cdca" value="${window.escapeHTML(player.cdca_id)}" required></div>
+                <div class="form-group" style="margin:0;"><label>State ID</label><input type="text" id="edit_state" value="${window.escapeHTML(player.state_id || '')}"></div>
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                <div class="form-group" style="margin:0;"><label>FIDE ID</label><input type="text" id="edit_fide" value="${player.fide_id || ''}"></div>
+                <div class="form-group" style="margin:0;"><label>FIDE ID</label><input type="text" id="edit_fide" value="${window.escapeHTML(player.fide_id || '')}"></div>
                 <div class="form-group" style="margin:0;"><label>FIDE Rating</label><input type="number" id="edit_rating" value="${player.fide_rating || ''}"></div>
             </div>
-            <div class="form-group" style="margin:0;"><label>Titles (Comma Separated)</label><input type="text" id="edit_title" value="${player.title || ''}"></div>
+            <div class="form-group" style="margin:0;"><label>Titles (Comma Separated)</label><input type="text" id="edit_title" value="${window.escapeHTML(player.title || '')}"></div>
             <div class="form-group" style="margin:0;">
                 <label>ID Status</label>
                 <select id="edit_status" style="width: 100%; padding: 0.9rem; border-radius: 8px; border: 1px solid #e2e8f0;">
@@ -243,7 +258,12 @@ window.openEditModal = function(id) {
         </div>
     `;
 
-    window._tempSaveEdit = async () => {
+    const footerHTML = `<button class="modal-btn modal-btn-cancel" id="modal-edit-cancel">Cancel</button><button class="modal-btn modal-btn-confirm" id="modal-edit-save">Save</button>`;
+    
+    window.showModal('✏️ Edit Player', bodyHTML, footerHTML);
+
+    document.getElementById('modal-edit-cancel').addEventListener('click', window.closeModal);
+    document.getElementById('modal-edit-save').addEventListener('click', async () => {
         const updateData = { 
             first_name: document.getElementById('edit_first').value.trim(), 
             last_name: document.getElementById('edit_last').value.trim() || null, 
@@ -257,8 +277,7 @@ window.openEditModal = function(id) {
         const { error } = await window.supabaseClient.from('player_database').update(updateData).eq('id', id);
         if(error) window.uiAlert('Failed', error.message, true);
         else { window.closeModal(); window.uiAlert('Success', 'Record updated.'); window.fetchPlayers(window.activeTbodyId, window.activeIsAdmin); }
-    };
-    window.showModal('✏️ Edit Player', bodyHTML, `<button class="modal-btn modal-btn-cancel" onclick="closeModal()">Cancel</button><button class="modal-btn modal-btn-confirm" onclick="window._tempSaveEdit()">Save</button>`);
+    });
 }
 
 window.deletePlayer = async function(id) {
@@ -292,12 +311,12 @@ window.timeSince = function(dateString) {
 window.fetchPublicNews = async function() {
     if (!window.supabaseClient) return;
     const { data: news, error } = await window.supabaseClient.from('news_articles').select('*').order('created_at', { ascending: false });
-    
+
     if (error) return;
 
     const headlinesContainer = document.getElementById('public-headlines');
     const announcementsContainer = document.getElementById('public-announcements');
-    
+
     if(headlinesContainer) headlinesContainer.innerHTML = '';
     if(announcementsContainer) announcementsContainer.innerHTML = '';
 
@@ -308,18 +327,20 @@ window.fetchPublicNews = async function() {
 
     news.forEach(item => {
         const timeAgo = window.timeSince(item.created_at);
-        const tagsArray = item.tags ? item.tags.split(',') : [];
+        const tagsArray = item.tags ? window.escapeHTML(item.tags).split(',') : [];
         const tagsHtml = tagsArray.map(tag => `<span class="tag-red">${tag.trim()}</span>`).join('');
         const listTagsHtml = tagsArray.map(tag => tag.trim()).join(' · ');
+        const safeTitle = window.escapeHTML(item.title);
+        const safeAuthor = window.escapeHTML(item.author);
 
         if (item.category === 'Headline') {
             const html = `
                 <a href="#" class="news-card-hero" style="background-image: url('${item.image_url || 'https://via.placeholder.com/600x400?text=No+Image'}');">
                     <div class="news-content">
                         <div class="news-tags">${tagsHtml}</div>
-                        <h3 class="news-title">${item.title}</h3>
+                        <h3 class="news-title">${safeTitle}</h3>
                         <div class="news-meta">
-                            <strong>${item.author}</strong>
+                            <strong>${safeAuthor}</strong>
                             <span>${timeAgo}</span>
                         </div>
                     </div>
@@ -330,7 +351,7 @@ window.fetchPublicNews = async function() {
             const html = `
                 <a href="#" class="news-list-item">
                     <div class="news-list-tags">${listTagsHtml}</div>
-                    <h3 class="news-list-title">${item.title}</h3>
+                    <h3 class="news-list-title">${safeTitle}</h3>
                 </a>
             `;
             if(announcementsContainer) announcementsContainer.insertAdjacentHTML('beforeend', html);
@@ -346,7 +367,7 @@ window.fetchAdminNews = async function() {
     if (error) return window.uiAlert('Database Error', error.message, true);
 
     tbody.innerHTML = '';
-    
+
     if (!news || news.length === 0) {
         tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No articles found.</td></tr>';
         return;
@@ -355,7 +376,7 @@ window.fetchAdminNews = async function() {
     news.forEach(item => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td><strong style="color:var(--text-dark);">${item.title}</strong></td>
+            <td><strong style="color:var(--text-dark);">${window.escapeHTML(item.title)}</strong></td>
             <td>${item.category === 'Headline' ? '<span class="badge badge-im">Headline</span>' : '<span class="badge badge-default">Announcement</span>'}</td>
             <td>${new Date(item.created_at).toLocaleDateString()}</td>
             <td><button onclick="window.deleteNews('${item.id}')" class="action-btn delete">Delete</button></td>
@@ -412,7 +433,7 @@ window.fetchUsersForSuperAdmin = async function() {
         const btnClass = profile.is_admin ? "action-btn delete" : "action-btn promote";
         const statusBadge = profile.is_admin ? '<span class="badge" style="background:#e0f2fe; color:#0369a1;">Admin</span>' : '<span class="badge badge-default">User</span>';
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td><strong style="color:var(--text-dark);">${profile.email}</strong> ${profile.is_super_admin ? '👑' : ''}</td><td>${statusBadge}</td><td>${!profile.is_super_admin ? `<button onclick="toggleAdmin('${profile.id}', ${profile.is_admin})" class="${btnClass}">${btnText}</button>` : '<span style="color:var(--text-muted); font-size:0.85rem;">Root User</span>'}</td>`;
+        tr.innerHTML = `<td><strong style="color:var(--text-dark);">${window.escapeHTML(profile.email)}</strong> ${profile.is_super_admin ? '👑' : ''}</td><td>${statusBadge}</td><td>${!profile.is_super_admin ? `<button onclick="toggleAdmin('${profile.id}', ${profile.is_admin})" class="${btnClass}">${btnText}</button>` : '<span style="color:var(--text-muted); font-size:0.85rem;">Root User</span>'}</td>`;
         tbody.appendChild(tr);
     });
 }
