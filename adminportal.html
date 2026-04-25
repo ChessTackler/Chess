@@ -10,24 +10,19 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* CLEAN, SUPREME, MINIMALIST UI (Matches Reference Image) */
         body {
-            background-color: #f3f4f6; /* Light gray background */
+            background-color: #f3f4f6; 
             min-height: 100vh;
         }
-
         .portal-wrapper {
             max-width: 1200px;
             margin: 0 auto;
             padding: 4rem 5%;
         }
-
-        /* SUPREME TYPOGRAPHY FOR HEADER */
         .portal-header {
             text-align: center;
             margin-bottom: 5rem;
         }
-
         .portal-title {
             font-family: 'Montserrat', sans-serif;
             font-size: 3rem;
@@ -39,94 +34,37 @@
             position: relative;
             display: inline-block;
         }
-
-        /* Power line under the title */
         .portal-title::after {
-            content: '';
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 6px;
-            background-color: var(--primary-blue);
-            border-radius: 10px;
+            content: ''; position: absolute; bottom: -12px; left: 50%;
+            transform: translateX(-50%); width: 80px; height: 6px;
+            background-color: var(--primary-blue); border-radius: 10px;
         }
-
-        .portal-subtitle {
-            color: #6b7280;
-            font-size: 1.15rem;
-            font-weight: 500;
-        }
-
-        /* THE GRID */
+        .portal-subtitle { color: #6b7280; font-size: 1.15rem; font-weight: 500; }
+        
         .ui-elements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2.5rem;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.5rem;
         }
-
-        /* THE CARD DESIGN (Clean White with Blue Border) */
         .ui-card {
-            background-color: #ffffff;
-            border-top: 4px solid var(--primary-blue);
-            padding: 3rem 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            background-color: #ffffff; border-top: 4px solid var(--primary-blue);
+            padding: 3rem 2rem; display: flex; flex-direction: column;
+            align-items: center; text-align: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-
-        .ui-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.06);
-        }
-
-        /* Line Icons */
-        .ui-icon {
-            width: 64px;
-            height: 64px;
-            margin-bottom: 1.5rem;
-            color: #374151;
-        }
-
-        /* Text Formatting */
+        .ui-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.06); }
+        .ui-icon { width: 64px; height: 64px; margin-bottom: 1.5rem; color: #374151; }
         .ui-card-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: #111827;
-            margin-bottom: 1rem;
+            font-family: 'Montserrat', sans-serif; font-size: 1.25rem;
+            font-weight: 800; color: #111827; margin-bottom: 1rem;
         }
-
-        .ui-card-desc {
-            font-size: 0.95rem;
-            color: #6b7280;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-            flex-grow: 1; 
-        }
-
-        /* Flat Blue Button */
+        .ui-card-desc { font-size: 0.95rem; color: #6b7280; line-height: 1.6; margin-bottom: 2rem; flex-grow: 1; }
+        
         .ui-btn {
-            background-color: var(--primary-blue);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 0.8rem 2rem;
-            font-size: 0.95rem;
-            font-weight: 600;
-            border-radius: 4px; 
-            transition: background-color 0.2s, box-shadow 0.2s;
-            width: 100%;
-            max-width: 200px;
+            background-color: var(--primary-blue); color: #ffffff; text-decoration: none;
+            padding: 0.8rem 2rem; font-size: 0.95rem; font-weight: 600;
+            border-radius: 4px; transition: background-color 0.2s, box-shadow 0.2s;
+            width: 100%; max-width: 200px;
         }
-
-        .ui-btn:hover {
-            background-color: var(--primary-dark);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-        }
+        .ui-btn:hover { background-color: var(--primary-dark); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
     </style>
 </head>
 <body>
@@ -137,7 +75,6 @@
             <div class="logo-divider admin-divider"></div>
             <img src="LogoABCA.png" alt="ABCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA'">
         </a>
-        
         <button onclick="triggerLogoutUI()" class="admin-logout-btn" title="Log Out">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
             <span>Log Out</span>
@@ -192,9 +129,7 @@
     </div>
 
     <script src="app.js"></script>
-    
     <script>
-        // High-Quality Custom Logout Modal Logic
         function triggerLogoutUI() {
             const bodyHTML = `
                 <div style="text-align: center; padding: 1.5rem 0;">
@@ -205,23 +140,18 @@
                     <p style="color: #64748b; font-size: 1rem; line-height: 1.5;">You are about to securely log out of the CDCA Administration Portal. Unsaved changes will be lost.</p>
                 </div>
             `;
-            
-            // Rich dual-button footer
             const footerHTML = `
                 <div style="display: flex; gap: 1rem; width: 100%;">
                     <button class="modal-btn modal-btn-cancel" style="flex: 1; padding: 1rem; font-size: 1rem;" onclick="window.closeModal()">Cancel</button>
                     <button class="modal-btn" style="flex: 1; padding: 1rem; font-size: 1rem; background: #ef4444; color: white; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);" onclick="window.handleLogout()">Confirm Log Out</button>
                 </div>
             `;
-            
             window.showModal('🔐 Secure Authentication', bodyHTML, footerHTML);
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
             const authMessage = document.getElementById('auth-message');
             const adminContent = document.getElementById('admin-content');
-
-            // Strictly check for admin rights using global helper from app.js
             const auth = await window.verifyAdminAccess();
 
             if (!auth.allowed) {
