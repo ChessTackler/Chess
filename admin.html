@@ -18,9 +18,11 @@
     </header>
 
     <div class="container">
+        <h2 class="section-title">Admin Dashboard</h2>
+        
         <div class="admin-grid">
             <div class="card">
-                <h3 style="margin-bottom: 1.5rem; color: var(--primary-blue);">Register Player</h3>
+                <h3 style="margin-bottom: 1.5rem; color: var(--primary-dark);">Register Player</h3>
                 <form id="add-player-form">
                     <div class="form-group"><label>First Name</label><input type="text" id="first_name" required></div>
                     <div class="form-group"><label>Last Name</label><input type="text" id="last_name" required></div>
@@ -30,26 +32,33 @@
                     <div class="form-group">
                         <label>Title</label>
                         <select id="title">
-                            <option value="">None</option><option value="CM">CM</option><option value="IM">IM</option><option value="GM">GM</option>
+                            <option value="">None</option>
+                            <option value="CM">CM</option>
+                            <option value="FM">FM</option>
+                            <option value="IM">IM</option>
+                            <option value="GM">GM</option>
                         </select>
                     </div>
                     <button type="submit" class="btn-orange" style="width: 100%;">Save Player</button>
                 </form>
             </div>
 
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th>Name</th><th>State ID</th><th>Rating</th><th>Action</th></tr></thead>
-                    <tbody id="admin-table-body"></tbody>
-                </table>
+            <div class="card">
+                <h3 style="margin-bottom: 1.5rem; color: var(--primary-dark);">Manage Players</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Name</th><th>State ID</th><th>Rating</th><th>Action</th></tr></thead>
+                        <tbody id="admin-table-body"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <div id="super-admin-panel" style="display: none; margin-top: 3rem;">
-            <h2 style="color: var(--accent-orange); margin-bottom: 1rem;">👑 Super Admin: User Role Management</h2>
+        <div id="super-admin-panel" class="card" style="display: none; margin-top: 2rem;">
+            <h3 style="color: var(--accent-orange); margin-bottom: 1.5rem;">👑 Super Admin: User Role Management</h3>
             <div class="table-wrapper">
                 <table>
-                    <thead><tr><th>User Email</th><th>Status</th><th>Manage Tag</th></tr></thead>
+                    <thead><tr><th>User Email</th><th>Role</th><th>Manage Tag</th></tr></thead>
                     <tbody id="super-admin-table-body"></tbody>
                 </table>
             </div>
@@ -61,25 +70,28 @@
         window.onload = async () => {
             const access = await verifyAdminAccess();
 
+            // Redirect unauthorized users immediately
             if (!access.allowed) {
-                alert(access.error || "Please log in first.");
+                alert(access.error || "Please log in with an admin account first.");
                 window.location.href = 'login.html';
                 return;
             }
 
+            // Reveal body and set email tag
             document.getElementById('secure-body').style.display = 'flex';
             document.getElementById('welcome-text').innerText = `Logged in: ${access.email}`;
             fetchPlayers('admin-table-body', true);
 
+            // Display Super Admin tools if applicable
             if (access.is_super_admin) {
                 document.getElementById('super-admin-panel').style.display = 'block';
                 fetchUsersForSuperAdmin();
             }
         };
 
+        // Form Submission Logic
         document.getElementById('add-player-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await addPlayer();
+            await addPlayer(e);
         });
     </script>
 </body>
