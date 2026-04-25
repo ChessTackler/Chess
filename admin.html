@@ -149,6 +149,7 @@
 
             const auth = await window.verifyAdminAccess();
 
+            // Explicitly hides admin panel if user is not authorized
             if (!auth.allowed) {
                 authMessage.innerHTML = `<span style="color: #ef4444;">❌ Access Denied.</span><br><span style="font-size:1rem; font-weight:400; display:block; margin-top:10px;">You must be logged in as an Administrator. Redirecting...</span>`;
                 setTimeout(() => { window.location.href = 'index.html'; }, 2000);
