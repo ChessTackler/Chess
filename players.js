@@ -175,65 +175,65 @@ window.deleteAllTimePlayer = async function(id) {
     });
 }
 
-// --- 6. MOBILE AUTO-FEED SCRIPT ---
-// This triggers when you tap the button in admin.html
+// --- 6. MOBILE AUTO-FEED SCRIPT (DIAGNOSTIC MODE) ---
 window.mobileFeedDatabase = async function() {
-    if (!window.supabaseClient) return window.uiAlert("Error", "Database not connected.", true);
-    
-    // Prevent double-tapping
-    const btn = document.getElementById('mobile-feed-btn');
-    btn.innerText = "⏳ Uploading to Supabase...";
-    btn.disabled = true;
+    try {
+        if (!window.supabaseClient) {
+            alert("🛑 CRASH: Supabase is not connected to this page.");
+            return;
+        }
+        
+        alert("⏳ Attempting to contact the database now...");
 
-    const playersToInsert = [
-        { cdca_id: "100025", state_id: null, first_name: "Rahul", last_name: "Sangma", title: "IM", fide_rating: null, fide_id: null },
-        { cdca_id: "200025", state_id: null, first_name: "Priya", last_name: "Ratnam", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "300025", state_id: null, first_name: "Kumar", last_name: "Kaushlendra", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "400025", state_id: null, first_name: "Sunil", last_name: "Kumar Saini", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "500025", state_id: null, first_name: "Y.P", last_name: "srivastava", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "600025", state_id: null, first_name: "Nand", last_name: "Kishore", title: "FA", fide_rating: null, fide_id: null },
-        { cdca_id: "700025", state_id: null, first_name: "Haque", last_name: "Minhajul", title: "FI, AIM", fide_rating: null, fide_id: null },
-        { cdca_id: "800025", state_id: null, first_name: "Vikash", last_name: "Kumar Dwivedi", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "900025", state_id: null, first_name: "Rahul", last_name: "Raj", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "1000025", state_id: null, first_name: "Ved", last_name: "Prakash", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "1100025", state_id: null, first_name: "Mohit", last_name: "Kumar Soni", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "1200025", state_id: null, first_name: "Md.", last_name: "Attaula Khan", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "1300025", state_id: null, first_name: "Sonu", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "1400025", state_id: null, first_name: "Amandeep", last_name: "Chauhan", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "1500025", state_id: null, first_name: "Kumar", last_name: "Amrendra", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "1600025", state_id: null, first_name: "Praveen", last_name: "Kumar Soni", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "1700025", state_id: null, first_name: "Raj", last_name: "Prakhar", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "1800025", state_id: null, first_name: "Dhananjay", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "1900025", state_id: null, first_name: "Arbind", last_name: "Kumar Singh", title: "IA, FA, NI", fide_rating: null, fide_id: null },
-        { cdca_id: "2000025", state_id: null, first_name: "Nitesh", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "2100025", state_id: null, first_name: "Randhir", last_name: "Kumar Singh", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "2200025", state_id: null, first_name: "Sagar", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "2300025", state_id: null, first_name: "Prem", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "2400025", state_id: null, first_name: "Ravi", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "2500025", state_id: null, first_name: "Kumar", last_name: "Shubham", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "2600025", state_id: null, first_name: "Raj", last_name: "Shekhar", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "2700025", state_id: null, first_name: "Sumedha", last_name: "Shree", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "2800025", state_id: null, first_name: "Mohini", last_name: "Pandit", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "2900025", state_id: null, first_name: "Nitesh", last_name: "Ranjan", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "3000025", state_id: null, first_name: "Farhan", last_name: "Raza", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "3100025", state_id: null, first_name: "Shivam", last_name: "Anand", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "3200025", state_id: null, first_name: "Ashwini", last_name: "Giri", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "3300025", state_id: null, first_name: "Akash", last_name: "kumar", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "3400025", state_id: null, first_name: "Shubhankar", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "3500025", state_id: null, first_name: "Ayush", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "3600025", state_id: null, first_name: "Sunny", last_name: "Kumar Singh", title: null, fide_rating: null, fide_id: null },
-        { cdca_id: "3700025", state_id: null, first_name: "Aryan", last_name: "Singh", title: null, fide_rating: null, fide_id: null }
-    ];
+        const playersToInsert = [
+            { cdca_id: "100025", state_id: null, first_name: "Rahul", last_name: "Sangma", title: "IM", fide_rating: null, fide_id: null },
+            { cdca_id: "200025", state_id: null, first_name: "Priya", last_name: "Ratnam", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "300025", state_id: null, first_name: "Kumar", last_name: "Kaushlendra", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "400025", state_id: null, first_name: "Sunil", last_name: "Kumar Saini", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "500025", state_id: null, first_name: "Y.P", last_name: "srivastava", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "600025", state_id: null, first_name: "Nand", last_name: "Kishore", title: "FA", fide_rating: null, fide_id: null },
+            { cdca_id: "700025", state_id: null, first_name: "Haque", last_name: "Minhajul", title: "FI, AIM", fide_rating: null, fide_id: null },
+            { cdca_id: "800025", state_id: null, first_name: "Vikash", last_name: "Kumar Dwivedi", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "900025", state_id: null, first_name: "Rahul", last_name: "Raj", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "1000025", state_id: null, first_name: "Ved", last_name: "Prakash", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "1100025", state_id: null, first_name: "Mohit", last_name: "Kumar Soni", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "1200025", state_id: null, first_name: "Md.", last_name: "Attaula Khan", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "1300025", state_id: null, first_name: "Sonu", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "1400025", state_id: null, first_name: "Amandeep", last_name: "Chauhan", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "1500025", state_id: null, first_name: "Kumar", last_name: "Amrendra", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "1600025", state_id: null, first_name: "Praveen", last_name: "Kumar Soni", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "1700025", state_id: null, first_name: "Raj", last_name: "Prakhar", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "1800025", state_id: null, first_name: "Dhananjay", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "1900025", state_id: null, first_name: "Arbind", last_name: "Kumar Singh", title: "IA, FA, NI", fide_rating: null, fide_id: null },
+            { cdca_id: "2000025", state_id: null, first_name: "Nitesh", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "2100025", state_id: null, first_name: "Randhir", last_name: "Kumar Singh", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "2200025", state_id: null, first_name: "Sagar", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "2300025", state_id: null, first_name: "Prem", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "2400025", state_id: null, first_name: "Ravi", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "2500025", state_id: null, first_name: "Kumar", last_name: "Shubham", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "2600025", state_id: null, first_name: "Raj", last_name: "Shekhar", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "2700025", state_id: null, first_name: "Sumedha", last_name: "Shree", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "2800025", state_id: null, first_name: "Mohini", last_name: "Pandit", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "2900025", state_id: null, first_name: "Nitesh", last_name: "Ranjan", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "3000025", state_id: null, first_name: "Farhan", last_name: "Raza", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "3100025", state_id: null, first_name: "Shivam", last_name: "Anand", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "3200025", state_id: null, first_name: "Ashwini", last_name: "Giri", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "3300025", state_id: null, first_name: "Akash", last_name: "kumar", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "3400025", state_id: null, first_name: "Shubhankar", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "3500025", state_id: null, first_name: "Ayush", last_name: "Kumar", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "3600025", state_id: null, first_name: "Sunny", last_name: "Kumar Singh", title: null, fide_rating: null, fide_id: null },
+            { cdca_id: "3700025", state_id: null, first_name: "Aryan", last_name: "Singh", title: null, fide_rating: null, fide_id: null }
+        ];
 
-    const { data, error } = await window.supabaseClient.from('all_time_players').insert(playersToInsert);
-    
-    if (error) {
-        if (error.code === '23505') window.uiAlert("Warning", "Data has already been added to the database. You can delete this button now.");
-        else window.uiAlert("Error", error.message, true);
-    } else {
-        window.uiAlert("Success!", "All 37 players have been added to the database.");
-        fetchAllTimePlayers('all-time-admin-body', true);
+        const { data, error } = await window.supabaseClient.from('all_time_players').insert(playersToInsert);
+        
+        if (error) {
+            alert("❌ DATABASE ERROR:\n\nMessage: " + error.message + "\n\nCode: " + error.code);
+        } else {
+            alert("✅ SUCCESS! Data uploaded.");
+            fetchAllTimePlayers('all-time-admin-body', true);
+        }
+    } catch (err) {
+        alert("⚠️ JAVASCRIPT CRASH:\n\n" + err.message);
     }
-    
-    btn.innerText = "Data Uploaded!";
 }
