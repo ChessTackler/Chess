@@ -1,0 +1,83 @@
+/* =========================================
+   REGISTRATION MODULE SPECIFIC STYLES
+========================================= */
+
+/* File Input Styling */
+.file-input-styled {
+    background: #f8fafc;
+    border: 2px dashed #cbd5e1 !important;
+    padding: 1.5rem !important;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 12px !important;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.file-input-styled:hover {
+    border-color: var(--primary-blue) !important;
+    background: #eff6ff;
+}
+
+.file-input-styled::file-selector-button {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 15px;
+    transition: 0.2s;
+}
+
+.file-input-styled::file-selector-button:hover { 
+    background: var(--primary-dark); 
+}
+
+/* Payment Layout */
+.payment-section-wrapper {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+    background: #f8fafc;
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+}
+
+.qr-code-box {
+    flex-shrink: 0;
+    text-align: center;
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.qr-code-box img {
+    border-radius: 8px;
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+}
+
+.payment-upload-box { 
+    flex-grow: 1; 
+}
+
+/* Mobile Overrides for Payment Box */
+@media (max-width: 768px) {
+    .payment-section-wrapper { 
+        flex-direction: column; 
+        text-align: center; 
+        padding: 1.5rem; 
+        gap: 1.5rem; 
+    }
+    .payment-upload-box { 
+        width: 100%; 
+        text-align: left; 
+    }
+}
