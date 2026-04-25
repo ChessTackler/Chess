@@ -52,7 +52,7 @@
                 const password = document.getElementById('password').value;
 
                 if (typeof supabase === 'undefined') {
-                    throw new Error("Cannot connect to server. Check your internet or app.js link.");
+                    throw new Error("Cannot connect to server.");
                 }
 
                 const { data, error } = await supabase.auth.signUp({ email, password });
@@ -63,7 +63,6 @@
                 setTimeout(() => window.location.href = 'index.html', 1500); 
 
             } catch (error) {
-                console.error("Signup Error:", error);
                 msgEl.innerText = error.message;
                 msgEl.style.color = "#E74C3C"; 
             }
