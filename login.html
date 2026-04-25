@@ -52,7 +52,7 @@
                 const password = document.getElementById('password').value;
 
                 if (typeof supabase === 'undefined') {
-                    throw new Error("Cannot connect to server. Check your internet or app.js link.");
+                    throw new Error("Cannot connect to server.");
                 }
 
                 const { data, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -61,9 +61,8 @@
                 msgEl.innerText = "Success! Redirecting...";
                 msgEl.style.color = "#27AE60";
                 window.location.href = 'index.html'; 
-                
+
             } catch (error) {
-                console.error("Login Error:", error);
                 msgEl.innerText = error.message;
                 msgEl.style.color = "#E74C3C";
             }
