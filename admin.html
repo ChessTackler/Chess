@@ -8,136 +8,183 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body>
+<body style="background-color: #f1f5f9;">
 
-    <header class="chess-graphic-nav">
+    <header class="chess-graphic-nav" style="border-bottom: 2px solid var(--primary-blue);">
         <a href="index.html" class="logo-wrapper">
             <img src="LogoCDCA.png" alt="CDCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=CDCA'">
             <div class="logo-divider"></div>
             <img src="LogoABCA.png" alt="ABCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA'">
         </a>
-        <nav id="main-nav"></nav>
+        
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <span class="badge badge-im" style="font-size: 0.9rem; padding: 0.5rem 1rem;">🛡️ Secure Admin Portal</span>
+            <button onclick="window.handleLogout()" class="btn-orange" style="background: #ef4444; box-shadow: none; padding: 0.6rem 1.2rem;">Log Out</button>
+        </div>
     </header>
 
-    <div id="auth-message" style="text-align: center; padding: 5rem 1rem; font-size: 1.2rem; font-weight: 600; color: #475569;">
-        Checking authorization credentials...
+    <div id="auth-message" style="text-align: center; padding: 8rem 1rem; font-size: 1.2rem; font-weight: 600; color: #475569;">
+        <div class="loader" style="margin: 0 auto 1rem auto; width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: var(--primary-blue); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        Authenticating Admin Credentials...
     </div>
 
     <div id="admin-content" style="display: none;">
-        <div class="container">
-            <h2 class="section-title" style="text-align: left;">Dashboard Overview</h2>
-
-            <h3 style="margin-bottom: 1rem;">📰 Publish News & Updates</h3>
-            <div class="admin-card">
-                <form id="add-news-form" onsubmit="window.addNews(event)">
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-                        <div class="form-group">
-                            <label>Article Title*</label>
-                            <input type="text" id="news_title" required placeholder="E.g. Grandmaster achieves new peak...">
-                        </div>
-                        <div class="form-group">
-                            <label>Category*</label>
-                            <select id="news_category" required>
-                                <option value="Headline">Headline (Requires Image)</option>
-                                <option value="Announcement">Announcement (Text Only)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem;">
-                        <div class="form-group">
-                            <label>Tags (Comma separated)*</label>
-                            <input type="text" id="news_tags" required placeholder="HEADLINES, NEWS, POSTS">
-                        </div>
-                        <div class="form-group">
-                            <label>Image URL (Required for Headlines)</label>
-                            <input type="url" id="news_image" placeholder="https://image-link.com/img.jpg">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn-orange">Publish Article</button>
-                </form>
+        <div class="container" style="max-width: 1400px; padding-top: 2rem;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
+                <div>
+                    <h2 class="section-title" style="text-align: left; margin-bottom: 0.5rem; font-size: 2.5rem;">Dashboard Overview</h2>
+                    <p style="color: var(--text-muted); font-size: 1.05rem;" id="admin-welcome-text">Manage your databases, publish updates, and oversee the platform.</p>
+                </div>
             </div>
 
-            <div class="table-wrapper" style="margin-bottom: 4rem;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Article Title</th>
-                            <th>Category</th>
-                            <th>Date Published</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-news-tbody"></tbody>
-                </table>
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="window.switchAdminTab('tab-news')">📰 News & Media</button>
+                <button class="tab-btn" onclick="window.switchAdminTab('tab-players')">♟️ Player Database</button>
+                <button class="tab-btn" id="super-admin-tab-btn" style="display:none;" onclick="window.switchAdminTab('tab-users')">🛡️ System Users</button>
             </div>
 
-            <h3 style="margin-bottom: 1rem;">♟️ Add New Player</h3>
-            <div class="admin-card">
-                <form id="add-player-form" onsubmit="window.addPlayer(event)">
-                    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:1rem; margin-bottom:1rem;">
-                        <div class="form-group"><label>First Name*</label><input type="text" id="first_name" required></div>
-                        <div class="form-group"><label>Last Name</label><input type="text" id="last_name"></div>
-                        <div class="form-group"><label>CDCA ID*</label><input type="text" id="cdca_id" required></div>
-                        <div class="form-group"><label>State ID</label><input type="text" id="state_id"></div>
-                    </div>
-                    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:1rem; margin-bottom:1.5rem;">
-                        <div class="form-group"><label>FIDE ID</label><input type="text" id="fide_id"></div>
-                        <div class="form-group"><label>FIDE Rating</label><input type="number" id="fide_rating"></div>
-                        <div class="form-group"><label>Titles (e.g. GM, IM)</label><input type="text" id="title"></div>
-                        <div class="form-group">
-                            <label>Status*</label>
-                            <select id="id_status" required>
-                                <option value="Active">Active</option>
-                                <option value="Inactive">Inactive</option>
-                            </select>
+            <div id="tab-news" class="tab-content active">
+                <div class="admin-layout-grid">
+                    <div class="admin-layout-col">
+                        <div class="admin-card">
+                            <h3 style="margin-bottom: 1.5rem; color: var(--text-dark); border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem;">Publish New Article</h3>
+                            <form id="add-news-form" onsubmit="window.addNews(event)">
+                                <div class="form-group">
+                                    <label>Article Title*</label>
+                                    <input type="text" id="news_title" required placeholder="E.g. Grandmaster achieves new peak...">
+                                </div>
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                    <div class="form-group">
+                                        <label>Category*</label>
+                                        <select id="news_category" required>
+                                            <option value="Headline">Headline (Requires Image)</option>
+                                            <option value="Announcement">Announcement (Text Only)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tags (Comma separated)*</label>
+                                        <input type="text" id="news_tags" required placeholder="e.g. STATE, TOURNAMENT">
+                                    </div>
+                                </div>
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                    <div class="form-group">
+                                        <label>Publish Date</label>
+                                        <input type="date" id="news_date">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Publish Time</label>
+                                        <input type="time" id="news_time">
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 1.5rem;">
+                                    <label>Cover Image URL (Required for Headlines)</label>
+                                    <input type="url" id="news_image" placeholder="https://your-image-link.com/img.jpg">
+                                </div>
+                                <button type="submit" class="btn-orange" style="width: 100%;">Publish Article</button>
+                            </form>
                         </div>
                     </div>
-                    <button type="submit" class="btn-orange">Add Player to Database</button>
-                </form>
-            </div>
 
-            <div class="search-box" style="margin-bottom: 1.5rem; max-width: 400px; box-shadow: none; border: 1px solid var(--border-color);">
-                <input type="text" id="searchInput" placeholder="Search Database..." onkeyup="handleGlobalSearch()">
-            </div>
-
-            <div class="table-wrapper" style="margin-bottom: 4rem;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Player Name</th>
-                            <th>CDCA ID</th>
-                            <th>State ID</th>
-                            <th>Rating</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-tbody"></tbody>
-                </table>
-                <div class="pagination">
-                    <span class="pagination-info" id="page-info">Page 1 of 1</span>
-                    <div class="pagination-controls">
-                        <button id="page-prev" onclick="changePage(-1)" disabled>Previous</button>
-                        <button id="page-next" onclick="changePage(1)" disabled>Next</button>
+                    <div class="admin-layout-col">
+                        <div class="admin-card" style="padding: 0; overflow: hidden;">
+                            <div style="padding: 1.5rem; background: #f8fafc; border-bottom: 1px solid var(--border-color);">
+                                <h3 style="margin: 0; color: var(--text-dark);">Published Articles</h3>
+                            </div>
+                            <div class="table-wrapper" style="box-shadow: none; border: none; border-radius: 0;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Title & Details</th>
+                                            <th style="width: 150px;">Date</th>
+                                            <th style="width: 160px; text-align: right;">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="admin-news-tbody"></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div id="super-admin-section" style="display: none;">
-                <h3 style="margin-bottom: 1rem;">🛡️ Super Admin - User Roles</h3>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>User Email</th>
-                                <th>Role</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="super-admin-table-body"></tbody>
-                    </table>
+            <div id="tab-players" class="tab-content">
+                <div class="admin-card">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--text-dark); border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem;">Add New Player Registration</h3>
+                    <form id="add-player-form" onsubmit="window.addPlayer(event)">
+                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1.2rem; margin-bottom:1.5rem;">
+                            <div class="form-group" style="margin:0;"><label>First Name*</label><input type="text" id="first_name" required></div>
+                            <div class="form-group" style="margin:0;"><label>Last Name</label><input type="text" id="last_name"></div>
+                            <div class="form-group" style="margin:0;"><label>CDCA ID*</label><input type="text" id="cdca_id" required></div>
+                            <div class="form-group" style="margin:0;"><label>State ID</label><input type="text" id="state_id"></div>
+                            <div class="form-group" style="margin:0;"><label>FIDE ID</label><input type="text" id="fide_id"></div>
+                            <div class="form-group" style="margin:0;"><label>FIDE Rating</label><input type="number" id="fide_rating"></div>
+                            <div class="form-group" style="margin:0;"><label>Titles (e.g. GM, IM)</label><input type="text" id="title"></div>
+                            <div class="form-group" style="margin:0;">
+                                <label>Status*</label>
+                                <select id="id_status" required>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-orange">Add to Master Database</button>
+                    </form>
+                </div>
+
+                <div class="admin-card" style="padding: 0; overflow: hidden; margin-top: 2rem;">
+                    <div style="padding: 1.5rem; background: #f8fafc; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                        <h3 style="margin: 0; color: var(--text-dark);">Master Player Registry</h3>
+                        <div class="search-box" style="margin: 0; box-shadow: none; border: 1px solid var(--border-color); max-width: 350px;">
+                            <input type="text" id="searchInput" placeholder="Search Database..." onkeyup="handleGlobalSearch()" style="padding: 0.6rem 1rem;">
+                        </div>
+                    </div>
+                    <div class="table-wrapper" style="box-shadow: none; border: none; border-radius: 0;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Player Name</th>
+                                    <th>CDCA ID</th>
+                                    <th>State ID</th>
+                                    <th>Rating</th>
+                                    <th>Status</th>
+                                    <th style="text-align: right;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-tbody"></tbody>
+                        </table>
+                        <div class="pagination" style="border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
+                            <span class="pagination-info" id="page-info">Page 1 of 1</span>
+                            <div class="pagination-controls">
+                                <button id="page-prev" onclick="changePage(-1)" disabled>Previous</button>
+                                <button id="page-next" onclick="changePage(1)" disabled>Next</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <div id="tab-users" class="tab-content">
+                <div class="admin-card" style="padding: 0; overflow: hidden;">
+                    <div style="padding: 1.5rem; background: #fef2f2; border-bottom: 1px solid #fecaca;">
+                        <h3 style="margin: 0; color: #991b1b;">🛡️ Administrative Roles</h3>
+                        <p style="margin: 0; font-size: 0.9rem; color: #b91c1c; margin-top: 5px;">Grant or revoke admin access to registered users. Exercise caution.</p>
+                    </div>
+                    <div class="table-wrapper" style="box-shadow: none; border: none; border-radius: 0;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User Email</th>
+                                    <th>Current Role</th>
+                                    <th style="text-align: right;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="super-admin-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -149,17 +196,19 @@
 
             const auth = await window.verifyAdminAccess();
 
-            // Explicitly hides admin panel if user is not authorized
             if (!auth.allowed) {
-                authMessage.innerHTML = `<span style="color: #ef4444;">❌ Access Denied.</span><br><span style="font-size:1rem; font-weight:400; display:block; margin-top:10px;">You must be logged in as an Administrator. Redirecting...</span>`;
+                authMessage.innerHTML = `<span style="color: #ef4444; font-size: 2rem;">❌</span><br><br>Access Denied.<br><span style="font-size:1rem; font-weight:400; display:block; margin-top:10px;">You must be logged in as an Administrator. Redirecting...</span>`;
                 setTimeout(() => { window.location.href = 'index.html'; }, 2000);
             } else {
                 authMessage.style.display = 'none';
                 adminContent.style.display = 'block';
+                document.getElementById('admin-welcome-text').innerText = `Welcome back, ${auth.email}. Manage your platform below.`;
+                
                 window.fetchPlayers('admin-tbody', true);
                 window.fetchAdminNews();
+                
                 if (auth.is_super_admin) {
-                    document.getElementById('super-admin-section').style.display = 'block';
+                    document.getElementById('super-admin-tab-btn').style.display = 'block';
                     window.fetchUsersForSuperAdmin();
                 }
             }
