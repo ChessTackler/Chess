@@ -18,16 +18,29 @@ async function updateNavbar() {
             .single();
 
         if (profile && profile.is_admin) {
-            navHTML += `<a href="admin.html" style="color: var(--accent-orange); font-weight: 700;">Admin Panel</a>`;
+            navHTML += `
+                <a href="admin.html" style="color: var(--accent-orange);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: text-bottom; margin-right: 4px;">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    Admin Panel
+                </a>`;
         }
-        navHTML += `<a href="#" onclick="handleLogout()" class="nav-auth-btn" style="color: #E74C3C;">Logout</a>`;
+        
+        navHTML += `
+            <a href="#" onclick="handleLogout()" class="nav-auth-btn" style="color: #E74C3C; border-left: 1px solid var(--border-color); padding-left: 1.5rem; margin-left: 0.5rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                Logout
+            </a>`;
     } else {
         navHTML += `
-            <a href="login.html" class="nav-auth-btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                Log In
-            </a>
-            <a href="signup.html" class="btn-orange" style="padding: 0.6rem 1.2rem; margin-left: 10px;">Sign Up</a>
+            <div style="display: flex; align-items: center; gap: 1rem; border-left: 1px solid var(--border-color); padding-left: 1rem; margin-left: 0.5rem;">
+                <a href="login.html" class="nav-auth-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+                    Log In
+                </a>
+                <a href="signup.html" class="btn-orange" style="padding: 0.6rem 1.2rem;">Sign Up</a>
+            </div>
         `;
     }
     nav.innerHTML = navHTML;
@@ -90,14 +103,15 @@ async function fetchPlayers(tableBodyId, isAdmin = false) {
     });
 }
 
-async function addPlayer() {
+async function addPlayer(event) {
+    event.preventDefault(); // Prevent form submission from reloading page
     const newPlayer = {
         first_name: document.getElementById('first_name').value,
         last_name: document.getElementById('last_name').value,
         state_id: document.getElementById('state_id').value,
         fide_id: document.getElementById('fide_id').value || null,
         fide_rating: document.getElementById('fide_rating').value || null,
-        title: document.getElementById('title').value
+        title: document.getElementById('title').value || null
     };
     const { error } = await supabase.from('players').insert([newPlayer]);
     if (error) alert('Error: ' + error.message);
