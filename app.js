@@ -1,20 +1,37 @@
 const supabaseUrl = 'https://vwzcdfgbqaszhqlvewch.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3emNkZmdicWFzemhxbHZld2NoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwNDc4MTgsImV4cCI6MjA5MjYyMzgxOH0.SBEcDqvAkpvxyVV2eSxuvYt-0Ehst5B0_dxI9u0eTRQ';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+// Safely initialize and attach to 'window' to avoid cross-script scope collisions
+if (window.supabase) {
+    window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+} else {
+    console.error("Supabase CDN not loaded. Check internet connection.");
+}
 
 // --- DYNAMIC NAVBAR RENDERING ---
 async function updateNavbar() {
     const nav = document.getElementById('main-nav');
     if (!nav) return; 
 
+    if (!window.supabaseClient) {
+        nav.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span style="color: #E74C3C; font-weight: 600; font-size: 0.85rem;">Database Offline</span>
+                <a href="login.html" class="nav-auth-btn">Log In</a>
+                <a href="signup.html" class="btn-orange" style="padding: 0.6rem 1.2rem;">Sign Up</a>
+            </div>
+        `;
+        return;
+    }
+
     try {
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        const { data: { session }, error: sessionError } = await window.supabaseClient.auth.getSession();
         if (sessionError) throw sessionError;
 
         let navHTML = `<a href="#">Tournaments</a><a href="#">Rankings</a>`;
 
         if (session) {
-            const { data: profile, error: profileError } = await supabase
+            const { data: profile } = await window.supabaseClient
                 .from('profiles')
                 .select('is_admin')
                 .eq('id', session.user.id)
@@ -50,24 +67,24 @@ async function updateNavbar() {
 
     } catch (error) {
         console.error("Navbar Error:", error);
-        nav.innerHTML = `
-            <a href="login.html" class="nav-auth-btn">Log In</a>
-            <a href="signup.html" class="btn-orange" style="padding: 0.6rem 1.2rem;">Sign Up</a>
-        `;
+        nav.innerHTML = `<a href="login.html" class="nav-auth-btn">Log In</a><a href="signup.html" class="btn-orange" style="padding: 0.6rem 1.2rem;">Sign Up</a>`;
     }
 }
 
 // --- AUTHENTICATION LOGIC ---
 async function handleLogout() {
-    await supabase.auth.signOut();
+    if (!window.supabaseClient) return;
+    await window.supabaseClient.auth.signOut();
     window.location.href = 'index.html';
 }
 
 async function verifyAdminAccess() {
-    const { data: { session } } = await supabase.auth.getSession();
+    if (!window.supabaseClient) return { allowed: false, error: "Database offline." };
+    
+    const { data: { session } } = await window.supabaseClient.auth.getSession();
     if (!session) return { allowed: false };
 
-    const { data: profile, error } = await supabase
+    const { data: profile, error } = await window.supabaseClient
         .from('profiles')
         .select('*')
         .eq('id', session.user.id)
@@ -81,18 +98,31 @@ async function verifyAdminAccess() {
 
 // --- DATABASE OPERATIONS (Players) ---
 async function fetchPlayers(tableBodyId, isAdmin = false) {
-    const { data: players, error } = await supabase
+    const tbody = document.getElementById(tableBodyId);
+    if (!tbody) return;
+
+    if (!window.supabaseClient) {
+        tbody.innerHTML = `<tr><td colspan="${isAdmin ? 4 : 5}" style="text-align: center; color: #E74C3C;">Database connection failed.</td></tr>`;
+        return;
+    }
+
+    const { data: players, error } = await window.supabaseClient
         .from('players')
         .select('*')
         .order('fide_rating', { ascending: false });
 
-    if (error) { console.error('Fetch error:', error); return; }
+    if (error) { 
+        tbody.innerHTML = `<tr><td colspan="${isAdmin ? 4 : 5}" style="text-align: center; color: #E74C3C;">Error loading players.</td></tr>`;
+        return; 
+    }
 
-    const tbody = document.getElementById(tableBodyId);
-    if (!tbody) return;
     tbody.innerHTML = ''; 
+    if (players.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="${isAdmin ? 4 : 5}" style="text-align: center; color: var(--text-muted);">No players found in database.</td></tr>`;
+        return;
+    }
 
-    players?.forEach(player => {
+    players.forEach(player => {
         const tr = document.createElement('tr');
         if (isAdmin) {
             tr.innerHTML = `
@@ -116,6 +146,8 @@ async function fetchPlayers(tableBodyId, isAdmin = false) {
 
 async function addPlayer(event) {
     event.preventDefault(); 
+    if (!window.supabaseClient) return alert("Cannot add player: Database offline.");
+
     const newPlayer = {
         first_name: document.getElementById('first_name').value,
         last_name: document.getElementById('last_name').value,
@@ -124,9 +156,11 @@ async function addPlayer(event) {
         fide_rating: document.getElementById('fide_rating').value || null,
         title: document.getElementById('title').value || null
     };
-    const { error } = await supabase.from('players').insert([newPlayer]);
-    if (error) alert('Error: ' + error.message);
-    else { 
+    
+    const { error } = await window.supabaseClient.from('players').insert([newPlayer]);
+    if (error) {
+        alert('Error: ' + error.message);
+    } else { 
         alert('Player Saved Successfully!'); 
         document.getElementById('add-player-form').reset(); 
         fetchPlayers('admin-table-body', true); 
@@ -134,18 +168,20 @@ async function addPlayer(event) {
 }
 
 async function deletePlayer(id) {
+    if (!window.supabaseClient) return alert("Database offline.");
     if(confirm("Delete this player?")) {
-        await supabase.from('players').delete().eq('id', id);
+        await window.supabaseClient.from('players').delete().eq('id', id);
         fetchPlayers('admin-table-body', true); 
     }
 }
 
 // --- SUPER ADMIN FUNCTIONS (Manage Users) ---
 async function fetchUsersForSuperAdmin() {
-    const { data: profiles } = await supabase.from('profiles').select('*').order('email');
     const tbody = document.getElementById('super-admin-table-body');
-    if (!tbody) return; 
+    if (!tbody || !window.supabaseClient) return; 
 
+    const { data: profiles } = await window.supabaseClient.from('profiles').select('*').order('email');
+    
     tbody.innerHTML = '';
     profiles?.forEach(profile => {
         const btnText = profile.is_admin ? "Remove Admin Tag" : "Give Admin Tag";
@@ -161,6 +197,7 @@ async function fetchUsersForSuperAdmin() {
 }
 
 async function toggleAdmin(id, currentStatus) {
-    await supabase.from('profiles').update({ is_admin: !currentStatus }).eq('id', id);
+    if (!window.supabaseClient) return;
+    await window.supabaseClient.from('profiles').update({ is_admin: !currentStatus }).eq('id', id);
     fetchUsersForSuperAdmin(); 
 }
