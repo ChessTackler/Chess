@@ -165,6 +165,12 @@ window.openEditModal = function(id) {
     const player = window.currentPlayersList.find(p => p.id === id);
     if(!player) return uiAlert('Error', 'Player data not found locally.', true);
 
+    let displayTitle = "None";
+    if (player.title === 'CM') displayTitle = "CM (Candidate Master)";
+    if (player.title === 'FM') displayTitle = "FM (FIDE Master)";
+    if (player.title === 'IM') displayTitle = "IM (International Master)";
+    if (player.title === 'GM') displayTitle = "GM (Grandmaster)";
+
     const bodyHTML = `
         <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
             <div class="form-group" style="margin:0;"><label>First Name</label><input type="text" id="edit_first" value="${player.first_name}" style="background:#fff;"></div>
@@ -174,15 +180,29 @@ window.openEditModal = function(id) {
                 <div class="form-group" style="margin:0;"><label>FIDE ID</label><input type="text" id="edit_fide" value="${player.fide_id || ''}" style="background:#fff;"></div>
                 <div class="form-group" style="margin:0;"><label>FIDE Rating</label><input type="number" id="edit_rating" value="${player.fide_rating || ''}" style="background:#fff;"></div>
             </div>
-            <div class="form-group" style="margin:0;">
-                <label>Title</label>
-                <select id="edit_title" style="background:#fff; width:100%; padding:0.8rem; border-radius:8px; border:1px solid var(--border-color); outline:none;">
-                    <option value="" ${player.title===''?'selected':''}>None</option>
+            
+            <div class="form-group" style="margin:0; position:relative;">
+                <label>Master Title</label>
+                <select id="edit_title" style="display: none;">
+                    <option value="" ${player.title===''||player.title===null?'selected':''}>None</option>
                     <option value="CM" ${player.title==='CM'?'selected':''}>CM</option>
                     <option value="FM" ${player.title==='FM'?'selected':''}>FM</option>
                     <option value="IM" ${player.title==='IM'?'selected':''}>IM</option>
                     <option value="GM" ${player.title==='GM'?'selected':''}>GM</option>
                 </select>
+                
+                <div class="custom-select-wrapper">
+                    <div class="custom-select" id="custom-edit-select">
+                        <div class="custom-select-trigger"><span id="custom-edit-text">${displayTitle}</span><div class="arrow"></div></div>
+                        <div class="custom-options">
+                            <span class="custom-option ${player.title===''||player.title===null?'selected':''}" data-value="">None</span>
+                            <span class="custom-option ${player.title==='CM'?'selected':''}" data-value="CM">CM (Candidate Master)</span>
+                            <span class="custom-option ${player.title==='FM'?'selected':''}" data-value="FM">FM (FIDE Master)</span>
+                            <span class="custom-option ${player.title==='IM'?'selected':''}" data-value="IM">IM (International Master)</span>
+                            <span class="custom-option ${player.title==='GM'?'selected':''}" data-value="GM">GM (Grandmaster)</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     `;
@@ -210,7 +230,33 @@ window.openEditModal = function(id) {
         <button class="modal-btn modal-btn-cancel" onclick="closeModal()">Cancel</button>
         <button class="modal-btn modal-btn-confirm" onclick="window._tempSaveEdit()">Save Changes</button>
     `;
+    
     showModal('✏️ Edit Player Data', bodyHTML, footerHTML);
+
+    // Wire up the dynamic UI dropdown INSIDE the modal
+    setTimeout(() => {
+        const editSelect = document.getElementById('custom-edit-select');
+        const editTrigger = editSelect.querySelector('.custom-select-trigger');
+        const editOptions = editSelect.querySelectorAll('.custom-option');
+        const editRealSelect = document.getElementById('edit_title');
+        const editSelectText = document.getElementById('custom-edit-text');
+
+        editTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            editSelect.classList.toggle('open');
+        });
+
+        editOptions.forEach(opt => {
+            opt.addEventListener('click', function(e) {
+                e.stopPropagation();
+                editOptions.forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                editSelectText.innerText = this.innerText;
+                editRealSelect.value = this.getAttribute('data-value');
+                editSelect.classList.remove('open');
+            });
+        });
+    }, 100);
 }
 
 // --- ADD & DELETE LOGIC ---
@@ -234,7 +280,6 @@ async function addPlayer(event) {
         uiAlert('Database Updated', 'Player has been saved successfully!'); 
         document.getElementById('add-player-form').reset(); 
         
-        // Reset custom select visually if on admin page
         const customText = document.getElementById('custom-select-text');
         if(customText) customText.innerText = "None";
         document.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
