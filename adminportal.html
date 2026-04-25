@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Portal - CDCA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Administration CDCA - Portal</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* CLEAN, MINIMALIST UI BASED ON PROVIDED IMAGE */
+        /* CLEAN, SUPREME, MINIMALIST UI */
         body {
             background-color: #f3f4f6; /* Light gray background */
             min-height: 100vh;
@@ -20,34 +22,54 @@
             padding: 4rem 5%;
         }
 
+        /* SUPREME TYPOGRAPHY FOR HEADER */
         .portal-header {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 5rem;
         }
 
         .portal-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #1f2937;
-            margin-bottom: 0.5rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            color: #111827;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Power line under the title */
+        .portal-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 6px;
+            background-color: var(--primary-blue);
+            border-radius: 10px;
         }
 
         .portal-subtitle {
             color: #6b7280;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
+            font-weight: 500;
         }
 
-        /* The Grid */
+        /* THE GRID */
         .ui-elements-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
         }
 
-        /* The Card Design */
+        /* THE CARD DESIGN */
         .ui-card {
             background-color: #ffffff;
-            border-top: 4px solid var(--primary-blue); /* Solid blue top border */
+            border-top: 4px solid var(--primary-blue);
             padding: 3rem 2rem;
             display: flex;
             flex-direction: column;
@@ -59,7 +81,7 @@
 
         .ui-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.06);
         }
 
         /* Line Icons */
@@ -72,18 +94,19 @@
 
         /* Text Formatting */
         .ui-card-title {
+            font-family: 'Montserrat', sans-serif;
             font-size: 1.25rem;
-            font-weight: 700;
+            font-weight: 800;
             color: #111827;
             margin-bottom: 1rem;
         }
 
         .ui-card-desc {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #6b7280;
             line-height: 1.6;
             margin-bottom: 2rem;
-            flex-grow: 1; /* Pushes button to bottom */
+            flex-grow: 1; 
         }
 
         /* Flat Blue Button */
@@ -91,15 +114,18 @@
             background-color: var(--primary-blue);
             color: #ffffff;
             text-decoration: none;
-            padding: 0.7rem 2rem;
-            font-size: 0.9rem;
+            padding: 0.8rem 2rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            border-radius: 4px; /* Slight rounding, mostly square */
-            transition: background-color 0.2s;
+            border-radius: 4px; 
+            transition: background-color 0.2s, box-shadow 0.2s;
+            width: 100%;
+            max-width: 200px;
         }
 
         .ui-btn:hover {
             background-color: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
         }
     </style>
 </head>
@@ -112,7 +138,7 @@
             <img src="LogoABCA.png" alt="ABCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA'">
         </a>
         
-        <button onclick="window.handleLogout()" class="admin-logout-btn" title="Log Out">
+        <button onclick="triggerLogoutUI()" class="admin-logout-btn" title="Log Out">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
             <span>Log Out</span>
         </button>
@@ -127,7 +153,7 @@
         <div class="portal-wrapper">
             
             <div class="portal-header">
-                <h1 class="portal-title">UI Elements</h1>
+                <h1 class="portal-title">Administration CDCA</h1>
                 <p class="portal-subtitle">Select an administrative module to manage the platform.</p>
             </div>
 
@@ -135,30 +161,30 @@
                 
                 <div class="ui-card">
                     <svg class="ui-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    <h3 class="ui-card-title">Application Review</h3>
-                    <p class="ui-card-desc">Access the private queue. Review new player registrations, verify secure documents, and activate pending CDCA IDs.</p>
-                    <a href="registered.html" class="ui-btn">Read More</a>
+                    <h3 class="ui-card-title">Registered Players</h3>
+                    <p class="ui-card-desc">View the secure directory of all onboarded players. Track registration statuses and view basic profile information efficiently.</p>
+                    <a href="registered.html" class="ui-btn">Access</a>
                 </div>
 
                 <div class="ui-card">
                     <svg class="ui-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <h3 class="ui-card-title">Master Database</h3>
-                    <p class="ui-card-desc">Manage the active player registry. Edit existing player profiles, update FIDE ratings, and manually add new players.</p>
-                    <a href="admin.html" class="ui-btn">Read More</a>
+                    <p class="ui-card-desc">Manage the active player registry. Edit existing player profiles, update FIDE ratings, and manually insert historical records.</p>
+                    <a href="admin.html" class="ui-btn">Access</a>
                 </div>
 
                 <div class="ui-card">
                     <svg class="ui-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                     <h3 class="ui-card-title">News & Media</h3>
-                    <p class="ui-card-desc">Publish official CDCA announcements and headlines. Manage the public news feed and update front-page alerts.</p>
-                    <a href="admin.html" class="ui-btn">Read More</a>
+                    <p class="ui-card-desc">Publish official CDCA announcements and tournament headlines. Manage the public news feed and update front-page alerts.</p>
+                    <a href="admin.html" class="ui-btn">Access</a>
                 </div>
 
                 <div class="ui-card">
-                    <svg class="ui-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                    <h3 class="ui-card-title">System Roles</h3>
-                    <p class="ui-card-desc">Super Admin controls. Grant or revoke administrative privileges to registered users on the CDCA platform.</p>
-                    <a href="admin.html" class="ui-btn">Read More</a>
+                    <svg class="ui-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <h3 class="ui-card-title">Application Review</h3>
+                    <p class="ui-card-desc">Process pending player applications. Securely verify uploaded Aadhaar cards and payment proofs to issue official CDCA IDs.</p>
+                    <a href="registered.html" class="ui-btn">Access</a>
                 </div>
 
             </div>
@@ -167,6 +193,30 @@
 
     <script src="app.js"></script>
     <script>
+        // High-Quality Custom Logout Modal Logic
+        function triggerLogoutUI() {
+            const bodyHTML = `
+                <div style="text-align: center; padding: 1.5rem 0;">
+                    <div style="background: #fee2e2; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem auto; box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);">
+                        <svg width="40" height="40" fill="none" stroke="#ef4444" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    </div>
+                    <h3 style="color: #111827; font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em;">Terminate Session?</h3>
+                    <p style="color: #64748b; font-size: 1rem; line-height: 1.5;">You are about to securely log out of the CDCA Administration Portal. Unsaved changes will be lost.</p>
+                </div>
+            `;
+            
+            // Rich dual-button footer
+            const footerHTML = `
+                <div style="display: flex; gap: 1rem; width: 100%;">
+                    <button class="modal-btn modal-btn-cancel" style="flex: 1; padding: 1rem; font-size: 1rem;" onclick="window.closeModal()">Cancel</button>
+                    <button class="modal-btn" style="flex: 1; padding: 1rem; font-size: 1rem; background: #ef4444; color: white; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);" onclick="window.handleLogout()">Confirm Log Out</button>
+                </div>
+            `;
+            
+            // Passing 'null' to the title so the custom modal looks cleaner without a double header
+            window.showModal('🔐 Secure Authentication', bodyHTML, footerHTML);
+        }
+
         document.addEventListener('DOMContentLoaded', async () => {
             const authMessage = document.getElementById('auth-message');
             const adminContent = document.getElementById('admin-content');
