@@ -10,15 +10,13 @@
 </head>
 <body>
 
-    <header>
+    <header class="chess-graphic-nav">
         <a href="index.html" class="logo-wrapper">
-            <img src="LogoCDCA.png" alt="CDCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=CDCA+Missing'">
+            <img src="LogoCDCA.png" alt="CDCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=CDCA'">
             <div class="logo-divider"></div>
-            <img src="LogoABCA.png" alt="ABCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA+Missing'">
+            <img src="LogoABCA.png" alt="ABCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA'">
         </a>
-        <nav id="main-nav">
-            <a href="index.html">Back to Site</a>
-        </nav>
+        <nav id="main-nav"></nav>
     </header>
 
     <div id="auth-message" style="text-align: center; padding: 5rem 1rem; font-size: 1.2rem; font-weight: 600; color: #475569;">
@@ -28,7 +26,7 @@
     <div id="admin-content" style="display: none;">
         <div class="container">
             <h2 class="section-title" style="text-align: left;">Dashboard Overview</h2>
-            
+
             <h3 style="margin-bottom: 1rem;">📰 Publish News & Updates</h3>
             <div class="admin-card">
                 <form id="add-news-form" onsubmit="window.addNews(event)">
@@ -148,9 +146,9 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const authMessage = document.getElementById('auth-message');
             const adminContent = document.getElementById('admin-content');
-            
+
             const auth = await window.verifyAdminAccess();
-            
+
             if (!auth.allowed) {
                 authMessage.innerHTML = `<span style="color: #ef4444;">❌ Access Denied.</span><br><span style="font-size:1rem; font-weight:400; display:block; margin-top:10px;">You must be logged in as an Administrator. Redirecting...</span>`;
                 setTimeout(() => { window.location.href = 'index.html'; }, 2000);
