@@ -7,7 +7,6 @@ if (window.supabase) {
     console.error("Supabase CDN not loaded.");
 }
 
-// Global state to store players locally for fast editing
 window.currentPlayersList = [];
 
 // --- CUSTOM MODAL UI SYSTEM ---
@@ -126,7 +125,7 @@ async function fetchPlayers(tableBodyId, isAdmin = false) {
     const { data: players, error } = await window.supabaseClient.from('players').select('*').order('fide_rating', { ascending: false });
     if (error) return; 
 
-    window.currentPlayersList = players; // Save globally for the edit form
+    window.currentPlayersList = players;
     tbody.innerHTML = ''; 
 
     if (players.length === 0) {
@@ -234,6 +233,14 @@ async function addPlayer(event) {
     } else { 
         uiAlert('Database Updated', 'Player has been saved successfully!'); 
         document.getElementById('add-player-form').reset(); 
+        
+        // Reset custom select visually if on admin page
+        const customText = document.getElementById('custom-select-text');
+        if(customText) customText.innerText = "None";
+        document.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
+        const defaultOpt = document.querySelector('.custom-option[data-value=""]');
+        if(defaultOpt) defaultOpt.classList.add('selected');
+
         fetchPlayers('admin-table-body', true); 
     }
 }
