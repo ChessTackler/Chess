@@ -32,11 +32,14 @@ body::before {
    NAVBAR GRAPHICS & ALIGNMENT
 ========================================= */
 .chess-graphic-nav {
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    /* STYLISH ABSTRACT CHESSBOARD DESIGN (Fading from right to left) */
+    background-color: #ffffff;
     background-image: 
-        radial-gradient(circle at 0% 50%, rgba(37, 99, 235, 0.04) 0%, transparent 40%),
-        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30h30v30H30V30zM0 0h30v30H0V0z' fill='%2394a3b8' fill-opacity='0.04' fill-rule='evenodd'/%3E%3C/svg%3E");
+        linear-gradient(90deg, #ffffff 40%, transparent 100%),
+        repeating-conic-gradient(rgba(148, 163, 184, 0.1) 0% 25%, transparent 0% 50%);
+    background-size: 100% 100%, 30px 30px;
+    background-position: left, right;
+    
     display: flex; justify-content: space-between; align-items: center;
     padding: 0.8rem 5%; border-bottom: 1px solid rgba(226, 232, 240, 0.8);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); position: sticky; top: 0; z-index: 1000;
@@ -44,12 +47,12 @@ body::before {
 
 .nav-left { display: flex; align-items: center; z-index: 1001; }
 
-.logo-wrapper { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+.logo-wrapper { display: flex; align-items: center; gap: 14px; text-decoration: none; position: relative; z-index: 2; }
 .brand-logo { height: 42px; width: auto; object-fit: contain; transition: transform 0.3s ease; }
 .brand-logo:hover { transform: scale(1.05); }
 .logo-divider { width: 2px; height: 30px; background-color: #E2E8F0; border-radius: 2px; }
 
-nav#main-nav { display: flex; align-items: center; gap: 2rem; min-height: 42px; }
+nav#main-nav { display: flex; align-items: center; gap: 2rem; min-height: 42px; position: relative; z-index: 2;}
 nav#main-nav a { text-decoration: none; color: var(--text-dark); font-weight: 600; font-size: 0.95rem; transition: all 0.2s ease; position: relative; }
 nav#main-nav a:not(.btn-orange):not(.nav-auth-btn)::after {
     content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0;
@@ -68,12 +71,10 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 7px; transition-duration: .5s; margin-right: 1.5rem;
 }
-/* CHANGED: Made bars pure black */
 .bars { width: 100%; height: 4px; background-color: #000000; border-radius: 4px; }
 #bar2 { transition-duration: .8s; }
 #bar1, #bar3 { width: 70%; }
 
-/* CHANGED: Made the "X" state black too */
 #nav-checkbox:checked + .nav-toggle .bars { position: absolute; transition-duration: .5s; background-color: #000000; }
 #nav-checkbox:checked + .nav-toggle #bar2 { transform: scaleX(0); transition-duration: .5s; }
 #nav-checkbox:checked + .nav-toggle #bar1 { width: 100%; transform: rotate(45deg); transition-duration: .5s; }
@@ -90,19 +91,19 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .sidebar-menu {
     position: fixed; top: 0; left: -320px; width: 320px; height: 100vh;
     background: #ffffff; z-index: 999; transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 4px 0 24px rgba(0,0,0,0.15); overflow-y: auto; padding: 6rem 1.5rem 2rem 1.5rem;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.15); overflow-y: auto; padding: 2rem 1.5rem;
+    display: flex; flex-direction: column;
 }
 
 #nav-checkbox:checked ~ .sidebar-menu { left: 0; }
 #nav-checkbox:checked ~ .sidebar-overlay { opacity: 1; visibility: visible; }
 
-/* ADDED: Header Flex container for the close button */
 .sidebar-header-flex { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 1.5rem; padding-left: 10px; }
 .menu-header { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 800; margin: 0; }
 .sidebar-close-btn { font-size: 28px; line-height: 1; cursor: pointer; color: var(--text-muted); transition: color 0.2s; margin-top: -4px; padding: 0 5px; }
 .sidebar-close-btn:hover { color: #ef4444; }
 
-.sidebar-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.sidebar-list { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
 
 .nav-details summary { list-style: none; outline: none; }
 .nav-details summary::-webkit-details-marker { display: none; }
@@ -137,6 +138,18 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 }
 .sub-link:hover { color: var(--accent-orange); background: #fffbeb; }
 
+/* SIDEBAR AUTH STYLES */
+.sidebar-auth-section { margin-top: 2rem; border-top: 2px solid var(--border-color); padding-top: 1.5rem; }
+.sidebar-auth-group { display: flex; flex-direction: column; gap: 10px; }
+.sidebar-btn { display: block; text-align: center; padding: 12px; border-radius: 8px; font-weight: 600; text-decoration: none; font-size: 1rem; transition: 0.2s; }
+.sidebar-btn-outline { border: 2px solid var(--border-color); color: var(--text-dark); }
+.sidebar-btn-outline:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+.sidebar-btn-solid { background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-hover) 100%); color: white; }
+.sidebar-btn-solid:hover { box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); transform: translateY(-1px); }
+.sidebar-btn-admin { background: #fffbeb; color: var(--accent-hover); border: 1px solid #fde68a; }
+.sidebar-btn-danger { border: 2px solid #fee2e2; color: #ef4444; }
+.sidebar-btn-danger:hover { background: #fee2e2; }
+
 /* =========================================
    BUTTONS & FORMS
 ========================================= */
@@ -165,7 +178,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .section-title { text-align: center; margin-bottom: 2.5rem; font-size: 2.2rem; color: var(--text-dark); font-weight: 800; letter-spacing: -0.02em; }
 
 .hero { 
-    position: relative; padding: 6rem 5%; display: flex; align-items: center; justify-content: center;
+    position: relative; padding: 7rem 5%; display: flex; align-items: center; justify-content: center;
     text-align: center; color: white; width: 100%; overflow: hidden; background-color: #0f172a; 
 }
 .hero::before {
@@ -173,9 +186,9 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     background-image: url('CBG.png'); background-size: cover; background-position: center;
     filter: blur(12px); opacity: 0.30; z-index: 0;
 }
-.hero-content { position: relative; z-index: 1; flex: 1; max-width: 750px; display: flex; flex-direction: column; align-items: center; }
+.hero-content { position: relative; z-index: 1; flex: 1; max-width: 750px; display: flex; flex-direction: column; align-items: center; margin-bottom: 2rem; }
 .hero-content h1 { font-size: 3.2rem; font-weight: 800; margin-bottom: 1.2rem; line-height: 1.15; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-.hero-content p { font-size: 1.2rem; margin-bottom: 2.5rem; color: #E2E8F0; line-height: 1.6; }
+.hero-content p { font-size: 1.2rem; margin-bottom: 0; color: #E2E8F0; line-height: 1.6; }
 
 .search-box { 
     display: flex; background: rgba(255, 255, 255, 0.95); border-radius: 50px; 
@@ -277,7 +290,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     .logo-divider { height: 22px; }
     #main-nav { display: none; }
 
-    .hero { padding: 4rem 5%; }
+    .hero { padding: 5rem 5%; }
     .hero-content h1 { font-size: 2.2rem; }
 
     .search-box { 
