@@ -82,7 +82,7 @@ window.uiConfirm = function(title, message, confirmBtnText, onConfirm) {
 }
 
 // ==========================================
-// AUTH & NAVBAR (UPDATED FOR SIDEBAR SYNC)
+// AUTH & NAVBAR
 // ==========================================
 async function updateNavbar() {
     const nav = document.getElementById('main-nav');
@@ -99,7 +99,6 @@ async function updateNavbar() {
         if (session) {
             const { data: profile } = await window.supabaseClient.from('profiles').select('is_admin').eq('id', session.user.id).single();
             
-            // Only visible to admin users
             let adminLinkDesktop = profile && profile.is_admin ? `<a href="admin.html" style="color: var(--accent-orange); font-weight:700;">Admin Panel</a>` : "";
             let adminLinkSidebar = profile && profile.is_admin ? `<a href="admin.html" class="sidebar-btn sidebar-btn-admin">Admin Panel</a>` : "";
 
@@ -181,7 +180,7 @@ window.renderTable = function() {
             const displayStatus = window.formatStatusBadge(player.id_status);
 
             if (window.activeIsAdmin) {
-                tr.innerHTML = `<td><div class="player-name">👤 ${fullName}</div></td><td>${displayCdcaId}</td><td>${displayStateId}</td><td>${displayRating}</td><td>${displayStatus}</td><td><div style="display:flex; gap:0.5rem;"><button onclick="openEditModal('${player.id}')" class="action-btn promote">Edit</button><button onclick="deletePlayer('${player.id}')" class="action-btn delete">Delete</button></div></td>`;
+                tr.innerHTML = `<td><div class="player-name">👤 ${fullName}</div></td><td>${displayCdcaId}</td><td>${displayStateId}</td><td>${displayRating}</td><td>${displayStatus}</td><td style="text-align: right;"><div style="display:flex; gap:0.5rem; justify-content: flex-end;"><button onclick="openEditModal('${player.id}')" class="action-btn promote">Edit</button><button onclick="deletePlayer('${player.id}')" class="action-btn delete">Delete</button></div></td>`;
             } else {
                 tr.innerHTML = `<td><div class="player-name">${fullName}</div></td><td>${displayCdcaId}</td><td>${displayStateId}</td><td>${displayFideId}</td><td>${displayRating}</td><td>${displayTitle}</td><td>${displayStatus}</td>`;
             }
@@ -298,8 +297,10 @@ window.deletePlayer = async function(id) {
 }
 
 // ==========================================
-// NEWS ENGINE
+// NEWS ENGINE (EDIT & DATETIME)
 // ==========================================
+window.currentNewsList = []; 
+
 window.timeSince = function(dateString) {
     const date = new Date(dateString);
     const seconds = Math.floor((new Date() - date) / 1000);
@@ -319,7 +320,6 @@ window.timeSince = function(dateString) {
 window.fetchPublicNews = async function() {
     if (!window.supabaseClient) return;
     const { data: news, error } = await window.supabaseClient.from('news_articles').select('*').order('created_at', { ascending: false });
-
     if (error) return;
 
     const headlinesContainer = document.getElementById('public-headlines');
@@ -374,20 +374,35 @@ window.fetchAdminNews = async function() {
     const { data: news, error } = await window.supabaseClient.from('news_articles').select('*').order('created_at', { ascending: false });
     if (error) return window.uiAlert('Database Error', error.message, true);
 
+    window.currentNewsList = news || [];
     tbody.innerHTML = '';
 
-    if (!news || news.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No articles found.</td></tr>';
+    if (!window.currentNewsList || window.currentNewsList.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-muted); padding: 2rem;">No articles published yet.</td></tr>';
         return;
     }
 
-    news.forEach(item => {
+    window.currentNewsList.forEach(item => {
         const tr = document.createElement('tr');
+        const badge = item.category === 'Headline' ? '<span class="badge badge-im">Headline</span>' : '<span class="badge badge-default">Announcement</span>';
+        const dateObj = new Date(item.created_at);
+        const formattedDate = dateObj.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+        const formattedTime = dateObj.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+
         tr.innerHTML = `
-            <td><strong style="color:var(--text-dark);">${window.escapeHTML(item.title)}</strong></td>
-            <td>${item.category === 'Headline' ? '<span class="badge badge-im">Headline</span>' : '<span class="badge badge-default">Announcement</span>'}</td>
-            <td>${new Date(item.created_at).toLocaleDateString()}</td>
-            <td><button onclick="window.deleteNews('${item.id}')" class="action-btn delete">Delete</button></td>
+            <td>
+                <strong style="color:var(--text-dark); display:block; font-size:1.05rem; margin-bottom:5px;">${window.escapeHTML(item.title)}</strong>
+                <div style="display:flex; gap:10px; align-items:center;">${badge} <span style="font-size:0.8rem; color:#64748b;">Tags: ${window.escapeHTML(item.tags)}</span></div>
+            </td>
+            <td style="color:#475569; font-size:0.9rem;">
+                <strong>${formattedDate}</strong><br>${formattedTime}
+            </td>
+            <td style="text-align: right;">
+                <div style="display:flex; gap:0.5rem; justify-content:flex-end;">
+                    <button onclick="window.openEditNewsModal('${item.id}')" class="action-btn promote">Edit</button>
+                    <button onclick="window.deleteNews('${item.id}')" class="action-btn delete">Delete</button>
+                </div>
+            </td>
         `;
         tbody.appendChild(tr);
     });
@@ -397,12 +412,22 @@ window.addNews = async function(event) {
     event.preventDefault();
     if (!window.supabaseClient) return;
 
+    let dateVal = document.getElementById('news_date').value;
+    let timeVal = document.getElementById('news_time').value;
+    let finalDate = new Date(); 
+    
+    if (dateVal) {
+        if (!timeVal) timeVal = new Date().toTimeString().substring(0,5); 
+        finalDate = new Date(`${dateVal}T${timeVal}:00`);
+    }
+
     const newArticle = {
         title: document.getElementById('news_title').value.trim(),
         category: document.getElementById('news_category').value,
         tags: document.getElementById('news_tags').value.trim(),
         image_url: document.getElementById('news_image').value.trim() || null,
-        author: 'CDCA Admin'
+        author: 'CDCA Admin',
+        created_at: finalDate.toISOString()
     };
 
     if(newArticle.category === 'Headline' && !newArticle.image_url) {
@@ -419,13 +444,78 @@ window.addNews = async function(event) {
     }
 }
 
+window.openEditNewsModal = function(id) {
+    const article = window.currentNewsList.find(a => a.id === id);
+    if(!article) return;
+
+    const dateObj = new Date(article.created_at);
+    const dateStr = dateObj.toISOString().split('T')[0];
+    const timeStr = dateObj.toTimeString().substring(0,5);
+
+    const bodyHTML = `
+        <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+            <div class="form-group" style="margin:0;"><label>Article Title</label><input type="text" id="edit_news_title" value="${window.escapeHTML(article.title)}" required></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                <div class="form-group" style="margin:0;">
+                    <label>Category</label>
+                    <select id="edit_news_category">
+                        <option value="Headline" ${article.category === 'Headline' ? 'selected' : ''}>Headline</option>
+                        <option value="Announcement" ${article.category === 'Announcement' ? 'selected' : ''}>Announcement</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin:0;"><label>Tags</label><input type="text" id="edit_news_tags" value="${window.escapeHTML(article.tags || '')}"></div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                <div class="form-group" style="margin:0;"><label>Date</label><input type="date" id="edit_news_date" value="${dateStr}"></div>
+                <div class="form-group" style="margin:0;"><label>Time</label><input type="time" id="edit_news_time" value="${timeStr}"></div>
+            </div>
+            <div class="form-group" style="margin:0;"><label>Image URL</label><input type="url" id="edit_news_image" value="${window.escapeHTML(article.image_url || '')}"></div>
+        </div>
+    `;
+
+    const footerHTML = `<button class="modal-btn modal-btn-cancel" id="modal-editnews-cancel">Cancel</button><button class="modal-btn modal-btn-confirm" id="modal-editnews-save">Save Changes</button>`;
+    
+    window.showModal('✏️ Edit Article', bodyHTML, footerHTML);
+
+    document.getElementById('modal-editnews-cancel').addEventListener('click', window.closeModal);
+    document.getElementById('modal-editnews-save').addEventListener('click', async () => {
+        let eDate = document.getElementById('edit_news_date').value;
+        let eTime = document.getElementById('edit_news_time').value;
+        let eFinalDate = new Date(`${eDate}T${eTime}:00`);
+
+        const updateData = { 
+            title: document.getElementById('edit_news_title').value.trim(), 
+            category: document.getElementById('edit_news_category').value, 
+            tags: document.getElementById('edit_news_tags').value.trim(),
+            image_url: document.getElementById('edit_news_image').value.trim() || null,
+            created_at: eFinalDate.toISOString()
+        };
+
+        if(updateData.category === 'Headline' && !updateData.image_url) {
+            return window.uiAlert('Missing Image', 'Headlines require a valid Image URL.', true);
+        }
+
+        const { error } = await window.supabaseClient.from('news_articles').update(updateData).eq('id', id);
+        if(error) window.uiAlert('Failed', error.message, true);
+        else { window.closeModal(); window.uiAlert('Success', 'Article updated successfully.'); window.fetchAdminNews(); }
+    });
+}
+
 window.deleteNews = async function(id) {
     if (!window.supabaseClient) return;
-    window.uiConfirm('⚠️ Delete Article?', 'Are you sure you want to delete this news item?', 'Delete', async () => {
+    window.uiConfirm('⚠️ Delete Article?', 'Are you sure you want to delete this news item? This cannot be undone.', 'Delete', async () => {
         const { error } = await window.supabaseClient.from('news_articles').delete().eq('id', id);
         if (error) window.uiAlert('Error', error.message, true);
         else { window.uiAlert('Deleted', 'Article removed.'); window.fetchAdminNews(); }
     });
+}
+
+window.switchAdminTab = function(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    const activeBtn = document.querySelector(`[onclick="window.switchAdminTab('${tabId}')"]`);
+    if(activeBtn) activeBtn.classList.add('active');
 }
 
 // ==========================================
@@ -441,7 +531,7 @@ window.fetchUsersForSuperAdmin = async function() {
         const btnClass = profile.is_admin ? "action-btn delete" : "action-btn promote";
         const statusBadge = profile.is_admin ? '<span class="badge" style="background:#e0f2fe; color:#0369a1;">Admin</span>' : '<span class="badge badge-default">User</span>';
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td><strong style="color:var(--text-dark);">${window.escapeHTML(profile.email)}</strong> ${profile.is_super_admin ? '👑' : ''}</td><td>${statusBadge}</td><td>${!profile.is_super_admin ? `<button onclick="toggleAdmin('${profile.id}', ${profile.is_admin})" class="${btnClass}">${btnText}</button>` : '<span style="color:var(--text-muted); font-size:0.85rem;">Root User</span>'}</td>`;
+        tr.innerHTML = `<td><strong style="color:var(--text-dark);">${window.escapeHTML(profile.email)}</strong> ${profile.is_super_admin ? '👑' : ''}</td><td>${statusBadge}</td><td style="text-align: right;">${!profile.is_super_admin ? `<button onclick="toggleAdmin('${profile.id}', ${profile.is_admin})" class="${btnClass}">${btnText}</button>` : '<span style="color:var(--text-muted); font-size:0.85rem;">Root User</span>'}</td>`;
         tbody.appendChild(tr);
     });
 }
