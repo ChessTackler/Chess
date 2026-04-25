@@ -10,32 +10,30 @@
 </head>
 <body style="background-color: #f1f5f9;">
 
-    <header class="chess-graphic-nav" style="border-bottom: 2px solid var(--primary-blue);">
+    <header class="chess-admin-header">
         <a href="index.html" class="logo-wrapper">
             <img src="LogoCDCA.png" alt="CDCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=CDCA'">
-            <div class="logo-divider"></div>
+            <div class="logo-divider admin-divider"></div>
             <img src="LogoABCA.png" alt="ABCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA'">
         </a>
         
-        <div style="display: flex; align-items: center; gap: 1.5rem;">
-            <span class="badge badge-im" style="font-size: 0.9rem; padding: 0.5rem 1rem;">🛡️ Secure Admin Portal</span>
-            <button onclick="window.handleLogout()" class="btn-orange" style="background: #ef4444; box-shadow: none; padding: 0.6rem 1.2rem;">Log Out</button>
-        </div>
+        <button onclick="window.handleLogout()" class="admin-logout-btn" title="Log Out">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            <span>Log Out</span>
+        </button>
     </header>
 
-    <div id="auth-message" style="text-align: center; padding: 8rem 1rem; font-size: 1.2rem; font-weight: 600; color: #475569;">
-        <div class="loader" style="margin: 0 auto 1rem auto; width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: var(--primary-blue); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+    <div id="auth-message" class="admin-auth-loader">
+        <div class="loader"></div>
         Authenticating Admin Credentials...
     </div>
 
     <div id="admin-content" style="display: none;">
-        <div class="container" style="max-width: 1400px; padding-top: 2rem;">
+        <div class="container admin-container">
             
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
-                <div>
-                    <h2 class="section-title" style="text-align: left; margin-bottom: 0.5rem; font-size: 2.5rem;">Dashboard Overview</h2>
-                    <p style="color: var(--text-muted); font-size: 1.05rem;" id="admin-welcome-text">Manage your databases, publish updates, and oversee the platform.</p>
-                </div>
+            <div class="admin-page-header">
+                <h2 class="section-title">Dashboard Overview</h2>
+                <p id="admin-welcome-text">Manage your databases, publish updates, and oversee the platform.</p>
             </div>
 
             <div class="admin-tabs">
@@ -45,16 +43,16 @@
             </div>
 
             <div id="tab-news" class="tab-content active">
-                <div class="admin-layout-grid">
-                    <div class="admin-layout-col">
+                <div class="admin-layout-flex">
+                    <div class="admin-col-sidebar">
                         <div class="admin-card">
-                            <h3 style="margin-bottom: 1.5rem; color: var(--text-dark); border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem;">Publish New Article</h3>
+                            <h3 class="card-heading">Publish New Article</h3>
                             <form id="add-news-form" onsubmit="window.addNews(event)">
                                 <div class="form-group">
                                     <label>Article Title*</label>
                                     <input type="text" id="news_title" required placeholder="E.g. Grandmaster achieves new peak...">
                                 </div>
-                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div class="responsive-grid-2">
                                     <div class="form-group">
                                         <label>Category*</label>
                                         <select id="news_category" required>
@@ -67,7 +65,7 @@
                                         <input type="text" id="news_tags" required placeholder="e.g. STATE, TOURNAMENT">
                                     </div>
                                 </div>
-                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                                <div class="responsive-grid-2">
                                     <div class="form-group">
                                         <label>Publish Date</label>
                                         <input type="date" id="news_date">
@@ -86,18 +84,18 @@
                         </div>
                     </div>
 
-                    <div class="admin-layout-col">
-                        <div class="admin-card" style="padding: 0; overflow: hidden;">
-                            <div style="padding: 1.5rem; background: #f8fafc; border-bottom: 1px solid var(--border-color);">
-                                <h3 style="margin: 0; color: var(--text-dark);">Published Articles</h3>
+                    <div class="admin-col-main">
+                        <div class="admin-card no-pad">
+                            <div class="card-header-bar">
+                                <h3>Published Articles</h3>
                             </div>
-                            <div class="table-wrapper" style="box-shadow: none; border: none; border-radius: 0;">
+                            <div class="table-wrapper admin-table-wrapper">
                                 <table>
                                     <thead>
                                         <tr>
                                             <th>Title & Details</th>
-                                            <th style="width: 150px;">Date</th>
-                                            <th style="width: 160px; text-align: right;">Actions</th>
+                                            <th style="min-width: 120px;">Date</th>
+                                            <th style="min-width: 140px; text-align: right;">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody id="admin-news-tbody"></tbody>
@@ -110,17 +108,17 @@
 
             <div id="tab-players" class="tab-content">
                 <div class="admin-card">
-                    <h3 style="margin-bottom: 1.5rem; color: var(--text-dark); border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem;">Add New Player Registration</h3>
+                    <h3 class="card-heading">Add New Player Registration</h3>
                     <form id="add-player-form" onsubmit="window.addPlayer(event)">
-                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1.2rem; margin-bottom:1.5rem;">
-                            <div class="form-group" style="margin:0;"><label>First Name*</label><input type="text" id="first_name" required></div>
-                            <div class="form-group" style="margin:0;"><label>Last Name</label><input type="text" id="last_name"></div>
-                            <div class="form-group" style="margin:0;"><label>CDCA ID*</label><input type="text" id="cdca_id" required></div>
-                            <div class="form-group" style="margin:0;"><label>State ID</label><input type="text" id="state_id"></div>
-                            <div class="form-group" style="margin:0;"><label>FIDE ID</label><input type="text" id="fide_id"></div>
-                            <div class="form-group" style="margin:0;"><label>FIDE Rating</label><input type="number" id="fide_rating"></div>
-                            <div class="form-group" style="margin:0;"><label>Titles (e.g. GM, IM)</label><input type="text" id="title"></div>
-                            <div class="form-group" style="margin:0;">
+                        <div class="responsive-grid-4">
+                            <div class="form-group"><label>First Name*</label><input type="text" id="first_name" required></div>
+                            <div class="form-group"><label>Last Name</label><input type="text" id="last_name"></div>
+                            <div class="form-group"><label>CDCA ID*</label><input type="text" id="cdca_id" required></div>
+                            <div class="form-group"><label>State ID</label><input type="text" id="state_id"></div>
+                            <div class="form-group"><label>FIDE ID</label><input type="text" id="fide_id"></div>
+                            <div class="form-group"><label>FIDE Rating</label><input type="number" id="fide_rating"></div>
+                            <div class="form-group"><label>Titles (e.g. GM, IM)</label><input type="text" id="title"></div>
+                            <div class="form-group">
                                 <label>Status*</label>
                                 <select id="id_status" required>
                                     <option value="Active">Active</option>
@@ -132,14 +130,14 @@
                     </form>
                 </div>
 
-                <div class="admin-card" style="padding: 0; overflow: hidden; margin-top: 2rem;">
-                    <div style="padding: 1.5rem; background: #f8fafc; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                        <h3 style="margin: 0; color: var(--text-dark);">Master Player Registry</h3>
-                        <div class="search-box" style="margin: 0; box-shadow: none; border: 1px solid var(--border-color); max-width: 350px;">
-                            <input type="text" id="searchInput" placeholder="Search Database..." onkeyup="handleGlobalSearch()" style="padding: 0.6rem 1rem;">
+                <div class="admin-card no-pad" style="margin-top: 2rem;">
+                    <div class="card-header-bar flex-between">
+                        <h3>Master Player Registry</h3>
+                        <div class="search-box slim-search">
+                            <input type="text" id="searchInput" placeholder="Search Database..." onkeyup="handleGlobalSearch()">
                         </div>
                     </div>
-                    <div class="table-wrapper" style="box-shadow: none; border: none; border-radius: 0;">
+                    <div class="table-wrapper admin-table-wrapper">
                         <table>
                             <thead>
                                 <tr>
@@ -148,12 +146,12 @@
                                     <th>State ID</th>
                                     <th>Rating</th>
                                     <th>Status</th>
-                                    <th style="text-align: right;">Actions</th>
+                                    <th style="min-width: 140px; text-align: right;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="admin-tbody"></tbody>
                         </table>
-                        <div class="pagination" style="border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
+                        <div class="pagination flat-pagination">
                             <span class="pagination-info" id="page-info">Page 1 of 1</span>
                             <div class="pagination-controls">
                                 <button id="page-prev" onclick="changePage(-1)" disabled>Previous</button>
@@ -165,18 +163,18 @@
             </div>
 
             <div id="tab-users" class="tab-content">
-                <div class="admin-card" style="padding: 0; overflow: hidden;">
-                    <div style="padding: 1.5rem; background: #fef2f2; border-bottom: 1px solid #fecaca;">
-                        <h3 style="margin: 0; color: #991b1b;">🛡️ Administrative Roles</h3>
-                        <p style="margin: 0; font-size: 0.9rem; color: #b91c1c; margin-top: 5px;">Grant or revoke admin access to registered users. Exercise caution.</p>
+                <div class="admin-card no-pad">
+                    <div class="card-header-bar danger-header">
+                        <h3>🛡️ Administrative Roles</h3>
+                        <p>Grant or revoke admin access to registered users. Exercise caution.</p>
                     </div>
-                    <div class="table-wrapper" style="box-shadow: none; border: none; border-radius: 0;">
+                    <div class="table-wrapper admin-table-wrapper">
                         <table>
                             <thead>
                                 <tr>
                                     <th>User Email</th>
                                     <th>Current Role</th>
-                                    <th style="text-align: right;">Actions</th>
+                                    <th style="min-width: 140px; text-align: right;">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="super-admin-table-body"></tbody>
@@ -197,7 +195,7 @@
             const auth = await window.verifyAdminAccess();
 
             if (!auth.allowed) {
-                authMessage.innerHTML = `<span style="color: #ef4444; font-size: 2rem;">❌</span><br><br>Access Denied.<br><span style="font-size:1rem; font-weight:400; display:block; margin-top:10px;">You must be logged in as an Administrator. Redirecting...</span>`;
+                authMessage.innerHTML = `<span style="color: #ef4444; font-size: 2.5rem;">♟️</span><br><br><span style="color:var(--text-dark); font-weight:800;">Access Denied.</span><br><span style="font-size:1rem; font-weight:400; display:block; margin-top:10px; color:var(--text-muted);">You must be logged in as an Administrator.<br>Redirecting...</span>`;
                 setTimeout(() => { window.location.href = 'index.html'; }, 2000);
             } else {
                 authMessage.style.display = 'none';
