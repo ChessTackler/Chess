@@ -68,11 +68,13 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 7px; transition-duration: .5s; margin-right: 1.5rem;
 }
-.bars { width: 100%; height: 4px; background-color: var(--primary-dark); border-radius: 4px; }
+/* CHANGED: Made bars pure black */
+.bars { width: 100%; height: 4px; background-color: #000000; border-radius: 4px; }
 #bar2 { transition-duration: .8s; }
 #bar1, #bar3 { width: 70%; }
 
-#nav-checkbox:checked + .nav-toggle .bars { position: absolute; transition-duration: .5s; background-color: var(--accent-orange); }
+/* CHANGED: Made the "X" state black too */
+#nav-checkbox:checked + .nav-toggle .bars { position: absolute; transition-duration: .5s; background-color: #000000; }
 #nav-checkbox:checked + .nav-toggle #bar2 { transform: scaleX(0); transition-duration: .5s; }
 #nav-checkbox:checked + .nav-toggle #bar1 { width: 100%; transform: rotate(45deg); transition-duration: .5s; }
 #nav-checkbox:checked + .nav-toggle #bar3 { width: 100%; transform: rotate(-45deg); transition-duration: .5s; }
@@ -94,7 +96,11 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 #nav-checkbox:checked ~ .sidebar-menu { left: 0; }
 #nav-checkbox:checked ~ .sidebar-overlay { opacity: 1; visibility: visible; }
 
-.menu-header { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 800; margin-bottom: 1.5rem; padding-left: 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
+/* ADDED: Header Flex container for the close button */
+.sidebar-header-flex { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 1.5rem; padding-left: 10px; }
+.menu-header { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 800; margin: 0; }
+.sidebar-close-btn { font-size: 28px; line-height: 1; cursor: pointer; color: var(--text-muted); transition: color 0.2s; margin-top: -4px; padding: 0 5px; }
+.sidebar-close-btn:hover { color: #ef4444; }
 
 .sidebar-list { display: flex; flex-direction: column; gap: 0.5rem; }
 
@@ -269,7 +275,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     .logo-wrapper { position: absolute; left: 50%; transform: translateX(-50%); gap: 8px; }
     .brand-logo { height: 32px; }
     .logo-divider { height: 22px; }
-    #main-nav { display: none; } /* Hide standard nav on mobile, forces user to use Sidebar */
+    #main-nav { display: none; }
 
     .hero { padding: 4rem 5%; }
     .hero-content h1 { font-size: 2.2rem; }
