@@ -82,7 +82,7 @@ window.uiConfirm = function(title, message, confirmBtnText, onConfirm) {
 }
 
 // ==========================================
-// AUTH & NAVBAR (Linked to Admin Portal)
+// AUTH & NAVBAR 
 // ==========================================
 async function updateNavbar() {
     const nav = document.getElementById('main-nav');
