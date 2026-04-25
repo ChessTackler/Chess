@@ -5,12 +5,11 @@
 window.allRegistrations = [];
 window.filteredRegistrations = [];
 window.regCurrentPage = 1;
-window.regPageSize = 15; // Shows 15 rows per page for bulk viewing
+window.regPageSize = 15;
 
 document.addEventListener('DOMContentLoaded', async () => {
     const authMessage = document.getElementById('auth-message');
     const adminContent = document.getElementById('admin-content');
-
     const auth = await window.verifyAdminAccess();
 
     if (!auth.allowed) {
@@ -25,9 +24,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 window.fetchRegistrationData = async function() {
     if (!window.supabaseClient) return;
-
-    // Fetch all players. Assuming Supabase adds 'created_at' automatically.
-    // If your table doesn't have created_at, you can order by 'cdca_id'
     const { data, error } = await window.supabaseClient
         .from('player_database')
         .select('*')
@@ -37,9 +33,8 @@ window.fetchRegistrationData = async function() {
         window.uiAlert('Database Error', error.message, true);
         return;
     }
-
     window.allRegistrations = data || [];
-    window.filterRegistrations(); // Apply default filters and render
+    window.filterRegistrations();
 }
 
 window.filterRegistrations = function() {
@@ -47,15 +42,12 @@ window.filterRegistrations = function() {
     const statusFilter = document.getElementById('statusFilter').value;
 
     window.filteredRegistrations = window.allRegistrations.filter(p => {
-        // Status Filter
         if (statusFilter !== 'All' && p.id_status !== statusFilter) return false;
-        
-        // Search Filter
         const searchStr = `${p.first_name} ${p.last_name || ''} ${p.cdca_id} ${p.email || ''} ${p.phone || ''} ${p.utr_number || ''}`.toLowerCase();
         return searchStr.includes(searchQuery);
     });
 
-    window.regCurrentPage = 1; // Reset to page 1 on new search
+    window.regCurrentPage = 1; 
     window.renderRegistrationTable();
 }
 
@@ -77,7 +69,6 @@ window.renderRegistrationTable = function() {
         paginated.forEach(player => {
             const tr = document.createElement('tr');
             
-            // Safe rendering
             const dateStr = player.created_at ? new Date(player.created_at).toLocaleDateString() : 'N/A';
             const fullName = window.escapeHTML(`${player.first_name} ${player.last_name || ''}`.trim());
             const displayId = `<strong style="color: var(--primary-dark); font-family: monospace;">${window.escapeHTML(player.cdca_id)}</strong>`;
@@ -85,10 +76,7 @@ window.renderRegistrationTable = function() {
             const displayUtr = player.utr_number ? window.escapeHTML(player.utr_number) : '<span style="color:#94a3b8; font-style:italic;">Not provided</span>';
             const displayStatus = window.formatStatusBadge(player.id_status);
 
-            // Highlight row slightly if pending
-            if(player.id_status === 'Pending') {
-                tr.style.backgroundColor = '#fffbeb'; // Faint yellow warning
-            }
+            if(player.id_status === 'Pending') { tr.style.backgroundColor = '#fffbeb'; }
 
             tr.innerHTML = `
                 <td style="font-size:0.9rem;">${dateStr}</td>
@@ -105,26 +93,21 @@ window.renderRegistrationTable = function() {
         });
     }
 
-    // Update Pagination UI
     document.getElementById('reg-page-info').innerText = `Page ${window.regCurrentPage} of ${totalPages} (${window.filteredRegistrations.length} Total Entries)`;
     document.getElementById('reg-page-prev').disabled = (window.regCurrentPage === 1);
     document.getElementById('reg-page-next').disabled = (window.regCurrentPage === totalPages);
-}
-
-window.changeRegPage = function(direction) {
-    window.regCurrentPage += direction;
-    window.renderRegistrationTable();
 }
 
 window.openReviewModal = function(id) {
     const player = window.allRegistrations.find(p => p.id === id);
     if (!player) return;
 
-    // These columns MUST exist in your Supabase table for this to work correctly.
-    // If they are null, we provide a placeholder image.
-    const photoUrl = player.photo_url || 'https://via.placeholder.com/150?text=No+Photo';
-    const aadhaarUrl = player.aadhaar_url || 'https://via.placeholder.com/150?text=No+Aadhaar';
-    const paymentUrl = player.payment_proof_url || 'https://via.placeholder.com/150?text=No+Proof';
+    const photoUrl = player.photo_url || '';
+    const aadhaarUrl = player.aadhaar_url || '';
+    const paymentUrl = player.payment_proof_url || '';
+    
+    // A clean document icon fallback for PDFs or broken images
+    const fallbackImg = 'https://via.placeholder.com/150x150/f8fafc/94a3b8?text=📄+Document';
 
     const bodyHTML = `
         <div style="max-height: 70vh; overflow-y: auto; padding-right: 10px;">
@@ -147,23 +130,21 @@ window.openReviewModal = function(id) {
             <h4 style="border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 10px;">Uploaded Documents</h4>
             <div class="document-grid">
                 <div class="doc-card">
-                    <img src="${photoUrl}" alt="Photo">
-                    <a href="${photoUrl}" target="_blank">View Photo ↗</a>
+                    <img src="${photoUrl}" alt="Photo" onerror="this.src='${fallbackImg}'">
+                    <a href="${photoUrl}" target="_blank">${photoUrl ? 'Open Photo ↗' : 'No File'}</a>
                 </div>
                 <div class="doc-card">
-                    <img src="${aadhaarUrl}" alt="Aadhaar">
-                    <a href="${aadhaarUrl}" target="_blank">View Aadhaar ↗</a>
+                    <img src="${aadhaarUrl}" alt="Aadhaar" onerror="this.src='${fallbackImg}'">
+                    <a href="${aadhaarUrl}" target="_blank">${aadhaarUrl ? 'Open Aadhaar ↗' : 'No File'}</a>
                 </div>
                 <div class="doc-card">
-                    <img src="${paymentUrl}" alt="Payment Proof">
-                    <a href="${paymentUrl}" target="_blank">View Payment ↗</a>
+                    <img src="${paymentUrl}" alt="Payment Proof" onerror="this.src='${fallbackImg}'">
+                    <a href="${paymentUrl}" target="_blank">${paymentUrl ? 'Open Proof ↗' : 'No File'}</a>
                 </div>
             </div>
-            
         </div>
     `;
 
-    // Footer changes based on current status
     let footerHTML = `<button class="modal-btn modal-btn-cancel" onclick="window.closeModal()">Close</button>`;
     
     if (player.id_status === 'Pending') {
@@ -191,7 +172,7 @@ window.approveRegistration = async function(id) {
             window.uiAlert('Failed', error.message, true);
         } else {
             window.uiAlert('Success', 'Player ID has been activated!');
-            window.fetchRegistrationData(); // Refresh the table
+            window.fetchRegistrationData(); 
         }
     });
 }
@@ -209,7 +190,7 @@ window.deleteRegistration = async function(id) {
             window.uiAlert('Failed', error.message, true);
         } else {
             window.uiAlert('Deleted', 'Application has been removed.');
-            window.fetchRegistrationData(); // Refresh the table
+            window.fetchRegistrationData(); 
         }
     });
 }
