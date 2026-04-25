@@ -10,14 +10,80 @@
 </head>
 <body>
 
-    <header>
-        <a href="index.html" class="logo-wrapper">
-            <img src="LogoCDCA.png" alt="CDCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=CDCA+Missing'">
-            <div class="logo-divider"></div>
-            <img src="LogoABCA.png" alt="ABCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA+Missing'">
-        </a>
-        <nav id="main-nav">
+    <header class="chess-graphic-nav">
+        <div class="nav-left">
+            <input type="checkbox" id="nav-checkbox">
+            <label for="nav-checkbox" class="nav-toggle">
+                <div class="bars" id="bar1"></div>
+                <div class="bars" id="bar2"></div>
+                <div class="bars" id="bar3"></div>
+            </label>
+
+            <div class="sidebar-overlay" onclick="document.getElementById('nav-checkbox').checked = false;"></div>
+            <nav class="sidebar-menu">
+                <div class="menu-header">Menu</div>
+                <div class="sidebar-list">
+                    
+                    <details class="nav-details">
+                        <summary class="radio-label">
+                            <div class="radio-circle"></div>
+                            <span class="radio-text">Players</span>
+                        </summary>
+                        <div class="sub-menu">
+                            <a href="players.html" class="sub-link">Player search</a>
+                            <a href="#" class="sub-link">New Player registration</a>
+                        </div>
+                    </details>
+
+                    <details class="nav-details">
+                        <summary class="radio-label">
+                            <div class="radio-circle"></div>
+                            <span class="radio-text">Calendar</span>
+                        </summary>
+                        <div class="sub-menu">
+                            <a href="#" class="sub-link">CDCA Events</a>
+                            <a href="#" class="sub-link">State Events</a>
+                            <a href="#" class="sub-link">Online Entry</a>
+                        </div>
+                    </details>
+
+                    <details class="nav-details">
+                        <summary class="radio-label">
+                            <div class="radio-circle"></div>
+                            <span class="radio-text">Information</span>
+                        </summary>
+                        <div class="sub-menu">
+                            <a href="#" class="sub-link">Office Bearers</a>
+                            <a href="#" class="sub-link">Committees</a>
+                            <a href="#" class="sub-link">Contact</a>
+                        </div>
+                    </details>
+
+                    <a href="#" class="radio-label direct-link">
+                        <div class="radio-circle"></div>
+                        <span class="radio-text">Archive</span>
+                    </a>
+                    
+                    <a href="#" class="radio-label direct-link">
+                        <div class="radio-circle"></div>
+                        <span class="radio-text">Rankings</span>
+                    </a>
+
+                    <a href="#" class="radio-label direct-link">
+                        <div class="radio-circle"></div>
+                        <span class="radio-text">News & Media</span>
+                    </a>
+                </div>
             </nav>
+        </div>
+
+        <a href="index.html" class="logo-wrapper">
+            <img src="LogoCDCA.png" alt="CDCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=CDCA'">
+            <div class="logo-divider"></div>
+            <img src="LogoABCA.png" alt="ABCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA'">
+        </a>
+
+        <div id="main-nav"></div>
     </header>
 
     <section class="hero">
@@ -25,40 +91,11 @@
             <h1>Official CDCA webpage & database.</h1>
             <p>Explore official player rankings, secure your member data, and stay up to date with the latest announcements.</p>
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search by Name, CDCA ID, FIDE ID..." onkeyup="handleGlobalSearch()">
-                <button onclick="handleGlobalSearch()">Search DB</button>
+                <input type="text" id="homeSearchInput" placeholder="Go to Player Database...">
+                <button onclick="window.location.href='players.html'">Search DB</button>
             </div>
         </div>
     </section>
-
-    <div class="container">
-        <h2 class="section-title">Master Player Registry</h2>
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Player Name</th>
-                        <th>CDCA ID</th>
-                        <th>State ID</th>
-                        <th>FIDE ID</th>
-                        <th>Rating</th>
-                        <th>Title</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="public-tbody">
-                    <tr><td colspan="7" style="text-align: center; padding: 2rem;">Loading database...</td></tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="pagination">
-            <span class="pagination-info" id="page-info">Page 1 of 1</span>
-            <div class="pagination-controls">
-                <button id="page-prev" onclick="changePage(-1)" disabled>Previous</button>
-                <button id="page-next" onclick="changePage(1)" disabled>Next</button>
-            </div>
-        </div>
-    </div>
 
     <div class="container news-section">
         <div class="news-header">
@@ -73,8 +110,7 @@
             <div class="header-line"></div>
             <h2>Announcements</h2>
         </div>
-        <div id="public-announcements" class="news-list">
-            </div>
+        <div id="public-announcements" class="news-list"></div>
     </div>
 
     <script src="app.js"></script>
