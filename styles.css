@@ -65,22 +65,24 @@ nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     background: white; width: 90%; max-width: 450px; border-radius: 16px;
     box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
     transform: translateY(20px) scale(0.95); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex; flex-direction: column; overflow: hidden; max-height: 90vh;
+    display: flex; flex-direction: column; max-height: 90vh; /* Removed overflow:hidden here so dropdowns can escape */
 }
 .custom-modal-overlay.active .custom-modal { transform: translateY(0) scale(1); }
 
 .custom-modal-header {
     padding: 1.25rem 1.5rem; border-bottom: 1px solid #f1f5f9; display: flex; 
     justify-content: space-between; align-items: center; background: #fafafa;
+    border-radius: 16px 16px 0 0;
 }
 .custom-modal-header h3 { margin: 0; font-size: 1.15rem; color: #1e293b; font-weight: 700; }
 .close-modal-btn { background: none; border: none; font-size: 1.5rem; color: #94a3b8; cursor: pointer; transition: color 0.2s; }
 .close-modal-btn:hover { color: #ef4444; }
 
-.custom-modal-body { padding: 1.5rem; overflow-y: auto; color: #475569; font-size: 0.95rem; line-height: 1.5; }
+.custom-modal-body { padding: 1.5rem; color: #475569; font-size: 0.95rem; line-height: 1.5; overflow: visible; }
 .custom-modal-footer {
     padding: 1.25rem 1.5rem; border-top: 1px solid #f1f5f9; display: flex; 
     justify-content: flex-end; gap: 1rem; background: #fafafa;
+    border-radius: 0 0 16px 16px;
 }
 
 .modal-btn { padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; font-size: 0.9rem;}
@@ -109,7 +111,7 @@ nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .auth-card h2 { color: var(--primary-blue); font-size: 1.8rem; margin-bottom: 0.5rem; }
 .auth-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; }
 
-.form-group { margin-bottom: 1.5rem; text-align: left; }
+.form-group { margin-bottom: 1.5rem; text-align: left; position: relative; }
 .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: var(--text-dark); }
 .form-group input, .form-group select { 
     width: 100%; padding: 0.9rem 1rem; border: 1px solid var(--border-color); 
