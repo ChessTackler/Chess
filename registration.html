@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Registration - CDCA</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="registration.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body style="background-color: #f8fafc;">
+
+    <header class="chess-graphic-nav">
+        <div class="nav-left">
+            <input type="checkbox" id="nav-checkbox">
+            <label for="nav-checkbox" class="nav-toggle">
+                <div class="bars" id="bar1"></div>
+                <div class="bars" id="bar2"></div>
+                <div class="bars" id="bar3"></div>
+            </label>
+            <div class="sidebar-overlay" onclick="document.getElementById('nav-checkbox').checked = false;"></div>
+            <nav class="sidebar-menu">
+                <div class="sidebar-header-flex">
+                    <div class="menu-header">Menu</div>
+                    <label for="nav-checkbox" class="sidebar-close-btn">&times;</label>
+                </div>
+                <div class="sidebar-list">
+                    <details class="nav-details" open>
+                        <summary class="radio-label">
+                            <div class="radio-circle" style="border-color: var(--accent-orange); background-color: var(--accent-orange);"></div>
+                            <span class="radio-text" style="color: #ffffff;">Players</span>
+                        </summary>
+                        <div class="sub-menu">
+                            <a href="players.html" class="sub-link">Player search</a>
+                            <a href="registration.html" class="sub-link" style="color: var(--accent-orange); font-weight: 600;">New Player registration</a>
+                        </div>
+                    </details>
+                    <details class="nav-details"><summary class="radio-label"><div class="radio-circle"></div><span class="radio-text">Calendar</span></summary><div class="sub-menu"><a href="CDCAevents.html" class="sub-link">CDCA Events</a><a href="stateinfo.html" class="sub-link">State Events</a><a href="onlineentry.html" class="sub-link">Online Entry</a></div></details>
+                    <details class="nav-details"><summary class="radio-label"><div class="radio-circle"></div><span class="radio-text">Information</span></summary><div class="sub-menu"><a href="officials.html" class="sub-link">Office Bearers</a><a href="Committees.html" class="sub-link">Committees</a><a href="contact.html" class="sub-link">Contact</a></div></details>
+                    <a href="#" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">Archive</span></a>
+                    <a href="#" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">Rankings</span></a>
+                    <a href="#" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">News & Media</span></a>
+                </div>
+                <div id="sidebar-auth" class="sidebar-auth-section"></div>
+            </nav>
+        </div>
+
+        <a href="index.html" class="logo-wrapper">
+            <img src="LogoCDCA.png" alt="CDCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=CDCA'">
+            <div class="logo-divider"></div>
+            <img src="LogoABCA.png" alt="ABCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA'">
+        </a>
+        <div id="main-nav"></div>
+    </header>
+
+    <div class="container" style="max-width: 900px; padding-top: 3rem; padding-bottom: 5rem;">
+        
+        <div class="admin-page-header" style="text-align: center; margin-bottom: 3rem;">
+            <span class="badge badge-im" style="margin-bottom: 1rem; font-size: 0.9rem;">Official Portal</span>
+            <h2 class="section-title" style="margin-bottom: 0.5rem; text-align: center;">New Player Registration</h2>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Register to generate your official CDCA ID and join the database.</p>
+        </div>
+
+        <div class="admin-card">
+            <form id="public-registration-form" onsubmit="window.submitRegistration(event)">
+                
+                <h3 class="card-heading">1. Personal Information</h3>
+                <div class="responsive-grid-2">
+                    <div class="form-group"><label>First Name*</label><input type="text" id="reg_first_name" required placeholder="Enter first name"></div>
+                    <div class="form-group"><label>Last Name</label><input type="text" id="reg_last_name" placeholder="Enter last name"></div>
+                    <div class="form-group">
+                        <label>Gender*</label>
+                        <select id="reg_gender" required>
+                            <option value="" disabled selected>Select Gender</option>
+                            <option value="Boy">Male (Boy)</option>
+                            <option value="Girl">Female (Girl)</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Date of Birth*</label><input type="date" id="reg_dob" required></div>
+                    <div class="form-group"><label>Email Address*</label><input type="email" id="reg_email" required placeholder="example@gmail.com"></div>
+                    <div class="form-group"><label>Phone Number*</label><input type="tel" id="reg_phone" required placeholder="+91 00000 00000"></div>
+                </div>
+
+                <h3 class="card-heading" style="margin-top: 2.5rem;">2. Verification Documents</h3>
+                <div class="responsive-grid-2">
+                    <div class="form-group">
+                        <label>Passport Size Photo* (JPG/PNG)</label>
+                        <input type="file" id="reg_photo" accept="image/*" required class="file-input-styled">
+                    </div>
+                    <div class="form-group">
+                        <label>Aadhaar Card Copy* (PDF/JPG)</label>
+                        <input type="file" id="reg_aadhaar" accept="image/*,.pdf" required class="file-input-styled">
+                    </div>
+                </div>
+
+                <h3 class="card-heading" style="margin-top: 2.5rem;">3. Registration Fee Payment</h3>
+                <div class="payment-section-wrapper">
+                    <div class="qr-code-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=cdca@ybl&pn=CDCA&cu=INR" alt="Scan to Pay" title="Mock QR Code">
+                        <p style="margin-top: 10px; font-weight: 600; font-size: 0.9rem;">Scan to Pay ₹500</p>
+                    </div>
+                    <div class="payment-upload-box">
+                        <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 0.95rem;">After scanning the QR code and completing your payment, please upload a screenshot of the successful transaction.</p>
+                        <div class="form-group" style="margin: 0;">
+                            <label>Upload Payment Proof*</label>
+                            <input type="file" id="reg_payment_proof" accept="image/*,.pdf" required class="file-input-styled">
+                        </div>
+                        <div class="form-group" style="margin-top: 1rem;">
+                            <label>Transaction ID / UTR No.*</label>
+                            <input type="text" id="reg_utr" required placeholder="e.g., 312345678901">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 3rem; text-align: center;">
+                    <button type="submit" class="btn-orange" id="reg-submit-btn" style="width: 100%; max-width: 400px; padding: 1rem; font-size: 1.1rem;">
+                        Complete Registration
+                    </button>
+                    <p style="margin-top: 15px; font-size: 0.85rem; color: var(--text-muted);">By clicking complete, you agree to the Terms & Conditions of CDCA.</p>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    
+    <script src="registration.js"></script>
+</body>
+</html>
