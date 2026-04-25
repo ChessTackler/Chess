@@ -293,10 +293,7 @@ window.fetchPublicNews = async function() {
     if (!window.supabaseClient) return;
     const { data: news, error } = await window.supabaseClient.from('news_articles').select('*').order('created_at', { ascending: false });
     
-    if (error) {
-        console.error("News fetch error:", error);
-        return;
-    }
+    if (error) return;
 
     const headlinesContainer = document.getElementById('public-headlines');
     const announcementsContainer = document.getElementById('public-announcements');
