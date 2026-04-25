@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDCA Officials</title>
+<style>
+    :root {
+        --primary-purple: #8121d8;
+        --secondary-pink: #d81b85;
+        --text-dark: #1a1a1a;
+        --text-gray: #666666;
+        --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+        font-family: var(--font-main);
+        margin: 0;
+        padding: 40px 20px;
+        background-color: #ffffff;
+    }
+
+    /* Header Styles */
+    .section-header {
+        text-align: left;
+        max-width: 1200px;
+        margin: 0 auto 40px auto;
+        padding-left: 20px;
+    }
+
+    .section-subtitle {
+        font-size: 0.85rem;
+        letter-spacing: 2px;
+        color: var(--text-gray);
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .section-title {
+        font-size: 2.8rem;
+        color: var(--primary-purple);
+        margin: 0;
+        font-weight: 700;
+    }
+
+    /* Grid Layout */
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Individual Card Styles */
+    .team-member {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .image-container {
+        width: 220px;
+        height: 220px;
+        background-color: var(--primary-purple);
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        overflow: hidden;
+        /* Default fallback shape */
+        border-radius: 50%; 
+    }
+
+    /* Distinct CSS Blob Shapes */
+    .blob-1 { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+    .blob-2 { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+    .blob-3 { border-radius: 30% 70% 70% 30% / 50% 60% 40% 50%; }
+    .blob-4 { border-radius: 50% 50% 40% 60% / 40% 60% 40% 60%; }
+
+    .image-container img {
+        width: 85%;
+        height: auto;
+        object-fit: cover;
+        /* Converts image to black and white */
+        filter: grayscale(100%) contrast(110%);
+        display: block;
+    }
+
+    /* Typography inside cards */
+    .role {
+        color: var(--primary-purple);
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 0 0 5px 0;
+    }
+
+    .name {
+        color: var(--text-dark);
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 0 0 5px 0;
+    }
+
+    .extra-info {
+        color: var(--secondary-pink);
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin: 0;
+    }
+</style>
+</head>
+<body>
+
+<section>
+    <div class="section-header">
+        <span class="section-subtitle">CDCA OFFICIALS</span>
+        <h2 class="section-title">Our People</h2>
+    </div>
+
+    <div class="team-grid">
+        
+        <div class="team-member">
+            <div class="image-container blob-1">
+                <img src="https://via.placeholder.com/200x250/cccccc/000000?text=Manoj+Verma" alt="Manoj Kumar Verma">
+            </div>
+            <p class="role">President, CDCA</p>
+            <h3 class="name">Manoj Kumar Verma 'SANKALP'</h3>
+            <p class="extra-info">president@cdca.example</p>
+        </div>
+
+        <div class="team-member">
+            <div class="image-container blob-2">
+                <img src="https://via.placeholder.com/200x250/cccccc/000000?text=Arbind+Singh" alt="Arbind Kumar Singh">
+            </div>
+            <p class="role">Secretary, CDCA</p>
+            <h3 class="name">Arbind Kumar Singh</h3>
+            <p class="extra-info">Int. Arbiter | National Instructor</p>
+        </div>
+
+        <div class="team-member">
+            <div class="image-container blob-3">
+                <img src="https://via.placeholder.com/200x250/cccccc/000000?text=Example+3" alt="Example Person">
+            </div>
+            <p class="role">Treasurer</p>
+            <h3 class="name">Jane Doe</h3>
+            <p class="extra-info">jane.doe@example.com</p>
+        </div>
+
+        <div class="team-member">
+            <div class="image-container blob-4">
+                <img src="https://via.placeholder.com/200x250/cccccc/000000?text=Example+4" alt="Example Person">
+            </div>
+            <p class="role">Joint Secretary</p>
+            <h3 class="name">John Smith</h3>
+            <p class="extra-info">john.smith@example.com</p>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>
