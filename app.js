@@ -82,7 +82,7 @@ window.uiConfirm = function(title, message, confirmBtnText, onConfirm) {
 }
 
 // ==========================================
-// AUTH & NAVBAR
+// AUTH & NAVBAR (Linked to Admin Portal)
 // ==========================================
 async function updateNavbar() {
     const nav = document.getElementById('main-nav');
@@ -99,8 +99,8 @@ async function updateNavbar() {
         if (session) {
             const { data: profile } = await window.supabaseClient.from('profiles').select('is_admin').eq('id', session.user.id).single();
             
-            let adminLinkDesktop = profile && profile.is_admin ? `<a href="admin.html" style="color: var(--accent-orange); font-weight:700;">Admin Panel</a>` : "";
-            let adminLinkSidebar = profile && profile.is_admin ? `<a href="admin.html" class="sidebar-btn sidebar-btn-admin">Admin Panel</a>` : "";
+            let adminLinkDesktop = profile && profile.is_admin ? `<a href="adminportal.html" style="color: var(--accent-orange); font-weight:700;">Admin Portal</a>` : "";
+            let adminLinkSidebar = profile && profile.is_admin ? `<a href="adminportal.html" class="sidebar-btn sidebar-btn-admin">Admin Portal</a>` : "";
 
             if(nav) nav.innerHTML = `${adminLinkDesktop} <a href="#" onclick="handleLogout()" class="nav-auth-btn" style="color: #E74C3C; border-left: 1px solid var(--border-color); padding-left: 1.5rem; margin-left: 0.5rem;">Logout</a>`;
             if(sidebarAuth) sidebarAuth.innerHTML = `<div class="sidebar-auth-group">${adminLinkSidebar}<a href="#" onclick="handleLogout()" class="sidebar-btn sidebar-btn-danger">Logout</a></div>`;
