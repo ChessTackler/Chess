@@ -2,11 +2,11 @@
 // NEW PLAYER REGISTRATION & UPLOAD LOGIC
 // ==========================================
 
+// Calculate and generate the next CDCA ID
 window.generateNextCDCAId = async function(genderStr) {
     const prefix = genderStr === 'Boy' ? 'B' : 'G';
     const searchPrefix = `CDCA/26-27/${prefix}/`;
 
-    // Search the master database for any existing IDs with this prefix
     const { data, error } = await window.supabaseClient
         .from('player_database')
         .select('cdca_id')
@@ -33,8 +33,14 @@ window.generateNextCDCAId = async function(genderStr) {
     return `${searchPrefix}${paddedSequence}`;
 }
 
+// Upload file to Supabase with 2MB limit check
 async function uploadToSupabaseStorage(file, folderPath) {
     if (!file) return null;
+
+    // CLIENT-SIDE 2MB LIMIT CHECK (2 * 1024 * 1024 bytes)
+    if (file.size > 2097152) {
+        throw new Error(`The file "${file.name}" exceeds the 2MB size limit. Please compress it and try again.`);
+    }
     
     const fileExt = file.name.split('.').pop();
     const uniqueFileName = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
@@ -46,7 +52,7 @@ async function uploadToSupabaseStorage(file, folderPath) {
 
     if (error) {
         console.error("Storage Upload Error:", error);
-        throw new Error(`Failed to upload file. Ensure the 'player_documents' bucket exists and is Public.`);
+        throw new Error(`Upload failed for ${file.name}. Ensure your Supabase 'player_documents' bucket is Public.`);
     }
 
     const { data: publicUrlData } = window.supabaseClient.storage
@@ -65,7 +71,7 @@ window.submitRegistration = async function(event) {
     }
 
     const btn = document.getElementById('reg-submit-btn');
-    btn.innerHTML = '<div class="loader" style="width: 20px; height: 20px; border: 3px solid #fff; border-top-color: transparent; border-radius: 50%; display: inline-block; vertical-align: middle; margin-right: 10px; animation: spin 1s linear infinite;"></div> Uploading Files & Processing...';
+    btn.innerHTML = '<div class="loader" style="width: 20px; height: 20px; border: 3px solid #fff; border-top-color: transparent; border-radius: 50%; display: inline-block; vertical-align: middle; margin-right: 10px; animation: spin 1s linear infinite;"></div> Uploading & Verifying...';
     btn.disabled = true;
 
     try {
@@ -85,7 +91,7 @@ window.submitRegistration = async function(event) {
              throw new Error("All verification documents and payment proof must be uploaded.");
         }
 
-        // Upload securely to Supabase
+        // Upload securely to Supabase (Will throw error if > 2MB)
         const photoUrl = await uploadToSupabaseStorage(photoFile, 'photos');
         const aadhaarUrl = await uploadToSupabaseStorage(aadhaarFile, 'aadhaar_cards');
         const paymentUrl = await uploadToSupabaseStorage(paymentFile, 'payment_proofs');
@@ -123,11 +129,11 @@ window.submitRegistration = async function(event) {
                 <p style="font-size: 0.85rem; color: #ef4444; font-weight: 600; background: #fee2e2; padding: 10px; border-radius: 6px;">⚠️ Save this ID. It is marked as 'Pending' until reviewed.</p>
             </div>
         `;
-        window.showModal('Action Complete', successBodyHTML, `<button class="modal-btn modal-btn-confirm" style="width: 100%; font-size: 1.05rem;" onclick="window.location.href='players.html'">View Database</button>`);
+        window.showModal('Registration Complete', successBodyHTML, `<button class="modal-btn modal-btn-confirm" style="width: 100%; font-size: 1.05rem;" onclick="window.location.href='players.html'">View Database</button>`);
         document.getElementById('public-registration-form').reset();
 
     } catch (err) {
-        window.uiAlert('Registration Failed', err.message || 'An error occurred during submission. Please try again.', true);
+        window.uiAlert('Registration Error', err.message || 'An error occurred during submission. Please try again.', true);
     } finally {
         btn.innerHTML = 'Complete Registration';
         btn.disabled = false;
