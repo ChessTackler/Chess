@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CDCA | Player Database</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=15">
+    <link rel="stylesheet" href="styles.css?v=16">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -17,10 +17,10 @@
 
     <section class="hero">
         <div class="hero-content">
-            <h1>Biggest Database of Chess Players</h1>
-            <p>Find district ratings, FIDE IDs, and verified profiles for players associated with the Chapra District Chess Association.</p>
+            <h1>Master Player Database</h1>
+            <p>Find district ratings, FIDE IDs, and verified profiles for all active and historical players associated with the Chapra District Chess Association.</p>
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search entire database..." onkeyup="window.handleGlobalSearch()">
+                <input type="text" id="searchInput" placeholder="Search by name, ID, or status..." onkeyup="window.handleGlobalSearch()">
                 <button type="button">Find Player</button>
             </div>
         </div>
@@ -29,54 +29,38 @@
         </div>
     </section>
 
-    <div class="container">
-        <h2 class="section-title">Verified Active Roster</h2>
+    <div class="container" style="padding-top: 2rem;">
         <div class="table-wrapper">
             <table>
                 <thead>
-                    <tr><th>Name</th><th>State ID</th><th>FIDE ID</th><th>Rating</th><th>Title</th></tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>CDCA ID</th>
+                        <th>State ID</th>
+                        <th>FIDE ID</th>
+                        <th>Rating</th>
+                        <th>Title(s)</th>
+                        <th>Status</th>
+                    </tr>
                 </thead>
                 <tbody id="public-table-body">
-                    <tr><td colspan="5" style="text-align: center; padding: 3rem; color: #7F8C8D;">Loading players...</td></tr>
+                    <tr><td colspan="7" style="text-align: center; padding: 3rem; color: #7F8C8D;">Loading master database...</td></tr>
                 </tbody>
             </table>
             <div class="pagination">
-                <span class="pagination-info" id="active-page-info">Page 1</span>
+                <span class="pagination-info" id="page-info">Page 1</span>
                 <div class="pagination-controls">
-                    <button id="active-prev" onclick="window.changeActivePage(-1)">Previous</button>
-                    <button id="active-next" onclick="window.changeActivePage(1)">Next</button>
+                    <button id="page-prev" onclick="window.changePage(-1)">Previous</button>
+                    <button id="page-next" onclick="window.changePage(1)">Next</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="container" style="padding-top: 1rem;">
-        <h2 class="section-title">Historical Database (All-Time)</h2>
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr><th>Name</th><th>CDCA ID</th><th>State ID</th><th>FIDE ID</th><th>Rating</th><th>Title(s)</th></tr>
-                </thead>
-                <tbody id="all-time-public-body">
-                    <tr><td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-muted);">Loading historical records...</td></tr>
-                </tbody>
-            </table>
-            <div class="pagination">
-                <span class="pagination-info" id="at-page-info">Page 1</span>
-                <div class="pagination-controls">
-                    <button id="at-prev" onclick="window.changeAtPage(-1)">Previous</button>
-                    <button id="at-next" onclick="window.changeAtPage(1)">Next</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="app.js?v=15"></script>
-    <script src="players.js?v=15"></script>
+    <script src="app.js?v=16"></script>
     <script>
         window.onload = () => {
             if(window.fetchPlayers) window.fetchPlayers('public-table-body');
-            if(window.fetchAllTimePlayers) window.fetchAllTimePlayers('all-time-public-body'); 
             if(window.updateNavbar) window.updateNavbar(); 
         };
     </script>
