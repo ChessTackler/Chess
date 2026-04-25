@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Admin Dashboard - CDCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -12,10 +12,9 @@
 
     <header>
         <a href="index.html" class="logo-wrapper">
-            <img src="LogoCDCA.png" alt="CDCA" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=CDCA+Missing'">
+            <img src="LogoCDCA.png" alt="CDCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=CDCA+Missing'">
             <div class="logo-divider"></div>
-            <img src="LogoABCA.png" alt="ABCA" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA+Missing'">
-            <span class="brand-text">Admin</span>
+            <img src="LogoABCA.png" alt="ABCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA+Missing'">
         </a>
         <nav id="main-nav">
             <a href="index.html">Back to Site</a>
@@ -99,7 +98,7 @@
                 </form>
             </div>
 
-            <div class="search-box" style="margin-bottom: 1.5rem; max-width: 400px;">
+            <div class="search-box" style="margin-bottom: 1.5rem; max-width: 400px; box-shadow: none; border: 1px solid var(--border-color);">
                 <input type="text" id="searchInput" placeholder="Search Database..." onkeyup="handleGlobalSearch()">
             </div>
 
