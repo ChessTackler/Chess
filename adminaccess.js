@@ -106,8 +106,8 @@ window.openReviewModal = function(id) {
     const aadhaarUrl = player.aadhaar_url || '';
     const paymentUrl = player.payment_proof_url || '';
     
-    // A clean document icon fallback for PDFs or broken images
-    const fallbackImg = 'https://via.placeholder.com/150x150/f8fafc/94a3b8?text=📄+Document';
+    const fallbackImg = 'https://via.placeholder.com/150x150/f8fafc/94a3b8?text=📄+PDF/Doc';
+    const noFileImg = 'https://via.placeholder.com/150x150/fee2e2/ef4444?text=No+File';
 
     const bodyHTML = `
         <div style="max-height: 70vh; overflow-y: auto; padding-right: 10px;">
@@ -120,26 +120,26 @@ window.openReviewModal = function(id) {
             <h4 style="border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 10px;">Player Details</h4>
             <div style="margin-bottom: 1.5rem;">
                 <div class="detail-row"><span class="detail-label">Full Name</span> <span class="detail-value">${window.escapeHTML(player.first_name)} ${window.escapeHTML(player.last_name || '')}</span></div>
-                <div class="detail-row"><span class="detail-label">Gender</span> <span class="detail-value">${window.escapeHTML(player.gender || 'N/A')}</span></div>
-                <div class="detail-row"><span class="detail-label">Date of Birth</span> <span class="detail-value">${window.escapeHTML(player.dob || 'N/A')}</span></div>
-                <div class="detail-row"><span class="detail-label">Email</span> <span class="detail-value">${window.escapeHTML(player.email || 'N/A')}</span></div>
-                <div class="detail-row"><span class="detail-label">Phone</span> <span class="detail-value">${window.escapeHTML(player.phone || 'N/A')}</span></div>
-                <div class="detail-row"><span class="detail-label">UTR Number</span> <span class="detail-value" style="font-family: monospace;">${window.escapeHTML(player.utr_number || 'N/A')}</span></div>
+                <div class="detail-row"><span class="detail-label">Gender</span> <span class="detail-value">${window.escapeHTML(player.gender || 'Old Record (N/A)')}</span></div>
+                <div class="detail-row"><span class="detail-label">Date of Birth</span> <span class="detail-value">${window.escapeHTML(player.dob || 'Old Record (N/A)')}</span></div>
+                <div class="detail-row"><span class="detail-label">Email</span> <span class="detail-value">${window.escapeHTML(player.email || 'Old Record (N/A)')}</span></div>
+                <div class="detail-row"><span class="detail-label">Phone</span> <span class="detail-value">${window.escapeHTML(player.phone || 'Old Record (N/A)')}</span></div>
+                <div class="detail-row"><span class="detail-label">UTR Number</span> <span class="detail-value" style="font-family: monospace;">${window.escapeHTML(player.utr_number || 'Old Record (N/A)')}</span></div>
             </div>
 
             <h4 style="border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 10px;">Uploaded Documents</h4>
             <div class="document-grid">
                 <div class="doc-card">
-                    <img src="${photoUrl}" alt="Photo" onerror="this.src='${fallbackImg}'">
-                    <a href="${photoUrl}" target="_blank">${photoUrl ? 'Open Photo ↗' : 'No File'}</a>
+                    <img src="${photoUrl || noFileImg}" alt="Photo" onerror="this.src='${fallbackImg}'">
+                    ${photoUrl ? `<a href="${photoUrl}" target="_blank">Open Photo ↗</a>` : `<span style="color:#ef4444; font-size:0.85rem;">Missing</span>`}
                 </div>
                 <div class="doc-card">
-                    <img src="${aadhaarUrl}" alt="Aadhaar" onerror="this.src='${fallbackImg}'">
-                    <a href="${aadhaarUrl}" target="_blank">${aadhaarUrl ? 'Open Aadhaar ↗' : 'No File'}</a>
+                    <img src="${aadhaarUrl || noFileImg}" alt="Aadhaar" onerror="this.src='${fallbackImg}'">
+                    ${aadhaarUrl ? `<a href="${aadhaarUrl}" target="_blank">Open Aadhaar ↗</a>` : `<span style="color:#ef4444; font-size:0.85rem;">Missing</span>`}
                 </div>
                 <div class="doc-card">
-                    <img src="${paymentUrl}" alt="Payment Proof" onerror="this.src='${fallbackImg}'">
-                    <a href="${paymentUrl}" target="_blank">${paymentUrl ? 'Open Proof ↗' : 'No File'}</a>
+                    <img src="${paymentUrl || noFileImg}" alt="Payment Proof" onerror="this.src='${fallbackImg}'">
+                    ${paymentUrl ? `<a href="${paymentUrl}" target="_blank">Open Proof ↗</a>` : `<span style="color:#ef4444; font-size:0.85rem;">Missing</span>`}
                 </div>
             </div>
         </div>
@@ -162,7 +162,7 @@ window.openReviewModal = function(id) {
 window.approveRegistration = async function(id) {
     if (!window.supabaseClient) return;
     
-    window.uiConfirm('Approve Registration?', 'This will change the ID status to Active, allowing it to appear normally in the public database.', 'Activate', async () => {
+    window.uiConfirm('Approve Registration?', 'This will change the ID status to Active.', 'Activate', async () => {
         const { error } = await window.supabaseClient
             .from('player_database')
             .update({ id_status: 'Active' })
