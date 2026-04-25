@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | CDCA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=15">
+    <link rel="stylesheet" href="styles.css?v=16">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { --primary-blue: #2563eb; --primary-hover: #1d4ed8; --accent-orange: #ea580c; --bg-light: #f8fafc; --text-dark: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0; --card-bg: rgba(255, 255, 255, 0.75); --danger-color: #ef4444; --danger-bg: #fef2f2; --success-color: #166534; --success-bg: #dcfce7; }
@@ -27,8 +27,8 @@
         .form-grid .full-width { grid-column: span 2; }
         .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
         .form-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
-        .form-group input { padding: 0.9rem 1.2rem; font-size: 0.95rem; color: var(--text-dark); background: #ffffff; border: 1px solid var(--border-color); border-radius: 10px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02); }
-        .form-group input:focus { outline: none; border-color: var(--primary-blue); }
+        .form-group input, .form-group select { padding: 0.9rem 1.2rem; font-size: 0.95rem; color: var(--text-dark); background: #ffffff; border: 1px solid var(--border-color); border-radius: 10px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02); }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary-blue); }
         .btn-gradient { background: linear-gradient(135deg, var(--primary-blue) 0%, #1e40af 100%); width: 100%; color: white; border: none; padding: 1.1rem; border-radius: 10px; font-weight: 600; font-size: 1rem; cursor: pointer; }
         .action-btn { background: white; border: 1px solid var(--border-color); color: var(--text-dark); border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; padding: 0.5rem 1rem; }
         .action-btn.delete { color: var(--danger-color); background: var(--danger-bg); border-color: #fca5a5; }
@@ -52,22 +52,29 @@
     </div>
 
     <div class="dashboard-container">
-        
         <div class="dashboard-grid">
-            <div class="grid-col" style="grid-column: 1 / -1; margin-bottom: -1rem;"><h2 style="color: var(--text-dark); font-weight: 700;">Active Roster</h2></div>
+            
             <div class="grid-col">
                 <div class="panel-card">
-                    <h3 class="panel-title"><span>➕</span> Register Active Player</h3>
+                    <h3 class="panel-title"><span>➕</span> Register Player</h3>
                     <form id="add-player-form">
                         <div class="form-grid">
                             <div class="form-group"><label>First Name</label><input type="text" id="first_name" required></div>
-                            <div class="form-group"><label>Last Name</label><input type="text" id="last_name" required></div>
-                            <div class="form-group"><label>State ID</label><input type="text" id="state_id" required></div>
+                            <div class="form-group"><label>Last Name</label><input type="text" id="last_name"></div>
+                            <div class="form-group"><label>CDCA ID</label><input type="text" id="cdca_id" placeholder="e.g. 100025" required></div>
+                            <div class="form-group"><label>State ID</label><input type="text" id="state_id" placeholder="Pending/Optional"></div>
                             <div class="form-group"><label>FIDE ID</label><input type="text" id="fide_id"></div>
-                            <div class="form-group full-width"><label>FIDE Rating</label><input type="number" id="fide_rating"></div>
-                            <div class="form-group full-width"><label>Titles (Text)</label><input type="text" id="title" placeholder="e.g. CM, IM"></div>
+                            <div class="form-group"><label>FIDE Rating</label><input type="number" id="fide_rating"></div>
+                            <div class="form-group full-width"><label>Titles (Comma Separated)</label><input type="text" id="title" placeholder="e.g. GM, IA, FA"></div>
+                            <div class="form-group full-width">
+                                <label>ID Status</label>
+                                <select id="id_status">
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive" selected>Inactive</option>
+                                </select>
+                            </div>
                         </div>
-                        <button type="submit" class="btn-gradient" style="margin-top: 2rem;">Save Active Player</button>
+                        <button type="submit" class="btn-gradient" style="margin-top: 2rem;">Save Player Record</button>
                     </form>
                 </div>
             </div>
@@ -75,18 +82,18 @@
             <div class="grid-col">
                 <div class="panel-card" style="padding: 0; overflow: hidden;">
                     <div style="padding: 1.5rem; background: #fafafa; border-bottom: 1px solid #e2e8f0;">
-                        <input type="text" id="searchInput" placeholder="Search Active Roster..." onkeyup="window.handleGlobalSearch()" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px; outline: none;">
+                        <input type="text" id="searchInput" placeholder="Search Master Database..." onkeyup="window.handleGlobalSearch()" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px; outline: none;">
                     </div>
                     <div class="table-wrapper" style="border: none; box-shadow: none; border-radius: 0;">
                         <table>
-                            <thead><tr><th>Player Name</th><th>State ID</th><th>Rating</th><th>Actions</th></tr></thead>
+                            <thead><tr><th>Player Name</th><th>CDCA ID</th><th>State ID</th><th>Rating</th><th>Status</th><th>Actions</th></tr></thead>
                             <tbody id="admin-table-body"></tbody>
                         </table>
                         <div class="pagination" style="border-radius: 0;">
-                            <span class="pagination-info" id="active-page-info">Page 1</span>
+                            <span class="pagination-info" id="page-info">Page 1</span>
                             <div class="pagination-controls">
-                                <button id="active-prev" onclick="window.changeActivePage(-1)">Previous</button>
-                                <button id="active-next" onclick="window.changeActivePage(1)">Next</button>
+                                <button id="page-prev" onclick="window.changePage(-1)">Previous</button>
+                                <button id="page-next" onclick="window.changePage(1)">Next</button>
                             </div>
                         </div>
                     </div>
@@ -102,52 +109,11 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <hr style="border: none; border-top: 1px solid var(--border-color); margin: 3rem 0;">
-
-        <div class="dashboard-grid">
-            <div class="grid-col" style="grid-column: 1 / -1; margin-bottom: -1rem;"><h2 style="color: var(--text-dark); font-weight: 700;">Historical Database</h2></div>
-            <div class="grid-col">
-                <div class="panel-card">
-                    <h3 class="panel-title"><span>🏛️</span> Add Historical Player</h3>
-                    <form id="add-all-time-form">
-                        <div class="form-grid">
-                            <div class="form-group"><label>First Name</label><input type="text" id="at_first_name" required></div>
-                            <div class="form-group"><label>Last Name</label><input type="text" id="at_last_name"></div>
-                            <div class="form-group"><label>CDCA ID</label><input type="text" id="at_cdca_id" placeholder="e.g. 100025" required></div>
-                            <div class="form-group"><label>State ID</label><input type="text" id="at_state_id" placeholder="Pending/Optional"></div>
-                            <div class="form-group"><label>FIDE ID</label><input type="text" id="at_fide_id"></div>
-                            <div class="form-group"><label>FIDE Rating</label><input type="number" id="at_fide_rating"></div>
-                            <div class="form-group full-width"><label>Titles (Text)</label><input type="text" id="at_title" placeholder="e.g. GM, IA, FA"></div>
-                        </div>
-                        <button type="submit" class="btn-gradient" style="margin-top: 2rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Save Historical Record</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="grid-col">
-                <div class="panel-card" style="padding: 0; overflow: hidden;">
-                    <div class="table-wrapper" style="border: none; box-shadow: none; border-radius: 0;">
-                        <table>
-                            <thead><tr><th>Player Name</th><th>CDCA ID</th><th>State ID</th><th>Rating</th><th>Actions</th></tr></thead>
-                            <tbody id="all-time-admin-body"></tbody>
-                        </table>
-                        <div class="pagination" style="border-radius: 0;">
-                            <span class="pagination-info" id="at-page-info">Page 1</span>
-                            <div class="pagination-controls">
-                                <button id="at-prev" onclick="window.changeAtPage(-1)">Previous</button>
-                                <button id="at-next" onclick="window.changeAtPage(1)">Next</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
-    <script src="app.js?v=15"></script>
-    <script src="players.js?v=15"></script>
+    <script src="app.js?v=16"></script>
     <script>
         window.onload = async () => {
             if(!window.verifyAdminAccess) return;
@@ -158,7 +124,6 @@
             document.getElementById('welcome-text').innerHTML = `Authenticated securely as <strong style="color: var(--primary-blue); word-break: break-all;">${access.email}</strong>`;
 
             if(window.fetchPlayers) window.fetchPlayers('admin-table-body', true);
-            if(window.fetchAllTimePlayers) window.fetchAllTimePlayers('all-time-admin-body', true);
 
             if (access.is_super_admin && window.fetchUsersForSuperAdmin) {
                 document.getElementById('super-admin-panel').style.display = 'block';
@@ -166,8 +131,9 @@
             }
         };
 
-        document.getElementById('add-player-form').addEventListener('submit', async (e) => { if(window.addPlayer) await window.addPlayer(e); });
-        document.getElementById('add-all-time-form').addEventListener('submit', async (e) => { if(window.addAllTimePlayer) await window.addAllTimePlayer(e); });
+        document.getElementById('add-player-form').addEventListener('submit', async (e) => { 
+            if(window.addPlayer) await window.addPlayer(e); 
+        });
     </script>
 </body>
 </html>
