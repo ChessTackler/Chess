@@ -2,7 +2,6 @@
 // NEW PLAYER REGISTRATION & UPLOAD LOGIC
 // ==========================================
 
-// Calculate and generate the next CDCA ID
 window.generateNextCDCAId = async function(genderStr) {
     const prefix = genderStr === 'Boy' ? 'B' : 'G';
     const searchPrefix = `CDCA/26-27/${prefix}/`;
@@ -33,11 +32,10 @@ window.generateNextCDCAId = async function(genderStr) {
     return `${searchPrefix}${paddedSequence}`;
 }
 
-// Upload file to Supabase with 2MB limit check
+// SECURE FIX: Just upload and return the internal file path.
 async function uploadToSupabaseStorage(file, folderPath) {
     if (!file) return null;
 
-    // CLIENT-SIDE 2MB LIMIT CHECK (2 * 1024 * 1024 bytes)
     if (file.size > 2097152) {
         throw new Error(`The file "${file.name}" exceeds the 2MB size limit. Please compress it and try again.`);
     }
@@ -52,21 +50,18 @@ async function uploadToSupabaseStorage(file, folderPath) {
 
     if (error) {
         console.error("Storage Upload Error:", error);
-        throw new Error(`Upload failed for ${file.name}. Ensure your Supabase 'player_documents' bucket is Public.`);
+        throw new Error(`Upload failed for ${file.name}.`);
     }
 
-    const { data: publicUrlData } = window.supabaseClient.storage
-        .from('player_documents')
-        .getPublicUrl(fullPath);
-
-    return publicUrlData.publicUrl;
+    // We no longer get a Public URL. We return the internal path for secure signing later.
+    return fullPath; 
 }
 
 window.submitRegistration = async function(event) {
     event.preventDefault();
     
     if (!window.supabaseClient) {
-        window.uiAlert('System Error', 'Database connection offline. Please check your network and refresh.', true);
+        window.uiAlert('System Error', 'Database connection offline.', true);
         return;
     }
 
@@ -91,12 +86,11 @@ window.submitRegistration = async function(event) {
              throw new Error("All verification documents and payment proof must be uploaded.");
         }
 
-        // Upload securely to Supabase (Will throw error if > 2MB)
-        const photoUrl = await uploadToSupabaseStorage(photoFile, 'photos');
-        const aadhaarUrl = await uploadToSupabaseStorage(aadhaarFile, 'aadhaar_cards');
-        const paymentUrl = await uploadToSupabaseStorage(paymentFile, 'payment_proofs');
+        // Returns internal paths (e.g. 'photos/12345.jpg')
+        const photoPath = await uploadToSupabaseStorage(photoFile, 'photos');
+        const aadhaarPath = await uploadToSupabaseStorage(aadhaarFile, 'aadhaar_cards');
+        const paymentPath = await uploadToSupabaseStorage(paymentFile, 'payment_proofs');
 
-        // Generate ID
         const generatedId = await window.generateNextCDCAId(gender);
 
         const newPlayerEntry = {
@@ -109,9 +103,9 @@ window.submitRegistration = async function(event) {
             email: email,
             phone: phone,
             utr_number: utrNumber,
-            photo_url: photoUrl,         
-            aadhaar_url: aadhaarUrl,     
-            payment_proof_url: paymentUrl 
+            photo_url: photoPath,         
+            aadhaar_url: aadhaarPath,     
+            payment_proof_url: paymentPath 
         };
 
         const { error } = await window.supabaseClient.from('player_database').insert([newPlayerEntry]);
@@ -133,7 +127,7 @@ window.submitRegistration = async function(event) {
         document.getElementById('public-registration-form').reset();
 
     } catch (err) {
-        window.uiAlert('Registration Error', err.message || 'An error occurred during submission. Please try again.', true);
+        window.uiAlert('Registration Error', err.message || 'An error occurred during submission.', true);
     } finally {
         btn.innerHTML = 'Complete Registration';
         btn.disabled = false;
