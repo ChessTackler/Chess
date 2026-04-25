@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | CDCA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=12">
+    <link rel="stylesheet" href="styles.css?v=13">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { --primary-blue: #2563eb; --primary-hover: #1d4ed8; --accent-orange: #ea580c; --bg-light: #f8fafc; --text-dark: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0; --card-bg: rgba(255, 255, 255, 0.75); --danger-color: #ef4444; --danger-bg: #fef2f2; --success-color: #166534; --success-bg: #dcfce7; }
@@ -177,8 +177,8 @@
 
     </div>
 
-    <script src="app.js?v=12"></script>
-    <script src="players.js?v=2"></script>
+    <script src="app.js?v=13"></script>
+    <script src="players.js?v=3"></script>
     <script>
         window.onload = async () => {
             const access = await verifyAdminAccess();
@@ -221,4 +221,6 @@
 
         document.getElementById('add-player-form').addEventListener('submit', async (e) => await addPlayer(e));
         document.getElementById('add-all-time-form').addEventListener('submit', async (e) => await addAllTimePlayer(e));
-    </
+    </script>
+</body>
+</html>
