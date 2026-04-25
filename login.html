@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In | CDCA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=10">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <script src="app.js?v=1"></script>
+    <script src="app.js?v=10"></script>
     <script>
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -51,21 +51,18 @@
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
 
-                if (!window.supabaseClient) {
-                    throw new Error("Cannot connect to server. Please refresh.");
-                }
+                if (!window.supabaseClient) throw new Error("Cannot connect to server. Please refresh.");
 
                 const { data, error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
                 if (error) throw error;
 
                 msgEl.innerText = "Success! Redirecting...";
-                msgEl.style.color = "#27AE60";
+                msgEl.style.color = "#10b981";
                 window.location.href = 'index.html'; 
 
             } catch (error) {
-                console.error("Login Error:", error);
                 msgEl.innerText = error.message;
-                msgEl.style.color = "#E74C3C";
+                msgEl.style.color = "#ef4444";
             }
         });
     </script>
