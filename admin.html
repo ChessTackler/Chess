@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CDCA Admin Panel</title>
+    <title>Admin Dashboard - Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -11,7 +11,12 @@
 <body>
 
     <header>
-        <a href="index.html" class="logo">CDCA Admin</a>
+        <a href="index.html" class="logo-wrapper">
+            <img src="LogoCDCA.png" alt="CDCA" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=CDCA+Missing'">
+            <div class="logo-divider"></div>
+            <img src="LogoABCA.png" alt="ABCA" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA+Missing'">
+            <span class="brand-text">Admin</span>
+        </a>
         <nav id="main-nav">
             <a href="index.html">Back to Site</a>
         </nav>
@@ -44,7 +49,7 @@
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem;">
                         <div class="form-group">
                             <label>Tags (Comma separated)*</label>
-                            <input type="text" id="news_tags" required placeholder="CDCA HEADLINES, NEWS">
+                            <input type="text" id="news_tags" required placeholder="HEADLINES, NEWS, POSTS">
                         </div>
                         <div class="form-group">
                             <label>Image URL (Required for Headlines)</label>
@@ -136,13 +141,11 @@
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
 
     <script src="app.js"></script>
     <script>
-        // Secure Page Initialization
         document.addEventListener('DOMContentLoaded', async () => {
             const authMessage = document.getElementById('auth-message');
             const adminContent = document.getElementById('admin-content');
@@ -155,11 +158,8 @@
             } else {
                 authMessage.style.display = 'none';
                 adminContent.style.display = 'block';
-                
-                // Initialize admin tables
                 window.fetchPlayers('admin-tbody', true);
                 window.fetchAdminNews();
-
                 if (auth.is_super_admin) {
                     document.getElementById('super-admin-section').style.display = 'block';
                     window.fetchUsersForSuperAdmin();
