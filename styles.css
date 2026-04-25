@@ -2,6 +2,7 @@
     --primary-blue: #4A90E2; 
     --primary-dark: #357ABD;
     --accent-orange: #F5A623; 
+    --accent-hover: #E09612;
     --bg-white: #FFFFFF;
     --bg-light: #F4F7F6;
     --text-dark: #2C3E50;
@@ -35,13 +36,21 @@ header {
 
 nav { display: flex; align-items: center; gap: 2rem; min-height: 42px; }
 nav a { text-decoration: none; color: var(--text-dark); font-weight: 600; font-size: 0.95rem; transition: all 0.2s ease; position: relative; }
-nav a:not(.btn-orange):not(.nav-auth-btn)::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: var(--primary-blue); transition: width 0.3s ease; }
+nav a:not(.btn-orange):not(.nav-auth-btn)::after {
+    content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0;
+    background-color: var(--primary-blue); transition: width 0.3s ease;
+}
 nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .nav-auth-btn { display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-weight: 600; transition: color 0.2s; cursor: pointer; }
 .nav-auth-btn:hover { color: var(--primary-blue); }
 
 /* --- Buttons & Forms --- */
-.btn-orange { background: linear-gradient(135deg, var(--accent-orange) 0%, #E67E22 100%); color: var(--bg-white); border: none; padding: 0.8rem 1.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; border-radius: 6px; transition: all 0.2s; text-decoration: none; display: inline-block; box-shadow: 0 4px 15px rgba(245, 166, 35, 0.3); }
+.btn-orange {
+    background: linear-gradient(135deg, var(--accent-orange) 0%, #E67E22 100%);
+    color: var(--bg-white); border: none; padding: 0.8rem 1.5rem; 
+    font-size: 1rem; font-weight: 600; cursor: pointer; border-radius: 6px; transition: all 0.2s;
+    text-decoration: none; display: inline-block; text-align: center; box-shadow: 0 4px 15px rgba(245, 166, 35, 0.3);
+}
 .btn-orange:hover { box-shadow: 0 6px 20px rgba(245, 166, 35, 0.4); transform: translateY(-2px); }
 .action-btn { padding: 0.4rem 0.8rem; border: none; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
 .action-btn.promote { background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
@@ -66,7 +75,7 @@ nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .search-box button { background-color: var(--accent-orange); color: white; border: none; padding: 0 2rem; font-weight: 600; font-size: 1.1rem; cursor: pointer; border-radius: 4px; }
 
 /* --- Tables & Badges --- */
-.table-wrapper { background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; overflow-x: auto; margin-bottom: 0; }
+.table-wrapper { background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 0; }
 .table-wrapper table { width: 100%; min-width: 800px; border-collapse: separate; border-spacing: 0; }
 .table-wrapper th { background: #f8fafc; color: #64748b; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 1.25rem 1.5rem; border-bottom: 2px solid #e2e8f0; text-align: left; }
 .table-wrapper td { padding: 1rem 1.5rem; font-size: 0.95rem; color: #334155; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
