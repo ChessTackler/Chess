@@ -82,14 +82,15 @@ window.uiConfirm = function(title, message, confirmBtnText, onConfirm) {
 }
 
 // ==========================================
-// AUTH & NAVBAR
+// AUTH & NAVBAR (UPDATED FOR SIDEBAR SYNC)
 // ==========================================
 async function updateNavbar() {
     const nav = document.getElementById('main-nav');
-    if (!nav) return; 
+    const sidebarAuth = document.getElementById('sidebar-auth');
 
     if (!window.supabaseClient) { 
-        nav.innerHTML = `<div style="display:flex; align-items:center; gap:1rem;"><a href="login.html" class="nav-auth-btn">Log In</a><a href="signup.html" class="btn-orange" style="padding:0.6rem 1.2rem;">Sign Up</a></div>`; 
+        if(nav) nav.innerHTML = `<div style="display:flex; align-items:center; gap:1rem;"><a href="login.html" class="nav-auth-btn">Log In</a><a href="signup.html" class="btn-orange" style="padding:0.6rem 1.2rem;">Sign Up</a></div>`; 
+        if(sidebarAuth) sidebarAuth.innerHTML = `<div class="sidebar-auth-group"><a href="login.html" class="sidebar-btn sidebar-btn-outline">Log In</a><a href="signup.html" class="sidebar-btn sidebar-btn-solid">Sign Up</a></div>`;
         return; 
     }
 
@@ -97,13 +98,20 @@ async function updateNavbar() {
         const { data: { session } } = await window.supabaseClient.auth.getSession();
         if (session) {
             const { data: profile } = await window.supabaseClient.from('profiles').select('is_admin').eq('id', session.user.id).single();
-            let adminLink = profile && profile.is_admin ? `<a href="admin.html" style="color: var(--accent-orange); font-weight:700;">Admin Panel</a>` : "";
-            nav.innerHTML = `${adminLink} <a href="#" onclick="handleLogout()" class="nav-auth-btn" style="color: #E74C3C; border-left: 1px solid var(--border-color); padding-left: 1.5rem; margin-left: 0.5rem;">Logout</a>`;
+            
+            // Only visible to admin users
+            let adminLinkDesktop = profile && profile.is_admin ? `<a href="admin.html" style="color: var(--accent-orange); font-weight:700;">Admin Panel</a>` : "";
+            let adminLinkSidebar = profile && profile.is_admin ? `<a href="admin.html" class="sidebar-btn sidebar-btn-admin">Admin Panel</a>` : "";
+
+            if(nav) nav.innerHTML = `${adminLinkDesktop} <a href="#" onclick="handleLogout()" class="nav-auth-btn" style="color: #E74C3C; border-left: 1px solid var(--border-color); padding-left: 1.5rem; margin-left: 0.5rem;">Logout</a>`;
+            if(sidebarAuth) sidebarAuth.innerHTML = `<div class="sidebar-auth-group">${adminLinkSidebar}<a href="#" onclick="handleLogout()" class="sidebar-btn sidebar-btn-danger">Logout</a></div>`;
         } else { 
-            nav.innerHTML = `<div style="display:flex; align-items:center; gap:1rem; border-left:1px solid var(--border-color); padding-left:1rem; margin-left:0.5rem;"><a href="login.html" class="nav-auth-btn">Log In</a><a href="signup.html" class="btn-orange" style="padding:0.6rem 1.2rem;">Sign Up</a></div>`; 
+            if(nav) nav.innerHTML = `<div style="display:flex; align-items:center; gap:1rem; border-left:1px solid var(--border-color); padding-left:1rem; margin-left:0.5rem;"><a href="login.html" class="nav-auth-btn">Log In</a><a href="signup.html" class="btn-orange" style="padding:0.6rem 1.2rem;">Sign Up</a></div>`; 
+            if(sidebarAuth) sidebarAuth.innerHTML = `<div class="sidebar-auth-group"><a href="login.html" class="sidebar-btn sidebar-btn-outline">Log In</a><a href="signup.html" class="sidebar-btn sidebar-btn-solid">Sign Up</a></div>`;
         }
     } catch (error) { 
-        nav.innerHTML = `<a href="login.html" class="nav-auth-btn">Log In</a>`; 
+        if(nav) nav.innerHTML = `<a href="login.html" class="nav-auth-btn">Log In</a>`; 
+        if(sidebarAuth) sidebarAuth.innerHTML = `<a href="login.html" class="sidebar-btn sidebar-btn-outline">Log In</a>`;
     }
 }
 
@@ -335,7 +343,7 @@ window.fetchPublicNews = async function() {
 
         if (item.category === 'Headline') {
             const html = `
-                <a href="#" class="news-card-hero" style="background-image: url('${item.image_url || 'https://via.placeholder.com/600x400?text=No+Image'}');">
+                <a href="headlines.html?id=${item.id}" class="news-card-hero" style="background-image: url('${item.image_url || 'https://via.placeholder.com/600x400?text=No+Image'}');">
                     <div class="news-content">
                         <div class="news-tags">${tagsHtml}</div>
                         <h3 class="news-title">${safeTitle}</h3>
@@ -349,7 +357,7 @@ window.fetchPublicNews = async function() {
             if(headlinesContainer) headlinesContainer.insertAdjacentHTML('beforeend', html);
         } else {
             const html = `
-                <a href="#" class="news-list-item">
+                <a href="announcements.html?id=${item.id}" class="news-list-item">
                     <div class="news-list-tags">${listTagsHtml}</div>
                     <h3 class="news-list-title">${safeTitle}</h3>
                 </a>
