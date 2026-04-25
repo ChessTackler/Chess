@@ -3,66 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CDCA | Player Database</title>
+    <title>CDCA - Chess Association</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=16">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
     <header>
-        <a href="index.html" class="logo"><img src="LogoCDCA.png" alt="CDCA"></a>
-        <nav id="main-nav"></nav>
+        <a href="index.html" class="logo">CDCA Portal</a>
+        <nav id="main-nav">
+            </nav>
     </header>
 
     <section class="hero">
         <div class="hero-content">
-            <h1>Master Player Database</h1>
-            <p>Find district ratings, FIDE IDs, and verified profiles for all active and historical players associated with the Chapra District Chess Association.</p>
+            <h1>Official Chess Database & News</h1>
+            <p>Explore official player rankings, secure your member data, and stay up to date with the latest CDCA announcements.</p>
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search by name, ID, or status..." onkeyup="window.handleGlobalSearch()">
-                <button type="button">Find Player</button>
+                <input type="text" id="searchInput" placeholder="Search by Name, CDCA ID, FIDE ID..." onkeyup="handleGlobalSearch()">
+                <button onclick="handleGlobalSearch()">Search DB</button>
             </div>
-        </div>
-        <div class="hero-illustration">
-            <img src="https://illustrations.popsy.co/blue/freelancer.svg" alt="Chess Database">
         </div>
     </section>
 
-    <div class="container" style="padding-top: 2rem;">
+    <div class="container">
+        <h2 class="section-title">Master Player Registry</h2>
         <div class="table-wrapper">
             <table>
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Player Name</th>
                         <th>CDCA ID</th>
                         <th>State ID</th>
                         <th>FIDE ID</th>
                         <th>Rating</th>
-                        <th>Title(s)</th>
+                        <th>Title</th>
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tbody id="public-table-body">
-                    <tr><td colspan="7" style="text-align: center; padding: 3rem; color: #7F8C8D;">Loading master database...</td></tr>
-                </tbody>
+                <tbody id="public-tbody">
+                    </tbody>
             </table>
-            <div class="pagination">
-                <span class="pagination-info" id="page-info">Page 1</span>
-                <div class="pagination-controls">
-                    <button id="page-prev" onclick="window.changePage(-1)">Previous</button>
-                    <button id="page-next" onclick="window.changePage(1)">Next</button>
-                </div>
+        </div>
+        <div class="pagination">
+            <span class="pagination-info" id="page-info">Page 1 of 1</span>
+            <div class="pagination-controls">
+                <button id="page-prev" onclick="changePage(-1)" disabled>Previous</button>
+                <button id="page-next" onclick="changePage(1)" disabled>Next</button>
             </div>
         </div>
     </div>
 
-    <script src="app.js?v=16"></script>
-    <script>
-        window.onload = () => {
-            if(window.fetchPlayers) window.fetchPlayers('public-table-body');
-            if(window.updateNavbar) window.updateNavbar(); 
-        };
-    </script>
+    <div class="container news-section">
+        <div class="news-header">
+            <div class="header-line"></div>
+            <h2>CDCA Headlines</h2>
+        </div>
+        <div id="public-headlines" class="news-grid">
+            <p style="color: var(--text-muted);">Loading headlines...</p>
+        </div>
+
+        <div class="news-header">
+            <div class="header-line"></div>
+            <h2>Announcements</h2>
+        </div>
+        <div id="public-announcements" class="news-list">
+            </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
