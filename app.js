@@ -1,8 +1,8 @@
 // ==========================================
 // SUPABASE INITIALIZATION
 // ==========================================
-const supabaseUrl = 'YOUR_SUPABASE_URL'; // Replace with your actual URL
-const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your actual Key
+const supabaseUrl = 'https://vwzcdfgbqaszhqlvewch.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3emNkZmdicWFzemhxbHZld2NoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwNDc4MTgsImV4cCI6MjA5MjYyMzgxOH0.SBEcDqvAkpvxyVV2eSxuvYt-0Ehst5B0_dxI9u0eTRQ';
 
 if (window.supabase) {
     window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -125,7 +125,7 @@ window.fetchPlayers = async function(tableBodyId, isAdmin = false) {
     const { data: players, error } = await window.supabaseClient.from('player_database').select('*').order('first_name', { ascending: true });
     if (error) return window.uiAlert('Database Error', error.message, true);
 
-    window.currentPlayersList = players;
+    window.currentPlayersList = players || [];
     window.renderTable();
 }
 
@@ -235,7 +235,7 @@ window.openEditModal = function(id) {
             <div class="form-group" style="margin:0;"><label>Titles (Comma Separated)</label><input type="text" id="edit_title" value="${player.title || ''}"></div>
             <div class="form-group" style="margin:0;">
                 <label>ID Status</label>
-                <select id="edit_status">
+                <select id="edit_status" style="width: 100%; padding: 0.9rem; border-radius: 8px; border: 1px solid #e2e8f0;">
                     <option value="Active" ${player.id_status === 'Active' ? 'selected' : ''}>Active</option>
                     <option value="Inactive" ${player.id_status === 'Inactive' ? 'selected' : ''}>Inactive</option>
                 </select>
@@ -286,14 +286,17 @@ window.timeSince = function(dateString) {
     if (interval > 1) return Math.floor(interval) + " hours ago";
     interval = seconds / 60;
     if (interval > 1) return Math.floor(interval) + " minutes ago";
-    return Math.floor(seconds) + " seconds ago";
+    return "Just now";
 }
 
 window.fetchPublicNews = async function() {
     if (!window.supabaseClient) return;
     const { data: news, error } = await window.supabaseClient.from('news_articles').select('*').order('created_at', { ascending: false });
     
-    if (error) return;
+    if (error) {
+        console.error("News fetch error:", error);
+        return;
+    }
 
     const headlinesContainer = document.getElementById('public-headlines');
     const announcementsContainer = document.getElementById('public-announcements');
@@ -301,10 +304,16 @@ window.fetchPublicNews = async function() {
     if(headlinesContainer) headlinesContainer.innerHTML = '';
     if(announcementsContainer) announcementsContainer.innerHTML = '';
 
+    if (!news || news.length === 0) {
+        if(headlinesContainer) headlinesContainer.innerHTML = '<p style="color: var(--text-muted);">No news available.</p>';
+        return;
+    }
+
     news.forEach(item => {
         const timeAgo = window.timeSince(item.created_at);
-        const tagsHtml = item.tags.split(',').map(tag => `<span class="tag-red">${tag.trim()}</span>`).join('');
-        const listTagsHtml = item.tags.split(',').map(tag => tag.trim()).join(' · ');
+        const tagsArray = item.tags ? item.tags.split(',') : [];
+        const tagsHtml = tagsArray.map(tag => `<span class="tag-red">${tag.trim()}</span>`).join('');
+        const listTagsHtml = tagsArray.map(tag => tag.trim()).join(' · ');
 
         if (item.category === 'Headline') {
             const html = `
@@ -340,6 +349,12 @@ window.fetchAdminNews = async function() {
     if (error) return window.uiAlert('Database Error', error.message, true);
 
     tbody.innerHTML = '';
+    
+    if (!news || news.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No articles found.</td></tr>';
+        return;
+    }
+
     news.forEach(item => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -375,7 +390,6 @@ window.addNews = async function(event) {
         window.uiAlert('Success', 'Article published!');
         document.getElementById('add-news-form').reset();
         window.fetchAdminNews();
-        if(document.getElementById('public-headlines')) window.fetchPublicNews(); 
     }
 }
 
@@ -418,7 +432,5 @@ window.toggleAdmin = async function(id, currentStatus) {
 document.addEventListener('DOMContentLoaded', () => {
     updateNavbar();
     if (document.getElementById('public-tbody')) window.fetchPlayers('public-tbody', false);
-    if (document.getElementById('admin-tbody')) window.fetchPlayers('admin-tbody', true);
     if (document.getElementById('public-headlines')) window.fetchPublicNews();
-    if (document.getElementById('admin-news-tbody')) window.fetchAdminNews();
 });
