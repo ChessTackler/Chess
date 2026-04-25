@@ -32,7 +32,6 @@ body::before {
    NAVBAR GRAPHICS & ALIGNMENT
 ========================================= */
 .chess-graphic-nav {
-    /* STYLISH ABSTRACT CHESSBOARD DESIGN (Fading from right to left) */
     background-color: #ffffff;
     background-image: 
         linear-gradient(90deg, #ffffff 40%, transparent 100%),
@@ -138,7 +137,6 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 }
 .sub-link:hover { color: var(--accent-orange); background: #fffbeb; }
 
-/* SIDEBAR AUTH STYLES */
 .sidebar-auth-section { margin-top: 2rem; border-top: 2px solid var(--border-color); padding-top: 1.5rem; }
 .sidebar-auth-group { display: flex; flex-direction: column; gap: 10px; }
 .sidebar-btn { display: block; text-align: center; padding: 12px; border-radius: 8px; font-weight: 600; text-decoration: none; font-size: 1rem; transition: 0.2s; }
@@ -278,6 +276,35 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .news-list-tags { color: #dc2626; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
 .news-list-title { color: #111827; font-size: 1.15rem; font-weight: 600; line-height: 1.4; transition: color 0.2s; }
 .news-list-item:hover .news-list-title { color: var(--primary-blue); }
+
+/* =========================================
+   ADMIN DASHBOARD UPGRADES
+========================================= */
+.admin-tabs {
+    display: flex; gap: 1rem; margin-bottom: 2rem; 
+    border-bottom: 2px solid var(--border-color); padding-bottom: 10px; 
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+.tab-btn {
+    padding: 0.8rem 1.5rem; background: none; border: none; font-weight: 700; 
+    color: var(--text-muted); cursor: pointer; border-radius: 8px; 
+    transition: 0.2s; white-space: nowrap; font-size: 1.05rem;
+}
+.tab-btn.active { background: #e0f2fe; color: var(--primary-dark); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.tab-btn:hover:not(.active) { background: #f8fafc; color: var(--text-dark); }
+
+.tab-content { display: none; animation: tabFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+.tab-content.active { display: block; }
+
+@keyframes tabFadeIn { 
+    from { opacity: 0; transform: translateY(10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+
+.admin-layout-grid { display: grid; grid-template-columns: 350px 1fr; gap: 2rem; align-items: start; }
+@media (max-width: 1024px) { .admin-layout-grid { grid-template-columns: 1fr; } }
+
+th[style*="text-align: right"], td[style*="text-align: right"] { text-align: right; }
 
 /* =========================================
    MOBILE RESPONSIVENESS FIXES
