@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CDCA | Player Database</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=10">
+    <link rel="stylesheet" href="styles.css?v=11">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -20,7 +20,7 @@
             <h1>Biggest Database of Chess Players</h1>
             <p>Find district ratings, FIDE IDs, and verified profiles for players associated with the Chapra District Chess Association.</p>
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search by player name or ID..." onkeyup="filterTable()">
+                <input type="text" id="searchInput" placeholder="Search active players..." onkeyup="filterTable()">
                 <button type="button">Find Player</button>
             </div>
         </div>
@@ -30,7 +30,7 @@
     </section>
 
     <div class="container">
-        <h2 class="section-title">Verified Player Registry</h2>
+        <h2 class="section-title">Verified Active Roster</h2>
         <div class="table-wrapper">
             <table>
                 <thead>
@@ -49,10 +49,37 @@
         </div>
     </div>
 
-    <script src="app.js?v=10"></script>
+    <div class="container" style="padding-top: 1rem;">
+        <h2 class="section-title">All-Time District Players</h2>
+        
+        <div class="search-box" style="max-width: 500px; margin: 0 auto 2rem auto; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+            <input type="text" id="searchAllTimeInput" placeholder="Search historical records..." onkeyup="filterAllTimeTable()" style="flex: 1; border: none; padding: 1rem 1.5rem; font-size: 1.1rem; outline: none; color: var(--text-dark);">
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>State ID</th>
+                        <th>FIDE ID</th>
+                        <th>Rating</th>
+                        <th>Title(s)</th>
+                    </tr>
+                </thead>
+                <tbody id="all-time-public-body">
+                    <tr><td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-muted);">Loading historical records...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="app.js?v=11"></script>
+    <script src="players.js?v=1"></script>
     <script>
         window.onload = () => {
             fetchPlayers('public-table-body');
+            fetchAllTimePlayers('all-time-public-body'); // Fetch the new table
             updateNavbar(); 
         };
 
@@ -60,6 +87,7 @@
             let input = document.getElementById("searchInput").value.toUpperCase();
             let trs = document.getElementById("public-table-body").getElementsByTagName("tr");
             for (let i = 0; i < trs.length; i++) {
+                if (trs[i].getElementsByTagName("td").length === 1) continue; // Skip loading row
                 trs[i].style.display = trs[i].innerText.toUpperCase().indexOf(input) > -1 ? "" : "none";
             }
         }
