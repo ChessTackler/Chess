@@ -10,7 +10,7 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* CLEAN, SUPREME, MINIMALIST UI */
+        /* CLEAN, SUPREME, MINIMALIST UI (Matches Reference Image) */
         body {
             background-color: #f3f4f6; /* Light gray background */
             min-height: 100vh;
@@ -66,7 +66,7 @@
             gap: 2.5rem;
         }
 
-        /* THE CARD DESIGN */
+        /* THE CARD DESIGN (Clean White with Blue Border) */
         .ui-card {
             background-color: #ffffff;
             border-top: 4px solid var(--primary-blue);
@@ -162,8 +162,8 @@
                 <div class="ui-card">
                     <svg class="ui-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     <h3 class="ui-card-title">Registered Players</h3>
-                    <p class="ui-card-desc">View the secure directory of all onboarded players. Track registration statuses and view basic profile information efficiently.</p>
-                    <a href="registered.html" class="ui-btn">Access</a>
+                    <p class="ui-card-desc">View the public directory of all onboarded players. Track registration statuses and view basic profile information efficiently.</p>
+                    <a href="players.html" class="ui-btn">Access</a>
                 </div>
 
                 <div class="ui-card">
@@ -184,7 +184,7 @@
                     <svg class="ui-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <h3 class="ui-card-title">Application Review</h3>
                     <p class="ui-card-desc">Process pending player applications. Securely verify uploaded Aadhaar cards and payment proofs to issue official CDCA IDs.</p>
-                    <a href="registered.html" class="ui-btn">Access</a>
+                    <a href="adminaccess.html" class="ui-btn">Access</a>
                 </div>
 
             </div>
@@ -192,6 +192,7 @@
     </div>
 
     <script src="app.js"></script>
+    
     <script>
         // High-Quality Custom Logout Modal Logic
         function triggerLogoutUI() {
@@ -213,7 +214,6 @@
                 </div>
             `;
             
-            // Passing 'null' to the title so the custom modal looks cleaner without a double header
             window.showModal('🔐 Secure Authentication', bodyHTML, footerHTML);
         }
 
@@ -221,6 +221,7 @@
             const authMessage = document.getElementById('auth-message');
             const adminContent = document.getElementById('admin-content');
 
+            // Strictly check for admin rights using global helper from app.js
             const auth = await window.verifyAdminAccess();
 
             if (!auth.allowed) {
