@@ -242,15 +242,15 @@ window.openEditModal = function(id) {
 
     const bodyHTML = `
         <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div class="responsive-grid-2">
                 <div class="form-group" style="margin:0;"><label>First Name</label><input type="text" id="edit_first" value="${window.escapeHTML(player.first_name)}"></div>
                 <div class="form-group" style="margin:0;"><label>Last Name</label><input type="text" id="edit_last" value="${window.escapeHTML(player.last_name || '')}"></div>
             </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div class="responsive-grid-2">
                 <div class="form-group" style="margin:0;"><label>CDCA ID</label><input type="text" id="edit_cdca" value="${window.escapeHTML(player.cdca_id)}" required></div>
                 <div class="form-group" style="margin:0;"><label>State ID</label><input type="text" id="edit_state" value="${window.escapeHTML(player.state_id || '')}"></div>
             </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div class="responsive-grid-2">
                 <div class="form-group" style="margin:0;"><label>FIDE ID</label><input type="text" id="edit_fide" value="${window.escapeHTML(player.fide_id || '')}"></div>
                 <div class="form-group" style="margin:0;"><label>FIDE Rating</label><input type="number" id="edit_rating" value="${player.fide_rating || ''}"></div>
             </div>
@@ -297,7 +297,7 @@ window.deletePlayer = async function(id) {
 }
 
 // ==========================================
-// NEWS ENGINE (EDIT & DATETIME)
+// NEWS ENGINE
 // ==========================================
 window.currentNewsList = []; 
 
@@ -392,7 +392,7 @@ window.fetchAdminNews = async function() {
         tr.innerHTML = `
             <td>
                 <strong style="color:var(--text-dark); display:block; font-size:1.05rem; margin-bottom:5px;">${window.escapeHTML(item.title)}</strong>
-                <div style="display:flex; gap:10px; align-items:center;">${badge} <span style="font-size:0.8rem; color:#64748b;">Tags: ${window.escapeHTML(item.tags)}</span></div>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap: wrap;">${badge} <span style="font-size:0.8rem; color:#64748b;">Tags: ${window.escapeHTML(item.tags)}</span></div>
             </td>
             <td style="color:#475569; font-size:0.9rem;">
                 <strong>${formattedDate}</strong><br>${formattedTime}
@@ -455,7 +455,7 @@ window.openEditNewsModal = function(id) {
     const bodyHTML = `
         <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
             <div class="form-group" style="margin:0;"><label>Article Title</label><input type="text" id="edit_news_title" value="${window.escapeHTML(article.title)}" required></div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div class="responsive-grid-2">
                 <div class="form-group" style="margin:0;">
                     <label>Category</label>
                     <select id="edit_news_category">
@@ -465,7 +465,7 @@ window.openEditNewsModal = function(id) {
                 </div>
                 <div class="form-group" style="margin:0;"><label>Tags</label><input type="text" id="edit_news_tags" value="${window.escapeHTML(article.tags || '')}"></div>
             </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div class="responsive-grid-2">
                 <div class="form-group" style="margin:0;"><label>Date</label><input type="date" id="edit_news_date" value="${dateStr}"></div>
                 <div class="form-group" style="margin:0;"><label>Time</label><input type="time" id="edit_news_time" value="${timeStr}"></div>
             </div>
