@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script src="app.js?v=1"></script>
     <script>
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -51,11 +51,11 @@
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
 
-                if (typeof supabase === 'undefined') {
-                    throw new Error("Cannot connect to server.");
+                if (!window.supabaseClient) {
+                    throw new Error("Cannot connect to server. Please refresh.");
                 }
 
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                const { data, error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
                 if (error) throw error;
 
                 msgEl.innerText = "Success! Redirecting...";
@@ -63,6 +63,7 @@
                 window.location.href = 'index.html'; 
 
             } catch (error) {
+                console.error("Login Error:", error);
                 msgEl.innerText = error.message;
                 msgEl.style.color = "#E74C3C";
             }
