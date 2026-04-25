@@ -4,179 +4,257 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CDCA Officials</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
     :root {
-        --primary-purple: #8121d8;
-        --secondary-pink: #d81b85;
-        --text-dark: #1a1a1a;
-        --text-gray: #666666;
-        --bg: #faf8ff;
+        --purple:       #7416c8;
+        --purple-light: #9b4de0;
+        --pink:         #c8177a;
+        --gold:         #b8860b;
+        --dark:         #12001f;
+        --mid:          #4a3670;
+        --text:         #1c1230;
+        --text-soft:    #5a4d78;
+        --bg:           #ffffff;
+        --bg-tint:      #faf7ff;
+        --line:         #e8e0f5;
     }
 
-    *, *::before, *::after { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-        font-family: 'DM Sans', sans-serif;
-        margin: 0;
-        padding: 60px 20px;
-        background-color: var(--bg);
-        background-image:
-            radial-gradient(ellipse at 10% 10%, rgba(129,33,216,0.07) 0%, transparent 55%),
-            radial-gradient(ellipse at 90% 90%, rgba(216,27,133,0.06) 0%, transparent 55%);
+        font-family: 'Outfit', sans-serif;
+        background: var(--bg);
         min-height: 100vh;
+        padding: 72px 28px 88px;
+        position: relative;
+        overflow-x: hidden;
     }
 
+    /* Very subtle texture */
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(ellipse at 0% 0%,   rgba(116,22,200,0.045) 0%, transparent 50%),
+            radial-gradient(ellipse at 100% 100%, rgba(200,23,122,0.035) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    section { position: relative; z-index: 1; }
+
+    /* ── Header ── */
     .section-header {
-        text-align: left;
         max-width: 1200px;
-        margin: 0 auto 60px auto;
-        padding-left: 20px;
-        border-left: 4px solid var(--primary-purple);
+        margin: 0 auto 72px auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .header-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 12px;
+    }
+
+    .eyebrow-line {
+        width: 40px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--purple), var(--pink));
+        border-radius: 2px;
+        flex-shrink: 0;
     }
 
     .section-subtitle {
-        font-size: 0.78rem;
-        letter-spacing: 3px;
-        color: var(--secondary-pink);
-        text-transform: uppercase;
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.7rem;
         font-weight: 600;
-        margin-bottom: 6px;
-        display: block;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: var(--purple);
     }
 
     .section-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 3rem;
-        color: var(--primary-purple);
-        margin: 0;
-        font-weight: 800;
-        line-height: 1.1;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 4rem;
+        font-weight: 700;
+        color: var(--text);
+        line-height: 1;
+        letter-spacing: -1.5px;
     }
 
+    .section-title em {
+        font-style: italic;
+        background: linear-gradient(110deg, var(--purple), var(--pink));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Thin rule below header */
+    .header-rule {
+        margin-top: 28px;
+        height: 1px;
+        background: linear-gradient(90deg, var(--line), transparent 70%);
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* ── Grid ── */
     .team-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 50px 30px;
+        gap: 56px 24px;
         max-width: 1200px;
-        margin: 0 auto;
+        margin: 56px auto 0;
     }
 
+    /* ── Card ── */
     .team-member {
-        text-align: center;
         display: flex;
         flex-direction: column;
         align-items: center;
-        animation: fadeUp 0.6s ease both;
+        text-align: center;
+        animation: riseIn 0.65s cubic-bezier(.22,1,.36,1) both;
     }
+    .team-member:nth-child(1) { animation-delay: 0.05s; }
+    .team-member:nth-child(2) { animation-delay: 0.13s; }
+    .team-member:nth-child(3) { animation-delay: 0.21s; }
+    .team-member:nth-child(4) { animation-delay: 0.29s; }
 
-    .team-member:nth-child(1) { animation-delay: 0.1s; }
-    .team-member:nth-child(2) { animation-delay: 0.2s; }
-    .team-member:nth-child(3) { animation-delay: 0.3s; }
-    .team-member:nth-child(4) { animation-delay: 0.4s; }
-
-    @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(24px); }
+    @keyframes riseIn {
+        from { opacity: 0; transform: translateY(28px); }
         to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── Blob wrapper ── */
+    /* ── Image blob ── */
     .image-wrap {
         position: relative;
-        width: 220px;
-        height: 220px;
-        margin-bottom: 24px;
-        transition: transform 0.4s cubic-bezier(.34,1.56,.64,1);
+        width: 210px;
+        height: 210px;
+        margin-bottom: 28px;
+        transition: transform 0.45s cubic-bezier(.34,1.45,.64,1);
     }
 
     .team-member:hover .image-wrap {
-        transform: translateY(-8px) scale(1.04);
+        transform: translateY(-8px) scale(1.03);
     }
 
-    /* Glow behind */
+    /* Soft glow */
     .image-wrap::before {
         content: '';
         position: absolute;
-        inset: 10px;
-        background: linear-gradient(135deg, var(--primary-purple), var(--secondary-pink));
-        filter: blur(20px);
-        opacity: 0.35;
+        inset: 4px;
+        background: linear-gradient(135deg, var(--purple), var(--pink));
+        opacity: 0.22;
+        filter: blur(18px);
         z-index: 0;
-        transition: opacity 0.4s ease;
+        transition: opacity 0.45s ease;
     }
-    .team-member:hover .image-wrap::before { opacity: 0.6; }
+    .team-member:hover .image-wrap::before {
+        opacity: 0.42;
+    }
 
     /* Gradient border ring */
     .image-wrap::after {
         content: '';
         position: absolute;
         inset: -3px;
-        background: linear-gradient(135deg, var(--primary-purple), var(--secondary-pink));
+        background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 60%, #e8a020 100%);
         z-index: 1;
+        transition: opacity 0.4s ease;
     }
 
-    /* Inner white mask so border shows */
+    /* White inset so border is visible */
     .image-inner {
         position: absolute;
         inset: 3px;
         overflow: hidden;
         z-index: 2;
-        background: #fff;
+        background: var(--bg-tint);
     }
 
+    /* HD-quality image */
     .image-inner img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         object-position: center top;
         display: block;
-        transition: transform 0.5s ease;
+        transform: translateZ(0) scale(1.01);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        filter: contrast(1.07) saturate(1.08) brightness(1.01);
+        transition: transform 0.5s ease, filter 0.4s ease;
     }
 
     .team-member:hover .image-inner img {
-        transform: scale(1.06);
+        transform: translateZ(0) scale(1.07);
+        filter: contrast(1.1) saturate(1.15) brightness(1.03);
     }
 
     /* Placeholder */
     .image-inner .placeholder {
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, #ede0fb, #fce4f4);
+        background: linear-gradient(145deg, #f0e8ff, #fde8f4);
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
     /* ── Blob shapes ── */
-    .blob-1::after, .blob-1::before, .blob-1 .image-inner { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
-    .blob-2::after, .blob-2::before, .blob-2 .image-inner { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-    .blob-3::after, .blob-3::before, .blob-3 .image-inner { border-radius: 30% 70% 70% 30% / 50% 60% 40% 50%; }
-    .blob-4::after, .blob-4::before, .blob-4 .image-inner { border-radius: 50% 50% 40% 60% / 40% 60% 40% 60%; }
+    .blob-1::after, .blob-1::before, .blob-1 .image-inner { border-radius: 42% 58% 68% 32% / 38% 52% 58% 52%; }
+    .blob-2::after, .blob-2::before, .blob-2 .image-inner { border-radius: 62% 38% 28% 72% / 58% 32% 68% 42%; }
+    .blob-3::after, .blob-3::before, .blob-3 .image-inner { border-radius: 32% 68% 68% 32% / 52% 58% 42% 48%; }
+    .blob-4::after, .blob-4::before, .blob-4 .image-inner { border-radius: 52% 48% 42% 58% / 42% 58% 42% 58%; }
 
-    /* Typography */
+    /* ── Member info ── */
+    .member-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
     .role {
-        color: var(--primary-purple);
-        font-size: 0.78rem;
-        font-weight: 600;
-        letter-spacing: 2px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 3px;
         text-transform: uppercase;
-        margin: 0 0 6px 0;
+        color: var(--purple);
+        margin-bottom: 2px;
     }
 
     .name {
-        font-family: 'Playfair Display', serif;
-        color: var(--text-dark);
-        font-size: 1.15rem;
-        font-weight: 700;
-        margin: 0 0 6px 0;
-        line-height: 1.3;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.32rem;
+        font-weight: 600;
+        color: var(--text);
+        line-height: 1.25;
+        letter-spacing: 0.1px;
     }
 
-    .extra-info {
-        color: var(--secondary-pink);
-        font-size: 0.82rem;
-        font-weight: 500;
-        margin: 0;
+    .divider {
+        width: 28px;
+        height: 1.5px;
+        background: linear-gradient(90deg, var(--purple), var(--pink));
+        border-radius: 2px;
+        margin: 4px auto 2px;
+    }
+
+    .tag {
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.74rem;
+        font-weight: 400;
+        color: var(--text-soft);
+        line-height: 1.6;
     }
 </style>
 </head>
@@ -184,12 +262,18 @@
 
 <section>
     <div class="section-header">
-        <span class="section-subtitle">CDCA Officials</span>
-        <h2 class="section-title">Our People</h2>
+        <div class="header-eyebrow">
+            <div class="eyebrow-line"></div>
+            <span class="section-subtitle">CDCA Officials</span>
+        </div>
+        <h2 class="section-title">Our <em>People</em></h2>
     </div>
+
+    <div class="header-rule"></div>
 
     <div class="team-grid">
 
+        <!-- Dr. Manoj Kumar Verma -->
         <div class="team-member">
             <div class="image-wrap blob-1">
                 <div class="image-inner">
@@ -197,11 +281,13 @@
                          alt="Dr. Manoj Kumar Verma">
                 </div>
             </div>
-            <p class="role">President, CDCA</p>
-            <h3 class="name">Dr. Manoj Kumar Verma 'SANKALP'</h3>
-            <p class="extra-info">president@cdca.example</p>
+            <div class="member-info">
+                <p class="role">President, CDCA</p>
+                <h3 class="name">Dr. Manoj Kumar Verma 'SANKALP'</h3>
+            </div>
         </div>
 
+        <!-- Arbind Kumar Singh -->
         <div class="team-member">
             <div class="image-wrap blob-2">
                 <div class="image-inner">
@@ -209,39 +295,52 @@
                          alt="Arbind Kumar Singh">
                 </div>
             </div>
-            <p class="role">Secretary, CDCA</p>
-            <h3 class="name">Arbind Kumar Singh</h3>
-            <p class="extra-info">Int. Arbiter | National Instructor</p>
+            <div class="member-info">
+                <p class="role">Secretary, CDCA</p>
+                <h3 class="name">Arbind Kumar Singh</h3>
+                <div class="divider"></div>
+                <span class="tag">Int. Arbiter</span>
+                <span class="tag">National Instructor</span>
+            </div>
         </div>
 
+        <!-- Kumar Shubham -->
         <div class="team-member">
             <div class="image-wrap blob-3">
                 <div class="image-inner">
                     <div class="placeholder">
-                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#8121d8" stroke-width="1.2" opacity="0.4">
-                            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#9b4de0" stroke-width="0.9" opacity="0.35">
+                            <circle cx="12" cy="8" r="4.5"/><path d="M3 21c0-4.5 4-8 9-8s9 3.5 9 8"/>
                         </svg>
                     </div>
                 </div>
             </div>
-            <p class="role">Treasurer</p>
-            <h3 class="name">Jane Doe</h3>
-            <p class="extra-info">jane.doe@example.com</p>
+            <div class="member-info">
+                <p class="role">Treasurer</p>
+                <h3 class="name">Kumar Shubham</h3>
+                <div class="divider"></div>
+                <span class="tag">Senior National Arbiter</span>
+            </div>
         </div>
 
+        <!-- Sagar Kumar -->
         <div class="team-member">
             <div class="image-wrap blob-4">
                 <div class="image-inner">
                     <div class="placeholder">
-                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#8121d8" stroke-width="1.2" opacity="0.4">
-                            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#9b4de0" stroke-width="0.9" opacity="0.35">
+                            <circle cx="12" cy="8" r="4.5"/><path d="M3 21c0-4.5 4-8 9-8s9 3.5 9 8"/>
                         </svg>
                     </div>
                 </div>
             </div>
-            <p class="role">Joint Secretary</p>
-            <h3 class="name">John Smith</h3>
-            <p class="extra-info">john.smith@example.com</p>
+            <div class="member-info">
+                <p class="role">Joint Secretary</p>
+                <h3 class="name">Sagar Kumar</h3>
+                <div class="divider"></div>
+                <span class="tag">Senior National Arbiter</span>
+                <span class="tag">Development Instructor</span>
+            </div>
         </div>
 
     </div>
