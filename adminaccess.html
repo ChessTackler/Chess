@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Review Portal - CDCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Specific overrides for bulk data view */
+        .full-width-container { max-width: 1600px; margin: 0 auto; padding: 2rem 5%; width: 100%; box-sizing: border-box; }
+        .document-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .doc-card { border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; text-align: center; background: #f8fafc; }
+        .doc-card img { width: 100%; height: 100px; object-fit: cover; border-radius: 4px; margin-bottom: 8px; border: 1px solid #e2e8f0; }
+        .doc-card a { font-size: 0.85rem; color: var(--primary-blue); font-weight: 600; text-decoration: none; }
+        .detail-row { display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding: 8px 0; }
+        .detail-label { color: var(--text-muted); font-size: 0.9rem; font-weight: 600; }
+        .detail-value { color: var(--text-dark); font-size: 0.95rem; font-weight: 500; text-align: right; }
+    </style>
+</head>
+<body style="background-color: #f1f5f9;">
+
+    <header class="chess-admin-header">
+        <a href="index.html" class="logo-wrapper">
+            <img src="LogoCDCA.png" alt="CDCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=CDCA'">
+            <div class="logo-divider admin-divider"></div>
+            <img src="LogoABCA.png" alt="ABCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA'">
+        </a>
+        
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="admin.html" class="btn-orange" style="background: transparent; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1rem; box-shadow: none;">Back to Dashboard</a>
+            <button onclick="window.handleLogout()" class="admin-logout-btn" title="Log Out">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                <span>Log Out</span>
+            </button>
+        </div>
+    </header>
+
+    <div id="auth-message" class="admin-auth-loader">
+        <div class="loader"></div>
+        Authenticating Secure Access...
+    </div>
+
+    <div id="admin-content" style="display: none;">
+        <div class="full-width-container">
+            
+            <div class="admin-page-header">
+                <span class="badge badge-im" style="margin-bottom: 10px;">Registration Queue</span>
+                <h2 class="section-title" style="text-align: left; margin-bottom: 0.5rem; font-size: 2.2rem;">Application Review Portal</h2>
+                <p style="color: var(--text-muted); font-size: 1.05rem;">Review uploaded documents, verify payments, and activate pending CDCA IDs.</p>
+            </div>
+
+            <div class="admin-card no-pad">
+                <div class="card-header-bar flex-between">
+                    <div>
+                        <h3 style="margin: 0;">Player Verification Database</h3>
+                        <p style="margin: 5px 0 0 0; font-size: 0.85rem; color: var(--text-muted);">Displays up to 1000+ entries efficiently.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="statusFilter" onchange="window.filterRegistrations()" style="padding: 0.6rem; border-radius: 50px; border: 1px solid var(--border-color); outline: none;">
+                            <option value="All">All Statuses</option>
+                            <option value="Pending" selected>Pending Review</option>
+                            <option value="Active">Active / Approved</option>
+                        </select>
+                        <div class="search-box slim-search" style="margin: 0;">
+                            <input type="text" id="regSearchInput" placeholder="Search ID, Name, UTR..." onkeyup="window.filterRegistrations()">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-wrapper admin-table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Submission Date</th>
+                                <th>Generated CDCA ID</th>
+                                <th>Player Name</th>
+                                <th>Contact Info</th>
+                                <th>UTR Number</th>
+                                <th>Status</th>
+                                <th style="text-align: right; min-width: 120px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="registration-tbody">
+                            <tr><td colspan="7" style="text-align: center; padding: 2rem;">Loading data...</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="pagination flat-pagination">
+                        <span class="pagination-info" id="reg-page-info">Page 1 of 1</span>
+                        <div class="pagination-controls">
+                            <button id="reg-page-prev" onclick="window.changeRegPage(-1)" disabled>Previous</button>
+                            <button id="reg-page-next" onclick="window.changeRegPage(1)" disabled>Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="adminaccess.js"></script>
+
+</body>
+</html>
