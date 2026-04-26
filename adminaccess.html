@@ -6,7 +6,6 @@
     <title>Queue - CDCA Review</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="adminaccess.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -15,12 +14,11 @@
             <span class="header-title">Review Queue Module</span>
         </div>
         <div style="display: flex; gap: 1rem;">
-            <a href="admin.html" class="btn-return">Dashboard</a>
-            <button onclick="window.handleLogout()" class="btn-logout">End Session</button>
+            <a href="admin.html"><button class="button"><div class="text">BACK</div></button></a>
         </div>
     </header>
 
-    <div id="admin-content" class="wide-container">
+    <div class="wide-container">
         
         <div class="page-header">
             <h1 class="portal-title">Application Verification</h1>
@@ -28,37 +26,28 @@
         </div>
 
         <div class="data-card">
-            <div class="toolbar">
-                <div class="filter-group">
-                    <select id="statusFilter" onchange="window.filterRegistrations()">
+            <div class="toolbar" style="display: flex; gap: 20px; align-items: center;">
+                <div class="textInputWrapper" style="width: 200px; margin: 0;">
+                    <select id="statusFilter" class="textInput" style="padding: 10px;">
                         <option value="All">View All</option>
                         <option value="Pending" selected>Pending Review</option>
-                        <option value="Active">Approved</option>
                     </select>
                 </div>
-                <div class="search-wrap">
-                    <input type="text" id="regSearchInput" placeholder="Search UTR, Name, ID..." onkeyup="window.filterRegistrations()">
+                <div class="textInputWrapper" style="width: 350px; margin: 0;">
+                    <input type="text" id="regSearchInput" placeholder="Search UTR, Name, ID..." class="textInput">
                 </div>
             </div>
 
             <table class="review-table">
                 <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Gen. ID</th>
-                        <th>Applicant</th>
-                        <th>Contact Data</th>
-                        <th>UTR Payment</th>
-                        <th>Status</th>
-                        <th style="text-align: right;">Action</th>
-                    </tr>
+                    <tr><th>Date</th><th>Gen. ID</th><th>Applicant</th><th>Contact Data</th><th>UTR Payment</th><th>Status</th><th style="text-align: right;">Action</th></tr>
                 </thead>
-                <tbody id="registration-tbody"></tbody>
+                <tbody id="registration-tbody">
+                    <tr><td colspan="7" style="text-align:center; padding: 2rem;">No pending applications in queue.</td></tr>
+                </tbody>
             </table>
         </div>
 
     </div>
-    <script src="app.js"></script>
-    <script src="adminaccess.js"></script>
 </body>
 </html>
