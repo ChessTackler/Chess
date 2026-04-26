@@ -5,16 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Command Center - CDCA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css"> <link rel="stylesheet" href="admin.css">
-    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app.js"></script>
 </head>
 <body>
 
     <header class="app-header">
-        <div class="brand-zone">
-            <span class="header-title">Command Center</span>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <div class="brand-zone" style="display: flex; align-items: center; gap: 8px;">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16"/><path d="M6 18v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/><path d="M12 12v-6"/><path d="M9 6a3 3 0 1 1 6 0 3 3 0 0 1-6 0"/></svg>
+                <span class="header-title">Command Center</span>
+            </div>
         </div>
         <button class="button" style="padding: 0.5em 1em; font-size: 12px;" onclick="window.handleLogout()"><div class="text">END SESSION</div></button>
     </header>
@@ -26,7 +32,8 @@
 
     <div id="admin-content" style="display: none;" class="layout-container">
 
-        <aside class="sidebar-nav">
+        <aside class="sidebar-nav" id="sidebar">
+            <button class="close-sidebar-btn" onclick="toggleSidebar()">×</button>
             <div class="user-profile">
                 <div class="avatar">A</div>
                 <div class="user-info">
@@ -35,15 +42,26 @@
                 </div>
             </div>
             <nav class="tab-list">
-                <button class="nav-btn active" onclick="switchAdminTab('tab-news')">📰 News & Media</button>
-                <button class="nav-btn" onclick="switchAdminTab('tab-players')">♟️ Master Database</button>
-                <a href="adminaccess.html" class="nav-btn direct-link" style="margin-top: 20px; border-top: 1px solid #e2e8f0; border-radius: 0;">🛡️ Review Queue</a>
-                <a href="registered.html" class="nav-btn direct-link">🔒 Private Directory</a>
+                <button class="nav-btn active" onclick="switchAdminTab('tab-news')">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15"/></svg>
+                    News & Media
+                </button>
+                <button class="nav-btn" onclick="switchAdminTab('tab-players')">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+                    Master Database
+                </button>
+                <a href="adminaccess.html" class="nav-btn direct-link" style="margin-top: 20px; border-top: 1px solid #e2e8f0; border-radius: 0;">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    Review Queue
+                </a>
+                <a href="registered.html" class="nav-btn direct-link">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    Private Directory
+                </a>
             </nav>
         </aside>
 
         <main class="workspace">
-
             <div id="tab-news" class="workspace-panel active">
                 <div class="header-flex"><h2>Publishing Desk</h2></div>
                 <div class="split-layout">
@@ -71,7 +89,7 @@
                     </div>
                     <div class="data-card">
                         <div class="card-title">Live Articles</div>
-                        <div style="overflow-x: auto;">
+                        <div class="table-responsive">
                             <table class="modern-table">
                                 <thead><tr><th>Article Info</th><th>Date</th><th style="text-align: right;">Actions</th></tr></thead>
                                 <tbody id="admin-news-tbody"><tr><td colspan="3" style="text-align:center;">Loading...</td></tr></tbody>
@@ -108,11 +126,11 @@
                     </div>
                     
                     <div class="data-card">
-                        <div class="card-title" style="display:flex; justify-content:space-between; align-items:center;">
+                        <div class="card-title list-header-mobile">
                             Database Records
-                            <div class="textInputWrapper" style="width: 200px; margin: 0;"><input type="text" id="searchInput" onkeyup="window.handleGlobalSearch()" placeholder="Search..." class="textInput" style="padding: 8px 12px; font-size:12px;"></div>
+                            <div class="textInputWrapper search-wrap"><input type="text" id="searchInput" onkeyup="window.handleGlobalSearch()" placeholder="Search..." class="textInput" style="padding: 8px 12px; font-size:12px;"></div>
                         </div>
-                        <div style="overflow-x: auto;">
+                        <div class="table-responsive">
                             <table class="modern-table">
                                 <thead><tr><th>Player</th><th>CDCA ID</th><th>State ID</th><th>Rating</th><th>Status</th><th style="text-align: right;">Action</th></tr></thead>
                                 <tbody id="admin-players-tbody"><tr><td colspan="6" style="text-align:center;">Loading...</td></tr></tbody>
@@ -121,7 +139,6 @@
                     </div>
                 </div>
             </div>
-
         </main>
     </div>
 
@@ -141,8 +158,6 @@
                     if(auth.email) document.getElementById('admin-email-display').innerText = auth.email;
                     authMessage.style.display = 'none';
                     adminContent.style.display = 'flex';
-                    
-                    // Initialize Datatables
                     window.fetchAdminNews();
                     window.fetchPlayers('admin-players-tbody', true);
                 } else {
@@ -156,6 +171,12 @@
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
+            // Auto close sidebar on mobile after clicking
+            if(window.innerWidth <= 900) toggleSidebar(); 
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
         }
     </script>
 </body>
