@@ -165,7 +165,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 
 .hero-content {
     flex: 1.1;
-    z-index: 3;
+    z-index: 10;
 }
 
 .hero-visual {
@@ -174,6 +174,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 5;
 }
 
 /* Faded Glowing Gradient behind Logo ONLY */
@@ -364,14 +365,48 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 ========================================= */
 /* Tablet */
 @media (max-width: 992px) {
-    .hero-container { padding: 2rem 0; }
-    .hero-content h1 { font-size: 2.5rem; }
-    .main-hero-logo { max-width: 280px; }
-    .badge-1 { right: 0; } .badge-2 { left: 0; }
+    .hero-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        position: relative; /* Context for absolute visuals */
+        min-height: 60vh;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 10; /* Ensures text is always on top */
+        width: 100%;
+    }
+    
+    /* Centralize Logo and send to back */
+    .hero-visual {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        max-width: 450px;
+        z-index: 1; /* Sends logo behind the text */
+        opacity: 0.12; /* Heavy fade for background watermark look */
+        pointer-events: none; /* Prevents logo from blocking clicks */
+    }
+    
+    .main-hero-logo {
+        width: 100%;
+        height: auto;
+    }
+
+    .visual-circle, .floating-badge { display: none; } /* Hide clutter on mobile */
+    .hero-ctas, .hero-stats { justify-content: center; }
+    .hero-content p { margin: 0 auto 2rem auto; }
 }
 
-/* Strict Mobile Fix: Places Logo cleanly on the right, faded behind the text */
+/* Strict Mobile Fixes */
 @media (max-width: 768px) {
+    /* Navbar Mobile Fixes */
     .chess-graphic-nav, .chess-admin-header { padding: 1rem 5%; }
     .nav-toggle { margin-right: 0; transform: scale(0.85); }
     .logo-wrapper { position: absolute; left: 50%; transform: translateX(-50%); gap: 8px; }
@@ -379,6 +414,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     .logo-divider { height: 22px; }
     #main-nav { display: none; }
     
+    /* Admin Portal Mobile Fixes */
     .admin-logout-btn span { display: none; }
     .admin-logout-btn { padding: 0.5rem; }
     .chess-admin-header { flex-direction: column; justify-content: center; text-align: center; padding: 1.2rem 1rem; }
@@ -386,26 +422,8 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     .portal-wrapper { padding: 3rem 5%; }
     .ui-card { padding: 2rem 1.5rem; }
 
-    /* The Hero Mobile Fix you requested */
-    .modern-hero { padding: 5rem 5% 4rem 5%; }
-    .hero-container {
-        display: block; /* Removes side-by-side flex */
-    }
-    .hero-content {
-        position: relative;
-        z-index: 10; /* Keeps text on top */
-    }
-    .hero-visual {
-        position: absolute;
-        top: 15%;
-        right: -20%; /* Pushes logo to the right side of the screen */
-        width: 350px;
-        opacity: 0.15; /* Makes it a beautiful, faded background element */
-        z-index: 1;
-        pointer-events: none;
-    }
-    .floating-badge { display: none; } /* Hide floating badges on small screens for cleaner look */
-    
-    .hero-stats { flex-direction: column; gap: 1.5rem; border-top: none; padding-top: 0; }
-    .hero-ctas { justify-content: flex-start; }
+    /* The Hero Mobile Fixes */
+    .modern-hero { padding: 4rem 5%; }
+    .hero-content h1 { font-size: 2.2rem; }
+    .hero-stats { flex-direction: column; gap: 1.5rem; }
 }
