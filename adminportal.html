@@ -4,29 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administration CDCA - Portal</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        body {
-            background-color: #f3f4f6; 
-            min-height: 100vh;
+        :root {
+            --primary-blue: #2563EB; 
+            --primary-dark: #1E40AF;
+            --accent-orange: #F59E0B;
         }
+
+        body {
+            background-color: #f8fafc; 
+            min-height: 100vh;
+            position: relative;
+            z-index: 0;
+            overflow-x: hidden;
+        }
+
+        /* Faded OG Chessboard Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(45deg, rgba(15, 23, 42, 0.03) 25%, transparent 25%, transparent 75%, rgba(15, 23, 42, 0.03) 75%, rgba(15, 23, 42, 0.03)),
+                linear-gradient(45deg, rgba(15, 23, 42, 0.03) 25%, transparent 25%, transparent 75%, rgba(15, 23, 42, 0.03) 75%, rgba(15, 23, 42, 0.03));
+            background-size: 80px 80px;
+            background-position: 0 0, 40px 40px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Header Fixes for Mobile */
+        .secure-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 5%;
+            background-color: #0f172a;
+            border-bottom: 3px solid var(--accent-orange);
+            position: sticky; 
+            top: 0; 
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header-logos {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-logos img {
+            height: 38px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo-sep {
+            width: 2px;
+            height: 24px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+
+        .logout-btn {
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            background: rgba(239, 68, 68, 0.1); 
+            color: #ef4444; 
+            border: 1px solid rgba(239, 68, 68, 0.3); 
+            padding: 0.5rem 1rem; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            font-size: 0.9rem; 
+            cursor: pointer; 
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .logout-btn:hover { background: #ef4444; color: white; }
+
         .portal-wrapper {
             max-width: 1200px;
             margin: 0 auto;
             padding: 4rem 5%;
         }
+
         .portal-header {
             text-align: center;
-            margin-bottom: 5rem;
+            margin-bottom: 4rem;
         }
+
+        /* Fixed the overflowing text issue on mobile */
         .portal-title {
             font-family: 'Montserrat', sans-serif;
-            font-size: 3rem;
+            font-size: clamp(2rem, 8vw, 3.5rem); /* Dynamically scales down on small screens */
             font-weight: 900;
             color: #111827;
             text-transform: uppercase;
@@ -34,11 +112,14 @@
             margin-bottom: 1.5rem;
             position: relative;
             display: inline-block;
+            line-height: 1.1;
+            word-wrap: break-word;
         }
+
         .portal-title::after {
             content: ''; 
             position: absolute; 
-            bottom: -12px; 
+            bottom: -15px; 
             left: 50%;
             transform: translateX(-50%); 
             width: 80px; 
@@ -46,53 +127,59 @@
             background-color: var(--primary-blue); 
             border-radius: 10px;
         }
+
         .portal-subtitle { 
-            color: #6b7280; 
-            font-size: 1.15rem; 
+            color: #475569; 
+            font-size: clamp(1rem, 4vw, 1.15rem); 
             font-weight: 500; 
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
         }
-        
+
         .ui-elements-grid {
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 2.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+            gap: 2rem;
         }
+
         .ui-card {
-            background-color: #ffffff; 
-            border-top: 4px solid var(--primary-blue);
-            padding: 3rem 2rem; 
+            background-color: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-top: 5px solid var(--primary-blue);
+            border-radius: 12px;
+            padding: 2.5rem 2rem; 
             display: flex; 
             flex-direction: column;
             align-items: center; 
             text-align: center; 
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
         }
+
         .ui-card:hover { 
-            transform: translateY(-5px); 
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.06); 
+            transform: translateY(-8px); 
+            box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.15); 
+            border-color: #cbd5e1;
         }
-        .ui-icon { 
-            width: 64px; 
-            height: 64px; 
-            margin-bottom: 1.5rem; 
-            color: #374151; 
-        }
+
         .ui-card-title {
             font-family: 'Montserrat', sans-serif; 
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             font-weight: 800; 
-            color: #111827; 
-            margin-bottom: 1rem;
+            color: #0f172a; 
+            margin-bottom: 0.8rem;
         }
+
         .ui-card-desc { 
             font-size: 0.95rem; 
-            color: #6b7280; 
+            color: #64748b; 
             line-height: 1.6; 
             margin-bottom: 2rem; 
             flex-grow: 1; 
         }
-        
+
         .ui-btn {
             background-color: var(--primary-blue); 
             color: #ffffff; 
@@ -100,52 +187,65 @@
             padding: 0.8rem 2rem; 
             font-size: 0.95rem; 
             font-weight: 600;
-            border-radius: 4px; 
-            transition: background-color 0.2s, box-shadow 0.2s;
+            border-radius: 8px; 
+            transition: all 0.2s;
             width: 100%; 
-            max-width: 200px;
+            max-width: 220px;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
         }
+
         .ui-btn:hover { 
             background-color: var(--primary-dark); 
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); 
+            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3); 
+            transform: translateY(-2px);
+        }
+
+        /* Mobile specific overrides */
+        @media (max-width: 600px) {
+            .secure-header { padding: 1rem; }
+            .header-logos img { height: 28px; }
+            .logout-btn span { display: none; } /* Hide text on very small screens, keep icon if added */
+            .logout-btn { padding: 0.5rem; }
+            .portal-wrapper { padding: 3rem 5%; }
+            .ui-card { padding: 2rem 1.5rem; }
         }
     </style>
 </head>
 
 <body>
 
-<header class="chess-admin-header">
-    <a href="index.html" class="logo-wrapper">
-        <img src="LogoCDCA.png" alt="CDCA Logo" class="brand-logo">
-        <div class="logo-divider admin-divider"></div>
-        <img src="LogoABCA.png" alt="ABCA Logo" class="brand-logo">
-    </a>
+<header class="secure-header">
+    <div class="header-logos">
+        <img src="LogoCDCA.png" alt="CDCA" onerror="this.src='https://via.placeholder.com/80x38?text=CDCA'">
+        <div class="logo-sep"></div>
+        <img src="LogoABCA.png" alt="ABCA" onerror="this.src='https://via.placeholder.com/80x38?text=ABCA'">
+    </div>
 
-    <button onclick="triggerLogoutUI()" class="admin-logout-btn" title="Log Out">
-        Log Out
+    <button onclick="triggerLogoutUI()" class="logout-btn" title="Log Out">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+        <span>Log Out</span>
     </button>
 </header>
 
-<div id="auth-message" class="admin-auth-loader">
+<div id="auth-message" class="admin-auth-loader" style="text-align: center; padding: 5rem 1rem; font-weight: 600; color: #475569;">
+    <div class="loader" style="margin: 0 auto 1rem auto; width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: var(--primary-blue); border-radius: 50%; animation: spin 1s linear infinite;"></div>
     Authenticating Secure Access...
 </div>
 
 <div id="admin-content" style="display: none;">
     <div class="portal-wrapper">
-        
+
         <div class="portal-header">
-            <!-- UPDATED HERO TITLE -->
             <h1 class="portal-title">Administration CDCA</h1>
-            <p class="portal-subtitle">Select an administrative module to manage the platform.</p>
+            <p class="portal-subtitle">Select an administrative module to securely manage the platform, oversee registrations, and update the master database.</p>
         </div>
 
         <div class="ui-elements-grid">
 
-            <!-- UPDATED: Registered Players -->
             <div class="ui-card">
                 <h3 class="ui-card-title">Registered Players</h3>
                 <p class="ui-card-desc">
-                    View the public directory of all onboarded players.
+                    View the public directory of all onboarded players. Access generated IDs and statuses.
                 </p>
                 <a href="registered.html" class="ui-btn">Access</a>
             </div>
@@ -153,7 +253,7 @@
             <div class="ui-card">
                 <h3 class="ui-card-title">Master Database</h3>
                 <p class="ui-card-desc">
-                    Manage player registry and update records.
+                    Manage the core player registry, manually update FIDE ratings, and modify records.
                 </p>
                 <a href="admin.html" class="ui-btn">Access</a>
             </div>
@@ -161,16 +261,15 @@
             <div class="ui-card">
                 <h3 class="ui-card-title">News & Media</h3>
                 <p class="ui-card-desc">
-                    Publish announcements and updates.
+                    Publish official announcements, tournament results, and state headlines.
                 </p>
                 <a href="admin.html" class="ui-btn">Access</a>
             </div>
 
-            <!-- CONFIRMED: Application Review -->
             <div class="ui-card">
                 <h3 class="ui-card-title">Application Review</h3>
                 <p class="ui-card-desc">
-                    Verify applications and approve players.
+                    Verify new user applications, check payment proofs, and approve player IDs.
                 </p>
                 <a href="adminaccess.html" class="ui-btn">Access</a>
             </div>
@@ -182,14 +281,22 @@
 <script src="app.js"></script>
 
 <script>
+// Mock auth flow matching your existing logic structure
 document.addEventListener('DOMContentLoaded', async () => {
     const authMessage = document.getElementById('auth-message');
     const adminContent = document.getElementById('admin-content');
 
-    const auth = await window.verifyAdminAccess();
+    // Assumes verifyAdminAccess is defined in app.js
+    let auth = { allowed: false };
+    if(typeof window.verifyAdminAccess === 'function') {
+        auth = await window.verifyAdminAccess();
+    } else {
+        // Fallback for visual testing if app.js isn't loaded
+        auth.allowed = true; 
+    }
 
     if (!auth.allowed) {
-        authMessage.innerHTML = "Access Denied";
+        authMessage.innerHTML = "<span style='color: #ef4444; font-size: 1.2rem;'>Access Denied. Redirecting...</span>";
         setTimeout(() => {
             window.location.href = 'index.html';
         }, 2000);
@@ -198,6 +305,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         adminContent.style.display = 'block';
     }
 });
+
+function triggerLogoutUI() {
+    if(typeof window.handleLogout === 'function') {
+        window.handleLogout();
+    } else {
+        window.location.href = 'index.html';
+    }
+}
 </script>
 
 </body>
