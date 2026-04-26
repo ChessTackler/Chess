@@ -1,0 +1,29 @@
+/* Borrows the premium structural DNA of adminaccess but focused on expanding rows */
+:root { --bg-dark: #0f172a; --surface: #ffffff; --app-bg: #f8fafc; --gold: #f59e0b; --border: #e2e8f0; --text-main: #1e293b; --text-light: #64748b; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+body { background: var(--app-bg); color: var(--text-main); }
+
+.app-header { background: var(--bg-dark); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100;}
+.header-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--surface); letter-spacing: 0.5px; }
+.btn-return, .btn-logout { background: transparent; border: 1px solid rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 6px; color: white; text-decoration: none; font-size: 0.9rem; transition: 0.2s; }
+.btn-return:hover { background: rgba(255,255,255,0.1); }
+.btn-logout:hover { background: #ef4444; border-color: #ef4444; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+.page-header { margin-bottom: 2rem; text-align: center; }
+.secure-badge { background: #dcfce7; color: #166534; padding: 0.4rem 1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; display: inline-block; margin-bottom: 1rem; }
+.portal-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--bg-dark); }
+.portal-subtitle { color: var(--text-light); font-size: 1.1rem; }
+
+.data-card { background: var(--surface); border-radius: 16px; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08); border: 1px solid var(--border); overflow: hidden; }
+.toolbar { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; border-bottom: 1px solid var(--border); background: #ffffff; }
+.toolbar h3 { color: var(--bg-dark); font-size: 1.2rem; }
+.search-input { padding: 0.8rem 1.2rem; border: 1px solid var(--border); border-radius: 50px; outline: none; font-size: 0.95rem; width: 350px; background: #f8fafc; transition: 0.2s; }
+.search-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1); background: white; }
+
+.interactive-table { width: 100%; border-collapse: collapse; }
+.interactive-table th { background: #f8fafc; padding: 1.2rem 1.5rem; text-align: left; font-size: 0.85rem; color: var(--text-light); text-transform: uppercase; border-bottom: 2px solid var(--border); }
+.interactive-table td { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+/* Styles for JS-injected expandable rows */
+.clickable-row { cursor: pointer; transition: all 0.2s; }
+.clickable-row:hover { background-color: #fefce8 !important; transform: scale(1.002); }
