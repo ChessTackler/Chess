@@ -53,22 +53,22 @@ async function uploadToSupabaseStorage(file, folderPath) {
         throw new Error(`Upload failed for ${file.name}.`);
     }
 
-    // We no longer get a Public URL. We return the internal path for secure signing later.
     return fullPath; 
 }
 
 window.submitRegistration = async function(event) {
     event.preventDefault();
 
+    // Verifies that app.js successfully initialized the database connection
     if (!window.supabaseClient) {
-        window.uiAlert('System Error', 'Database connection offline. Are scripts loaded?', true);
+        window.uiAlert('System Error', 'Database connection offline. Ensure app.js is loaded.', true);
         return;
     }
 
     const btn = document.getElementById('reg-submit-btn');
-    const originalBtnHTML = btn.innerHTML; // Store original button HTML to preserve CSS
+    const originalBtnHTML = btn.innerHTML; 
     
-    // Update button nicely with CSS text class
+    // Smooth loading state
     btn.innerHTML = `<div class="text">Processing Data...</div>`;
     btn.disabled = true;
 
@@ -89,7 +89,6 @@ window.submitRegistration = async function(event) {
              throw new Error("All verification documents and payment proof must be uploaded.");
         }
 
-        // Returns internal paths (e.g. 'photos/12345.jpg')
         const photoPath = await uploadToSupabaseStorage(photoFile, 'photos');
         const aadhaarPath = await uploadToSupabaseStorage(aadhaarFile, 'aadhaar_cards');
         const paymentPath = await uploadToSupabaseStorage(paymentFile, 'payment_proofs');
@@ -114,11 +113,12 @@ window.submitRegistration = async function(event) {
         const { error } = await window.supabaseClient.from('player_database').insert([newPlayerEntry]);
         if (error) throw error;
 
+        // Custom Success Message with your exact requested text
         const successBodyHTML = `
             <div style="text-align: center; padding: 1rem 0;">
                 <div style="font-size: 3.5rem; margin-bottom: 10px;">🎉</div>
-                <h3 style="color: #10b981; margin-bottom: 1rem; font-size: 1.5rem;">Registration Successful!</h3>
-                <p style="color: #475569; font-size: 1rem; margin-bottom: 1.5rem; line-height: 1.5;">Your documents and payment proof have been securely uploaded.</p>
+                <h3 style="color: #10b981; margin-bottom: 1rem; font-size: 1.5rem;">Success!</h3>
+                <p style="color: #475569; font-size: 1.05rem; margin-bottom: 1.5rem; line-height: 1.5; font-weight: 500;">Registration successful, admins will soon review your request.</p>
                 <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 2px dashed #cbd5e1; margin-bottom: 1rem;">
                     <span style="display: block; font-size: 0.85rem; color: #64748b; margin-bottom: 0.5rem; font-weight: 700; text-transform: uppercase;">Your Official CDCA ID</span>
                     <strong style="font-size: 1.8rem; color: var(--primary-dark); font-family: monospace; letter-spacing: 1px;">${generatedId}</strong>
@@ -126,13 +126,12 @@ window.submitRegistration = async function(event) {
                 <p style="font-size: 0.85rem; color: #ef4444; font-weight: 600; background: #fee2e2; padding: 10px; border-radius: 6px;">⚠️ Save this ID. It is marked as 'Pending' until reviewed.</p>
             </div>
         `;
-        window.showModal('Registration Complete', successBodyHTML, `<button class="modal-btn modal-btn-confirm" style="width: 100%; font-size: 1.05rem;" onclick="window.location.href='players.html'">View Database</button>`);
+        window.showModal('Registration Complete', successBodyHTML, `<button class="modal-btn modal-btn-confirm" style="width: 100%; font-size: 1.05rem;" onclick="window.location.href='index.html'">Return to Home</button>`);
         document.getElementById('public-registration-form').reset();
 
     } catch (err) {
         window.uiAlert('Registration Error', err.message || 'An error occurred during submission.', true);
     } finally {
-        // Restore original button state
         btn.innerHTML = originalBtnHTML;
         btn.disabled = false;
     }
