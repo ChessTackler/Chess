@@ -39,7 +39,7 @@ async function uploadToSupabaseStorage(file, folderPath) {
     if (file.size > 2097152) {
         throw new Error(`The file "${file.name}" exceeds the 2MB size limit. Please compress it and try again.`);
     }
-    
+
     const fileExt = file.name.split('.').pop();
     const uniqueFileName = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
     const fullPath = `${folderPath}/${uniqueFileName}`;
@@ -59,14 +59,17 @@ async function uploadToSupabaseStorage(file, folderPath) {
 
 window.submitRegistration = async function(event) {
     event.preventDefault();
-    
+
     if (!window.supabaseClient) {
-        window.uiAlert('System Error', 'Database connection offline.', true);
+        window.uiAlert('System Error', 'Database connection offline. Are scripts loaded?', true);
         return;
     }
 
     const btn = document.getElementById('reg-submit-btn');
-    btn.innerHTML = '<div class="loader" style="width: 20px; height: 20px; border: 3px solid #fff; border-top-color: transparent; border-radius: 50%; display: inline-block; vertical-align: middle; margin-right: 10px; animation: spin 1s linear infinite;"></div> Uploading & Verifying...';
+    const originalBtnHTML = btn.innerHTML; // Store original button HTML to preserve CSS
+    
+    // Update button nicely with CSS text class
+    btn.innerHTML = `<div class="text">Processing Data...</div>`;
     btn.disabled = true;
 
     try {
@@ -129,7 +132,8 @@ window.submitRegistration = async function(event) {
     } catch (err) {
         window.uiAlert('Registration Error', err.message || 'An error occurred during submission.', true);
     } finally {
-        btn.innerHTML = 'Complete Registration';
+        // Restore original button state
+        btn.innerHTML = originalBtnHTML;
         btn.disabled = false;
     }
 }
