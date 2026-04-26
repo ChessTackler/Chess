@@ -71,7 +71,7 @@ window.uiAlert = function(title, message, isError = false) {
 }
 
 window.uiConfirm = function(title, message, confirmBtnText, onConfirm) { 
-    const body = `<p style="font-size:1rem; color:#334155;">${message}</p>`; 
+    const body = `<p style="font-size:1.05rem; font-weight:500; color:#334155; text-align:center; padding: 1rem 0;">${message}</p>`; 
     const footer = `<button class="modal-btn modal-btn-cancel" id="modal-cancel-btn">Cancel</button><button class="modal-btn modal-btn-danger" id="modal-confirm-btn">${confirmBtnText}</button>`; 
     window.showModal(title, body, footer); 
     document.getElementById('modal-cancel-btn').addEventListener('click', window.closeModal);
@@ -114,10 +114,13 @@ async function updateNavbar() {
     }
 }
 
-window.handleLogout = async function() { 
+// Stylish Logout Confirmation utilizing Custom Modal
+window.handleLogout = function() { 
     if (!window.supabaseClient) return; 
-    await window.supabaseClient.auth.signOut(); 
-    window.location.href = 'index.html'; 
+    window.uiConfirm('🚪 End Session', 'Are you sure you want to securely log out of your account?', 'Yes, Logout', async () => {
+        await window.supabaseClient.auth.signOut(); 
+        window.location.href = 'index.html'; 
+    });
 }
 
 window.verifyAdminAccess = async function() { 
@@ -236,36 +239,60 @@ window.addPlayer = async function(event) {
     }
 }
 
+// UPGRADED PLAYER EDIT HTML - Now uses textInputWrapper styles!
 window.openEditModal = function(id) {
     const player = window.currentPlayersList.find(p => p.id === id);
     if(!player) return;
 
     const bodyHTML = `
-        <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+        <div style="display: flex; flex-direction: column; width: 100%;">
             <div class="responsive-grid-2">
-                <div class="form-group" style="margin:0;"><label>First Name</label><input type="text" id="edit_first" value="${window.escapeHTML(player.first_name)}"></div>
-                <div class="form-group" style="margin:0;"><label>Last Name</label><input type="text" id="edit_last" value="${window.escapeHTML(player.last_name || '')}"></div>
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">First Name</label>
+                    <div class="textInputWrapper" style="margin: 4px 0 10px 0;"><input type="text" class="textInput" id="edit_first" value="${window.escapeHTML(player.first_name)}"></div>
+                </div>
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">Last Name</label>
+                    <div class="textInputWrapper" style="margin: 4px 0 10px 0;"><input type="text" class="textInput" id="edit_last" value="${window.escapeHTML(player.last_name || '')}"></div>
+                </div>
             </div>
             <div class="responsive-grid-2">
-                <div class="form-group" style="margin:0;"><label>CDCA ID</label><input type="text" id="edit_cdca" value="${window.escapeHTML(player.cdca_id)}" required></div>
-                <div class="form-group" style="margin:0;"><label>State ID</label><input type="text" id="edit_state" value="${window.escapeHTML(player.state_id || '')}"></div>
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">CDCA ID</label>
+                    <div class="textInputWrapper" style="margin: 4px 0 10px 0;"><input type="text" class="textInput" id="edit_cdca" value="${window.escapeHTML(player.cdca_id)}" required></div>
+                </div>
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">State ID</label>
+                    <div class="textInputWrapper" style="margin: 4px 0 10px 0;"><input type="text" class="textInput" id="edit_state" value="${window.escapeHTML(player.state_id || '')}"></div>
+                </div>
             </div>
             <div class="responsive-grid-2">
-                <div class="form-group" style="margin:0;"><label>FIDE ID</label><input type="text" id="edit_fide" value="${window.escapeHTML(player.fide_id || '')}"></div>
-                <div class="form-group" style="margin:0;"><label>FIDE Rating</label><input type="number" id="edit_rating" value="${player.fide_rating || ''}"></div>
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">FIDE ID</label>
+                    <div class="textInputWrapper" style="margin: 4px 0 10px 0;"><input type="text" class="textInput" id="edit_fide" value="${window.escapeHTML(player.fide_id || '')}"></div>
+                </div>
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">FIDE Rating</label>
+                    <div class="textInputWrapper" style="margin: 4px 0 10px 0;"><input type="number" class="textInput" id="edit_rating" value="${player.fide_rating || ''}"></div>
+                </div>
             </div>
-            <div class="form-group" style="margin:0;"><label>Titles (Comma Separated)</label><input type="text" id="edit_title" value="${window.escapeHTML(player.title || '')}"></div>
-            <div class="form-group" style="margin:0;">
-                <label>ID Status</label>
-                <select id="edit_status" style="width: 100%; padding: 0.9rem; border-radius: 8px; border: 1px solid #e2e8f0;">
-                    <option value="Active" ${player.id_status === 'Active' ? 'selected' : ''}>Active</option>
-                    <option value="Inactive" ${player.id_status === 'Inactive' ? 'selected' : ''}>Inactive</option>
-                </select>
+            <div>
+                <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">Titles (Comma Separated)</label>
+                <div class="textInputWrapper" style="margin: 4px 0 10px 0;"><input type="text" class="textInput" id="edit_title" value="${window.escapeHTML(player.title || '')}"></div>
+            </div>
+            <div>
+                <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">ID Status</label>
+                <div class="textInputWrapper" style="margin: 4px 0 10px 0;">
+                    <select id="edit_status" class="textInput" style="padding: 11px;">
+                        <option value="Active" ${player.id_status === 'Active' ? 'selected' : ''}>Active</option>
+                        <option value="Inactive" ${player.id_status === 'Inactive' ? 'selected' : ''}>Inactive</option>
+                    </select>
+                </div>
             </div>
         </div>
     `;
 
-    const footerHTML = `<button class="modal-btn modal-btn-cancel" id="modal-edit-cancel">Cancel</button><button class="modal-btn modal-btn-confirm" id="modal-edit-save">Save</button>`;
+    const footerHTML = `<button class="modal-btn modal-btn-cancel" id="modal-edit-cancel">Cancel</button><button class="modal-btn modal-btn-confirm" id="modal-edit-save">Save Changes</button>`;
     
     window.showModal('✏️ Edit Player', bodyHTML, footerHTML);
 
@@ -289,7 +316,7 @@ window.openEditModal = function(id) {
 
 window.deletePlayer = async function(id) {
     if (!window.supabaseClient) return;
-    window.uiConfirm('⚠️ Delete?', 'Remove this player entirely?', 'Delete', async () => {
+    window.uiConfirm('⚠️ Delete?', 'Are you sure you want to completely remove this player from the database?', 'Delete', async () => {
         await window.supabaseClient.from('player_database').delete().eq('id', id);
         window.fetchPlayers(window.activeTbodyId, window.activeIsAdmin); 
         window.uiAlert('Deleted', 'Player removed.');
@@ -444,6 +471,7 @@ window.addNews = async function(event) {
     }
 }
 
+// UPGRADED NEWS EDIT HTML - Fixes the overlapping inputs shown in your screenshot
 window.openEditNewsModal = function(id) {
     const article = window.currentNewsList.find(a => a.id === id);
     if(!article) return;
@@ -453,23 +481,43 @@ window.openEditNewsModal = function(id) {
     const timeStr = dateObj.toTimeString().substring(0,5);
 
     const bodyHTML = `
-        <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
-            <div class="form-group" style="margin:0;"><label>Article Title</label><input type="text" id="edit_news_title" value="${window.escapeHTML(article.title)}" required></div>
+        <div style="display: flex; flex-direction: column; width: 100%;">
+            <div>
+                <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">Article Title</label>
+                <div class="textInputWrapper" style="margin: 4px 0 10px 0;"><input type="text" class="textInput" id="edit_news_title" value="${window.escapeHTML(article.title)}" required></div>
+            </div>
+            
             <div class="responsive-grid-2">
-                <div class="form-group" style="margin:0;">
-                    <label>Category</label>
-                    <select id="edit_news_category">
-                        <option value="Headline" ${article.category === 'Headline' ? 'selected' : ''}>Headline</option>
-                        <option value="Announcement" ${article.category === 'Announcement' ? 'selected' : ''}>Announcement</option>
-                    </select>
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">Category</label>
+                    <div class="textInputWrapper" style="margin: 4px 0 10px 0;">
+                        <select id="edit_news_category" class="textInput" style="padding: 11px;">
+                            <option value="Headline" ${article.category === 'Headline' ? 'selected' : ''}>Headline</option>
+                            <option value="Announcement" ${article.category === 'Announcement' ? 'selected' : ''}>Announcement</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group" style="margin:0;"><label>Tags</label><input type="text" id="edit_news_tags" value="${window.escapeHTML(article.tags || '')}"></div>
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">Tags</label>
+                    <div class="textInputWrapper" style="margin: 4px 0 10px 0;"><input type="text" class="textInput" id="edit_news_tags" value="${window.escapeHTML(article.tags || '')}"></div>
+                </div>
             </div>
+
             <div class="responsive-grid-2">
-                <div class="form-group" style="margin:0;"><label>Date</label><input type="date" id="edit_news_date" value="${dateStr}"></div>
-                <div class="form-group" style="margin:0;"><label>Time</label><input type="time" id="edit_news_time" value="${timeStr}"></div>
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">Date</label>
+                    <div class="textInputWrapper" style="margin: 4px 0 10px 0;"><input type="date" class="textInput" id="edit_news_date" value="${dateStr}"></div>
+                </div>
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">Time</label>
+                    <div class="textInputWrapper" style="margin: 4px 0 10px 0;"><input type="time" class="textInput" id="edit_news_time" value="${timeStr}"></div>
+                </div>
             </div>
-            <div class="form-group" style="margin:0;"><label>Image URL</label><input type="url" id="edit_news_image" value="${window.escapeHTML(article.image_url || '')}"></div>
+
+            <div>
+                <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">Image URL</label>
+                <div class="textInputWrapper" style="margin: 4px 0 0 0;"><input type="url" class="textInput" id="edit_news_image" value="${window.escapeHTML(article.image_url || '')}"></div>
+            </div>
         </div>
     `;
 
