@@ -4,146 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Champions - CDCA Admin</title>
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* =========================================
-           GLOBAL & VARIABLES
-        ========================================= */
-        :root {
-            --primary-blue: #2563EB; 
-            --primary-dark: #1E40AF;
-            --accent-orange: #F59E0B;
-            --accent-hover: #D97706;
-            --text-dark: #1E293B;
-            --text-muted: #64748B;
-            --bg-light: #F8FAFC;
-            --border-color: #E2E8F0;
-        }
-
+        :root { --primary-blue: #2563EB; --primary-dark: #1E40AF; --accent-orange: #F59E0B; --accent-hover: #D97706; --text-dark: #1E293B; --text-muted: #64748B; --bg-light: #F8FAFC; --border-color: #E2E8F0; }
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box !important; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            min-height: 100vh;
-            position: relative;
-            z-index: 0;
-            overflow-x: hidden;
-        }
-
-        /* Subtle Admin Background */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: 
-                linear-gradient(45deg, rgba(15, 23, 42, 0.025) 25%, transparent 25%, transparent 75%, rgba(15, 23, 42, 0.025) 75%, rgba(15, 23, 42, 0.025)),
-                linear-gradient(45deg, rgba(15, 23, 42, 0.025) 25%, transparent 25%, transparent 75%, rgba(15, 23, 42, 0.025) 75%, rgba(15, 23, 42, 0.025));
-            background-size: 80px 80px;
-            background-position: 0 0, 40px 40px;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        /* =========================================
-           SECURE HEADER (Logo Blowout Fixed)
-        ========================================= */
-        .chess-admin-header {
-            background-color: #0f172a; 
-            padding: 1rem 5%; 
-            border-bottom: 3px solid var(--accent-orange);
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            flex-wrap: wrap; /* Prevents overflow */
-            gap: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000;
-        }
-
-        .header-logos { 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            text-decoration: none; 
-            flex-shrink: 0; 
-        }
-
-        /* STRICT CONSTRAINTS TO FIX MASSIVE LOGO ISSUE */
-        .header-logos img { 
-            height: 42px; 
-            max-height: 42px;
-            width: auto; 
-            object-fit: contain; 
-        }
-
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-light); color: var(--text-dark); min-height: 100vh; overflow-x: hidden; }
+        body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(45deg, rgba(15, 23, 42, 0.025) 25%, transparent 25%, transparent 75%, rgba(15, 23, 42, 0.025) 75%, rgba(15, 23, 42, 0.025)), linear-gradient(45deg, rgba(15, 23, 42, 0.025) 25%, transparent 25%, transparent 75%, rgba(15, 23, 42, 0.025) 75%, rgba(15, 23, 42, 0.025)); background-size: 80px 80px; background-position: 0 0, 40px 40px; z-index: -1; pointer-events: none; }
+        .chess-admin-header { background-color: #0f172a; padding: 1rem 5%; border-bottom: 3px solid var(--accent-orange); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); position: sticky; top: 0; z-index: 1000; }
+        .header-logos { display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0; }
+        .header-logos img { height: 42px; max-height: 42px; width: auto; object-fit: contain; }
         .logo-sep { width: 2px; height: 28px; background-color: rgba(255, 255, 255, 0.2); border-radius: 2px; }
-
         .header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
-
-        .btn-outline-light {
-            background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white;
-            padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem;
-            text-decoration: none; transition: all 0.2s; white-space: nowrap;
-        }
+        .btn-outline-light { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
         .btn-outline-light:hover { background: rgba(255,255,255,0.1); border-color: white; }
-
-        .admin-logout-btn {
-            display: flex; align-items: center; gap: 8px; background: rgba(239, 68, 68, 0.1); 
-            color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 0.6rem 1.2rem; 
-            border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; 
-            transition: all 0.2s; white-space: nowrap;
-        }
+        .admin-logout-btn { display: flex; align-items: center; gap: 8px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
         .admin-logout-btn:hover { background: #ef4444; color: white; box-shadow: 0 4px 12px rgba(239,68,68,0.3); }
-
-        /* =========================================
-           LOADER & LAYOUT
-        ========================================= */
         .admin-auth-loader { text-align: center; padding: 8rem 1rem; font-size: 1.2rem; font-weight: 600; color: var(--text-muted); }
         .loader { margin: 0 auto 1rem auto; width: 40px; height: 40px; border: 4px solid var(--border-color); border-top-color: var(--primary-blue); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-
         .container { max-width: 1200px; margin: 0 auto; padding: 3rem 5%; }
         .admin-page-header { margin-bottom: 3rem; }
         .section-title { font-family: 'Montserrat', sans-serif; font-size: 2.2rem; color: #111827; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
         .badge-im { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 0.25rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: inline-block; }
-
         .admin-layout-flex { display: grid; grid-template-columns: 1fr; gap: 2rem; }
         @media (min-width: 992px) { .admin-layout-flex { grid-template-columns: 1fr 1fr; } }
-
-        .admin-card { 
-            background: white; padding: 2rem; border-radius: 16px; 
-            border: 1px solid var(--border-color); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); 
-            position: relative;
-        }
-        
+        .admin-card { background: white; padding: 2rem; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); position: relative; }
         .card-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; color: var(--text-dark); border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem; font-size: 1.2rem; font-weight: 700; }
-        
-        /* Edit Preview Badge */
         .live-status { font-size: 0.8rem; font-weight: 600; padding: 4px 10px; background: #dcfce7; color: #166534; border-radius: 50px; border: 1px solid #bbf7d0; display: inline-flex; align-items: center; gap: 5px;}
-
         .responsive-grid-2 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
         @media (min-width: 600px) { .responsive-grid-2 { grid-template-columns: 1fr 1fr; } }
-        
         .responsive-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-
         .form-group { margin-bottom: 1.2rem; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
         .form-group input { width: 100%; box-sizing: border-box; padding: 0.8rem 1rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.95rem; outline: none; transition: 0.2s; background: #f8fafc; }
         .form-group input:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); background: white; }
-
         .btn-orange { background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-hover) 100%); color: white; border: none; padding: 0.9rem 1.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; border-radius: 8px; transition: all 0.2s; width: 100%; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25); margin-top: 1rem; }
         .btn-orange:hover { box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4); transform: translateY(-2px); }
-
-        /* =========================================
-           MOBILE FIXES
-        ========================================= */
         @media (max-width: 600px) {
             .chess-admin-header { flex-direction: column; justify-content: center; text-align: center; padding: 1.2rem 1rem; }
             .header-actions { width: 100%; justify-content: center; }
@@ -181,7 +79,7 @@
         <div class="admin-page-header">
             <span class="badge-im" style="margin-bottom: 10px;">Admin Module</span>
             <h2 class="section-title">Champions Editor</h2>
-            <p style="color: var(--text-muted); font-size: 1.05rem;">Data edited here will immediately reflect on the public homepage. The forms below show the currently active data.</p>
+            <p style="color: var(--text-muted); font-size: 1.05rem;">Data edited here will immediately reflect on the public homepage.</p>
         </div>
 
         <div class="admin-layout-flex">
@@ -194,13 +92,13 @@
                     <div class="form-group"><label>Player Name</label><input type="text" id="Open_name" required placeholder="E.g. Gukesh D"></div>
                     <div class="form-group"><label>Title Subtext</label><input type="text" id="Open_title" required placeholder="E.g. World Chess Champion"></div>
                     <div class="responsive-grid-3">
-                        <div class="form-group"><label>Standard Rating</label><input type="number" id="Open_std" placeholder="2700"></div>
-                        <div class="form-group"><label>Rapid Rating</label><input type="number" id="Open_rap" placeholder="2700"></div>
-                        <div class="form-group"><label>Blitz Rating</label><input type="number" id="Open_bli" placeholder="2700"></div>
+                        <div class="form-group"><label>Standard</label><input type="text" id="Open_std" placeholder="2700"></div>
+                        <div class="form-group"><label>Rapid</label><input type="text" id="Open_rap" placeholder="2700"></div>
+                        <div class="form-group"><label>Blitz</label><input type="text" id="Open_bli" placeholder="2700"></div>
                     </div>
-                    <div class="form-group"><label>Flag Icon URL (.png)</label><input type="url" id="Open_flag" placeholder="https://flagcdn.com/w40/in.png"></div>
+                    <div class="form-group"><label>Flag Emoji (e.g. 🇮🇳)</label><input type="text" id="Open_flag_emoji" placeholder="🇮🇳" maxlength="10"></div>
                     <div class="form-group"><label>Transparent Image URL (.png)</label><input type="url" id="Open_img" placeholder="URL to portrait image"></div>
-                    <button type="submit" class="btn-orange">Save Edits to Homepage</button>
+                    <button type="submit" class="btn-orange">Save Edits</button>
                 </form>
             </div>
 
@@ -213,13 +111,13 @@
                     <div class="form-group"><label>Player Name</label><input type="text" id="Women_name" required placeholder="E.g. Ju, Wenjun"></div>
                     <div class="form-group"><label>Title Subtext</label><input type="text" id="Women_title" required placeholder="E.g. Women's World Chess Champion"></div>
                     <div class="responsive-grid-3">
-                        <div class="form-group"><label>Standard Rating</label><input type="number" id="Women_std" placeholder="2500"></div>
-                        <div class="form-group"><label>Rapid Rating</label><input type="number" id="Women_rap" placeholder="2500"></div>
-                        <div class="form-group"><label>Blitz Rating</label><input type="number" id="Women_bli" placeholder="2500"></div>
+                        <div class="form-group"><label>Standard</label><input type="text" id="Women_std" placeholder="2500"></div>
+                        <div class="form-group"><label>Rapid</label><input type="text" id="Women_rap" placeholder="2500"></div>
+                        <div class="form-group"><label>Blitz</label><input type="text" id="Women_bli" placeholder="2500"></div>
                     </div>
-                    <div class="form-group"><label>Flag Icon URL (.png)</label><input type="url" id="Women_flag" placeholder="https://flagcdn.com/w40/cn.png"></div>
+                    <div class="form-group"><label>Flag Emoji (e.g. 🇨🇳)</label><input type="text" id="Women_flag_emoji" placeholder="🇨🇳" maxlength="10"></div>
                     <div class="form-group"><label>Transparent Image URL (.png)</label><input type="url" id="Women_img" placeholder="URL to portrait image"></div>
-                    <button type="submit" class="btn-orange">Save Edits to Homepage</button>
+                    <button type="submit" class="btn-orange">Save Edits</button>
                 </form>
             </div>
         </div>
@@ -235,9 +133,9 @@
                     <div class="form-group"><label>Year / Subtitle</label><input type="text" id="District_title" required placeholder="E.g. Chapra 2026"></div>
                 </div>
                 <div class="responsive-grid-3">
-                    <div class="form-group"><label>Standard Rating</label><input type="number" id="District_std" placeholder="1800"></div>
-                    <div class="form-group"><label>Rapid Rating</label><input type="number" id="District_rap" placeholder="1800"></div>
-                    <div class="form-group"><label>Blitz Rating</label><input type="number" id="District_bli" placeholder="1800"></div>
+                    <div class="form-group"><label>Standard Rating</label><input type="text" id="District_std" placeholder="1800"></div>
+                    <div class="form-group"><label>Rapid Rating</label><input type="text" id="District_rap" placeholder="1800"></div>
+                    <div class="form-group"><label>Blitz Rating</label><input type="text" id="District_bli" placeholder="1800"></div>
                 </div>
                 <div class="form-group"><label>Portrait Image URL (.jpg/.png)</label><input type="url" id="District_img" placeholder="URL to player image"></div>
                 <button type="submit" class="btn-orange" style="width: 100%; max-width: 350px;">Save District Champion</button>
@@ -254,11 +152,8 @@
             const adminContent = document.getElementById('admin-content');
 
             let auth = { allowed: false };
-            if(typeof window.verifyAdminAccess === 'function') {
-                auth = await window.verifyAdminAccess();
-            } else {
-                auth.allowed = true; // Fallback for local UI testing
-            }
+            if(typeof window.verifyAdminAccess === 'function') { auth = await window.verifyAdminAccess(); } 
+            else { auth.allowed = true; }
 
             if (!auth.allowed) {
                 authMessage.innerHTML = "<span style='color: #ef4444; font-size: 1.2rem;'>Access Denied. Redirecting...</span>";
@@ -266,11 +161,10 @@
             } else {
                 authMessage.style.display = 'none';
                 adminContent.style.display = 'block';
-                loadCurrentData(); // Pre-fills the forms with existing data to act as an Edit page
+                loadCurrentData(); 
             }
         });
 
-        // Fetches data and populates inputs + status badges
         async function loadCurrentData() {
             if(!window.supabaseClient) {
                 document.querySelectorAll('[id^="status_"]').forEach(el => el.innerText = "Offline Mode");
@@ -282,11 +176,9 @@
                     data.forEach(champ => {
                         const cat = champ.category; 
                         
-                        // Update Status Badge
                         const statusEl = document.getElementById(`status_${cat}`);
                         if(statusEl) statusEl.innerText = champ.name || "None Set";
 
-                        // Populate Form Fields
                         if(document.getElementById(`${cat}_name`)) {
                             document.getElementById(`${cat}_name`).value = champ.name || '';
                             document.getElementById(`${cat}_title`).value = champ.title || '';
@@ -294,16 +186,13 @@
                             document.getElementById(`${cat}_rap`).value = champ.rating_rap || '';
                             document.getElementById(`${cat}_bli`).value = champ.rating_bli || '';
                             document.getElementById(`${cat}_img`).value = champ.image_url || '';
-                            if(document.getElementById(`${cat}_flag`)) document.getElementById(`${cat}_flag`).value = champ.flag_url || '';
+                            if(document.getElementById(`${cat}_flag_emoji`)) document.getElementById(`${cat}_flag_emoji`).value = champ.flag_emoji || '';
                         }
                     });
                 }
-            } catch(err) {
-                console.error(err);
-            }
+            } catch(err) { console.error(err); }
         }
 
-        // Saves edited data
         async function saveChampion(e, category) {
             e.preventDefault();
             if(!window.supabaseClient) { alert("Supabase not connected. Changes not saved."); return; }
@@ -318,11 +207,10 @@
                 image_url: document.getElementById(`${category}_img`).value || null,
             };
 
-            if(document.getElementById(`${category}_flag`)) {
-                payload.flag_url = document.getElementById(`${category}_flag`).value || null;
+            if(document.getElementById(`${category}_flag_emoji`)) {
+                payload.flag_emoji = document.getElementById(`${category}_flag_emoji`).value || null;
             }
 
-            // Push to DB using upsert (Update if exists, Insert if new)
             const { error } = await window.supabaseClient.from('champions_data').upsert([payload], { onConflict: 'category' });
             
             if(error) {
@@ -331,13 +219,10 @@
             } else {
                 if(typeof window.uiAlert === 'function') window.uiAlert("Success", `${category} Champion updated! Changes are now live.`);
                 else alert("Saved successfully!");
-                
-                // Immediately update the status badge
                 document.getElementById(`status_${category}`).innerText = payload.name;
             }
         }
 
-        // Secure Logout Confirmation
         function triggerLogoutUI() {
             if(typeof window.uiConfirm === 'function') {
                 window.uiConfirm('Sign Out?', 'Are you sure you want to securely log out?', 'Log Out', () => {
