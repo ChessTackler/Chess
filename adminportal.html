@@ -4,14 +4,270 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administration CDCA - Portal</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="styles.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root {
+            --primary-blue: #2563EB; 
+            --primary-dark: #1E40AF;
+            --accent-orange: #F59E0B;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box !important; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: var(--text-dark);
+            min-height: 100vh;
+            position: relative;
+            z-index: 0;
+            overflow-x: hidden;
+        }
+
+        /* Authentic Faded Chessboard Background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(45deg, rgba(15, 23, 42, 0.025) 25%, transparent 25%, transparent 75%, rgba(15, 23, 42, 0.025) 75%, rgba(15, 23, 42, 0.025)),
+                linear-gradient(45deg, rgba(15, 23, 42, 0.025) 25%, transparent 25%, transparent 75%, rgba(15, 23, 42, 0.025) 75%, rgba(15, 23, 42, 0.025));
+            background-size: 80px 80px;
+            background-position: 0 0, 40px 40px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* -------------------------------------
+           SECURE HEADER (Mobile Overlap Fixed)
+           ------------------------------------- */
+        .chess-admin-header {
+            background-color: #0f172a; 
+            padding: 1rem 5%; 
+            border-bottom: 3px solid var(--accent-orange);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-wrap: wrap; /* Prevents overlap on small screens */
+            gap: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+        }
+
+        .header-logos { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            text-decoration: none; 
+            flex-shrink: 0; 
+        }
+
+        .header-logos img { 
+            height: 42px; 
+            width: auto; 
+            object-fit: contain; 
+        }
+
+        .logo-sep { 
+            width: 2px; 
+            height: 28px; 
+            background-color: rgba(255, 255, 255, 0.2); 
+            border-radius: 2px; 
+        }
+
+        .header-actions { 
+            display: flex; 
+            gap: 10px; 
+            align-items: center; 
+        }
+
+        .admin-logout-btn {
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            background: rgba(239, 68, 68, 0.1); 
+            color: #ef4444; 
+            border: 1px solid rgba(239, 68, 68, 0.3); 
+            padding: 0.6rem 1.2rem; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            font-size: 0.95rem; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            white-space: nowrap;
+        }
+
+        .admin-logout-btn:hover { 
+            background: #ef4444; 
+            color: white; 
+            box-shadow: 0 4px 12px rgba(239,68,68,0.3); 
+        }
+
+        /* -------------------------------------
+           LOADER
+           ------------------------------------- */
+        .admin-auth-loader { 
+            text-align: center; 
+            padding: 8rem 1rem; 
+            font-size: 1.2rem; 
+            font-weight: 600; 
+            color: var(--text-muted); 
+        }
+
+        .loader { 
+            margin: 0 auto 1rem auto; 
+            width: 40px; 
+            height: 40px; 
+            border: 4px solid #e2e8f0; 
+            border-top-color: var(--primary-blue); 
+            border-radius: 50%; 
+            animation: spin 1s linear infinite; 
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* -------------------------------------
+           PORTAL GRID & CARDS
+           ------------------------------------- */
+        .portal-wrapper { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 4rem 5%; 
+        }
+
+        .portal-header { 
+            text-align: center; 
+            margin-bottom: 4rem; 
+        }
+
+        .portal-title {
+            font-family: 'Montserrat', sans-serif; 
+            font-size: clamp(2rem, 8vw, 3.5rem); 
+            font-weight: 900; 
+            color: #111827; 
+            text-transform: uppercase; 
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem; 
+            position: relative; 
+            display: inline-block; 
+            line-height: 1.1;
+        }
+
+        .portal-title::after {
+            content: ''; 
+            position: absolute; 
+            bottom: -15px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 80px; 
+            height: 6px; 
+            background-color: var(--primary-blue); 
+            border-radius: 10px;
+        }
+
+        .portal-subtitle { 
+            color: var(--text-muted); 
+            font-size: clamp(1rem, 4vw, 1.15rem); 
+            font-weight: 500; 
+            max-width: 600px; 
+            margin: 0 auto; 
+            line-height: 1.6; 
+        }
+
+        .ui-elements-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+            gap: 2rem; 
+        }
+
+        .ui-card {
+            background-color: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0; 
+            border-top: 5px solid var(--primary-blue); 
+            border-radius: 12px; 
+            padding: 2.5rem 2rem; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            text-align: center; 
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); 
+            transition: all 0.3s ease;
+        }
+
+        .ui-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.15); 
+            border-color: #cbd5e1; 
+        }
+
+        .ui-card-title { 
+            font-family: 'Montserrat', sans-serif; 
+            font-size: 1.3rem; 
+            font-weight: 800; 
+            color: #0f172a; 
+            margin-bottom: 0.8rem; 
+        }
+
+        .ui-card-desc { 
+            font-size: 0.95rem; 
+            color: var(--text-muted); 
+            line-height: 1.6; 
+            margin-bottom: 2rem; 
+            flex-grow: 1; 
+        }
+
+        .ui-btn {
+            background-color: var(--primary-blue); 
+            color: #ffffff; 
+            text-decoration: none; 
+            padding: 0.8rem 2rem; 
+            font-size: 0.95rem; 
+            font-weight: 600; 
+            border-radius: 8px; 
+            transition: all 0.2s; 
+            width: 100%; 
+            max-width: 220px;
+        }
+
+        .ui-btn:hover { 
+            background-color: var(--primary-dark); 
+            transform: translateY(-2px); 
+        }
+
+        /* -------------------------------------
+           MOBILE RESPONSIVENESS
+           ------------------------------------- */
+        @media (max-width: 768px) {
+            .admin-logout-btn span { display: none; }
+            .admin-logout-btn { padding: 0.5rem; }
+            
+            .chess-admin-header { 
+                flex-direction: column; 
+                justify-content: center; 
+                text-align: center; 
+                padding: 1.2rem 1rem; 
+            }
+            
+            .header-actions { 
+                width: 100%; 
+                justify-content: center; 
+            }
+            
+            .portal-wrapper { padding: 3rem 5%; }
+            .ui-card { padding: 2rem 1.5rem; }
+        }
+    </style>
 </head>
 
-<body class="admin-portal-bg">
+<body>
 
 <header class="chess-admin-header">
     <a href="index.html" class="header-logos">
@@ -76,12 +332,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const authMessage = document.getElementById('auth-message');
     const adminContent = document.getElementById('admin-content');
 
-    // Assumes verifyAdminAccess is defined in app.js
     let auth = { allowed: false };
     if(typeof window.verifyAdminAccess === 'function') {
         auth = await window.verifyAdminAccess();
     } else {
-        auth.allowed = true; // Fallback for local UI testing
+        auth.allowed = true; // Fallback for local testing without DB
     }
 
     if (!auth.allowed) {
@@ -109,6 +364,5 @@ function triggerLogoutUI() {
     }
 }
 </script>
-
 </body>
 </html>
