@@ -1,3 +1,6 @@
+/* =========================================
+   GLOBAL VARIABLES & BASE STYLES
+========================================= */
 :root {
     --primary-blue: #2563EB; 
     --primary-dark: #1E40AF;
@@ -18,8 +21,7 @@
 html, body { 
     max-width: 100vw; overflow-x: hidden;
     background-color: var(--bg-light); color: var(--text-dark); 
-    min-height: 100vh; display: flex; flex-direction: column; 
-    position: relative;
+    min-height: 100vh; display: flex; flex-direction: column; position: relative;
 }
 
 body::before {
@@ -32,11 +34,9 @@ body::before {
    PUBLIC NAVBAR GRAPHICS 
 ========================================= */
 .chess-graphic-nav {
-    background-color: #ffffff;
-    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03); 
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 0.8rem 5%; position: sticky; top: 0; z-index: 1000;
+    background-color: #ffffff; border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03); display: flex; justify-content: space-between; 
+    align-items: center; padding: 0.8rem 5%; position: sticky; top: 0; z-index: 1000;
 }
 
 .nav-left { display: flex; align-items: center; z-index: 1001; }
@@ -56,54 +56,23 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .nav-auth-btn:hover { color: var(--primary-blue); }
 
 /* =========================================
-   SLEEK ADMIN HEADER (For admin.html)
-========================================= */
-.chess-admin-header {
-    background-color: #0f172a; 
-    background-image: 
-        linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.03) 75%, rgba(255,255,255,0.03)),
-        linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.03) 75%, rgba(255,255,255,0.03));
-    background-size: 20px 20px; background-position: 0 0, 10px 10px;
-    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
-    padding: 1rem 5%; border-bottom: 3px solid var(--accent-orange);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); position: sticky; top: 0; z-index: 1000;
-}
-.chess-admin-header .admin-divider { background-color: rgba(255,255,255,0.15); }
-.admin-logout-btn {
-    display: flex; align-items: center; gap: 8px; background: rgba(239, 68, 68, 0.1); 
-    color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 0.6rem 1.2rem; 
-    border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;
-}
-.admin-logout-btn:hover { background: #ef4444; color: white; box-shadow: 0 4px 12px rgba(239,68,68,0.3); }
-
-/* =========================================
    SIDEBAR MENU & HAMBURGER
 ========================================= */
 #nav-checkbox { display: none; }
 .nav-toggle {
-    position: relative; width: 40px; height: 40px; cursor: pointer;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 7px; transition-duration: .5s; margin-right: 1.5rem;
+    position: relative; width: 40px; height: 40px; cursor: pointer; display: flex; flex-direction: column; 
+    align-items: center; justify-content: center; gap: 7px; transition-duration: .5s; margin-right: 1.5rem;
 }
 .bars { width: 100%; height: 4px; background-color: #000000; border-radius: 4px; }
-#bar2 { transition-duration: .8s; }
-#bar1, #bar3 { width: 70%; }
+#bar2 { transition-duration: .8s; } #bar1, #bar3 { width: 70%; }
 #nav-checkbox:checked + .nav-toggle .bars { position: absolute; transition-duration: .5s; background-color: #000000; }
 #nav-checkbox:checked + .nav-toggle #bar2 { transform: scaleX(0); transition-duration: .5s; }
 #nav-checkbox:checked + .nav-toggle #bar1 { width: 100%; transform: rotate(45deg); transition-duration: .5s; }
 #nav-checkbox:checked + .nav-toggle #bar3 { width: 100%; transform: rotate(-45deg); transition-duration: .5s; }
 #nav-checkbox:checked + .nav-toggle { transition-duration: .5s; transform: rotate(180deg); }
 
-.sidebar-overlay {
-    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px);
-    z-index: 998; opacity: 0; visibility: hidden; transition: 0.3s ease;
-}
-.sidebar-menu {
-    position: fixed; top: 0; left: -320px; width: 320px; height: 100vh;
-    background: #ffffff; z-index: 999; transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 4px 0 24px rgba(0,0,0,0.15); overflow-y: auto; padding: 2rem 1.5rem;
-    display: flex; flex-direction: column;
-}
+.sidebar-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); z-index: 998; opacity: 0; visibility: hidden; transition: 0.3s ease; }
+.sidebar-menu { position: fixed; top: 0; left: -320px; width: 320px; height: 100vh; background: #ffffff; z-index: 999; transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 4px 0 24px rgba(0,0,0,0.15); overflow-y: auto; padding: 2rem 1.5rem; display: flex; flex-direction: column; }
 #nav-checkbox:checked ~ .sidebar-menu { left: 0; }
 #nav-checkbox:checked ~ .sidebar-overlay { opacity: 1; visibility: visible; }
 
@@ -111,6 +80,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .menu-header { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 800; margin: 0; }
 .sidebar-close-btn { font-size: 28px; line-height: 1; cursor: pointer; color: var(--text-muted); transition: color 0.2s; margin-top: -4px; padding: 0 5px; }
 .sidebar-close-btn:hover { color: #ef4444; }
+
 .sidebar-list { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
 .nav-details summary { list-style: none; outline: none; }
 .nav-details summary::-webkit-details-marker { display: none; }
@@ -133,26 +103,6 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .sidebar-btn-outline:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
 .sidebar-btn-solid { background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-hover) 100%); color: white; }
 .sidebar-btn-solid:hover { box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); transform: translateY(-1px); }
-
-/* =========================================
-   BUTTONS & FORMS
-========================================= */
-.btn-orange {
-    background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-hover) 100%);
-    color: var(--bg-white); border: none; padding: 0.8rem 1.5rem; font-size: 1rem; 
-    font-weight: 600; cursor: pointer; border-radius: 8px; transition: all 0.2s;
-    text-decoration: none; display: inline-block; text-align: center; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
-}
-.btn-orange:hover { box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4); transform: translateY(-2px); }
-.action-btn { padding: 0.4rem 0.8rem; border: none; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s; white-space: nowrap; }
-.action-btn.promote { background-color: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
-.action-btn.promote:hover { background-color: #bae6fd; }
-.action-btn.delete { background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
-.action-btn.delete:hover { background-color: #fecaca; }
-
-.form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600; color: #475569; text-align: left; }
-.form-group input, .form-group select { width: 100%; box-sizing: border-box; padding: 0.9rem; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.95rem; outline: none; transition: 0.2s; }
-.form-group input:focus, .form-group select:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
 
 /* =========================================
    MODERN SAAS HERO SECTION (index.html)
@@ -178,11 +128,9 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .stat-item p { font-size: 0.85rem; color: #6b7280; margin: 0; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; }
 
 /* =========================================
-   TABLES, NEWS & GLOBALS
+   TABLES & NEWS
 ========================================= */
 .container { padding: 3rem 5%; max-width: 1200px; margin: 0 auto; width: 100%; flex: 1; box-sizing: border-box; }
-.section-title { text-align: center; margin-bottom: 2.5rem; font-size: 2.2rem; color: var(--text-dark); font-weight: 800; letter-spacing: -0.02em; }
-
 .news-section { margin-top: 1rem; margin-bottom: 4rem; }
 .news-header { display: flex; align-items: center; gap: 15px; margin-bottom: 1.5rem; margin-top: 3rem; }
 .header-line { width: 35px; height: 4px; background-color: #dc2626; border-radius: 2px; }
@@ -208,35 +156,32 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 ========================================= */
 .champions-container { max-width: 1200px; margin: 0 auto 5rem auto; padding: 0 5%; }
 .champions-header { font-size: 2rem; color: #1e293b; font-weight: 600; margin-bottom: 2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
-
 .champ-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
 
 .champ-card {
-    background: linear-gradient(145deg, #f8fafc, #e2e8f0);
-    border-radius: 16px; padding: 2rem; position: relative; overflow: visible;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.06); border: 1px solid #ffffff;
-    display: flex; flex-direction: column; min-height: 260px;
+    background: linear-gradient(145deg, #f8fafc, #e2e8f0); border-radius: 16px; padding: 2rem; 
+    position: relative; overflow: visible; box-shadow: 0 8px 24px rgba(0,0,0,0.06); 
+    border: 1px solid #ffffff; display: flex; flex-direction: column; min-height: 260px;
 }
 .champ-info { flex: 1; z-index: 2; position: relative; max-width: 60%; }
-.champ-flag { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 .champ-name { font-size: 1.6rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem; }
 .champ-title-text { font-size: 0.95rem; color: #475569; margin-bottom: 1.5rem; line-height: 1.4; font-weight: 500; }
+
+.champ-flag-emoji { 
+    width: 36px; height: 36px; border-radius: 50%; background: #ffffff; 
+    display: flex; align-items: center; justify-content: center; font-size: 1.3rem; 
+    margin-bottom: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; 
+}
 
 .champ-ratings { display: flex; gap: 1.5rem; margin-top: auto; }
 .rating-item { display: flex; flex-direction: column; align-items: center; gap: 6px; color: #0f172a; font-weight: 700; font-size: 1.05rem; }
 .rating-item svg { width: 22px; height: 22px; color: #475569; }
 
-.champ-img-wrapper {
-    position: absolute; right: -10px; bottom: 0; width: 45%; height: 110%; z-index: 1; display: flex; align-items: flex-end;
-}
+.champ-img-wrapper { position: absolute; right: -10px; bottom: 0; width: 45%; height: 110%; z-index: 1; display: flex; align-items: flex-end; }
 .champ-img-wrapper img { width: 100%; height: 100%; object-fit: contain; object-position: bottom; filter: drop-shadow(-5px 5px 10px rgba(0,0,0,0.1)); }
 
-/* District Champ Specific (Bottom Bar) */
 .district-header { font-size: 1.2rem; color: #1e293b; font-weight: 600; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
-.district-champ-card {
-    background: #ffffff; border-radius: 12px; padding: 1.5rem; display: flex; align-items: center; gap: 2rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.04); border: 1px solid #e2e8f0;
-}
+.district-champ-card { background: #ffffff; border-radius: 12px; padding: 1.5rem; display: flex; align-items: center; gap: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; }
 .dc-img { width: 100px; height: 100px; border-radius: 12px; object-fit: cover; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 .dc-info { flex: 1; }
 .dc-name { font-size: 1.4rem; font-weight: 700; color: #0f172a; margin-bottom: 0.2rem; }
@@ -244,7 +189,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .dc-ratings { display: flex; gap: 1.5rem; }
 
 /* =========================================
-   RESPONSIVE OVERRIDES
+   RESPONSIVE MOBILE OVERRIDES
 ========================================= */
 @media (max-width: 992px) {
     .modern-hero { min-height: auto; padding-bottom: 3rem; }
@@ -254,22 +199,19 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     .main-hero-logo { width: 100%; height: auto; }
     .hero-ctas { justify-content: center; }
     .hero-content p { margin: 0 auto 2rem auto; }
-    
-    .champ-img-wrapper { height: 100%; } /* Prevent tall images spilling out on tablets */
+    .champ-img-wrapper { height: 100%; } 
 }
 
 @media (max-width: 768px) {
-    .chess-graphic-nav, .chess-admin-header { padding: 1rem 5%; }
+    .chess-graphic-nav { padding: 1rem 5%; }
     .nav-toggle { margin-right: 0; transform: scale(0.85); }
     .logo-wrapper { position: absolute; left: 50%; transform: translateX(-50%); gap: 8px; }
     .brand-logo { height: 32px; }
     .logo-divider { height: 22px; }
+    
+    /* Strictly hides the desktop text auth buttons that were bleeding into mobile header */
     #main-nav { display: none !important; }
-    
-    .admin-logout-btn span { display: none; }
-    .admin-logout-btn { padding: 0.5rem; }
-    .chess-admin-header { flex-direction: column; justify-content: center; text-align: center; padding: 1.2rem 1rem; }
-    
+
     .modern-hero { padding: 3rem 5% 2rem 5%; }
     .hero-content h1 { font-size: 2.2rem; margin-top: 1rem; }
     .hero-stats { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 1.5rem; padding-top: 1.5rem; }
