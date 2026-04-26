@@ -38,7 +38,7 @@ body {
 }
 .header-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold); letter-spacing: 1px;}
 
-/* Top Navigation (Replaces Sidebar) */
+/* Top Navigation - Fixed for Mobile */
 .top-nav {
     background: rgba(255,255,255,0.95);
     backdrop-filter: blur(10px);
@@ -49,6 +49,7 @@ body {
 
 .nav-container {
     display: flex;
+    flex-direction: row; /* Forces horizontal alignment */
     gap: 15px;
     padding: 0.8rem 0;
     width: 100%;
@@ -56,9 +57,9 @@ body {
     margin: 0 auto;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
 }
-.nav-container::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
+.nav-container::-webkit-scrollbar { display: none; }
 
 .nav-btn { 
     background: transparent; 
@@ -74,7 +75,7 @@ body {
     display: flex; 
     align-items: center; 
     gap: 8px;
-    white-space: nowrap;
+    white-space: nowrap; /* Prevents text from breaking lines */
 }
 .nav-btn:hover { background: #f1f5f9; color: var(--text-main); }
 .nav-btn.active { background: var(--bg-dark); color: white; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15); }
@@ -132,11 +133,46 @@ form label { font-size: 0.85rem; font-weight: 700; margin-bottom: 0px; display: 
 .button .text { color: var(--gold); font-weight: 700; margin: auto; transition: all 0.3s; width: fit-content; text-transform: uppercase; letter-spacing: 1px;}
 .button:hover .text { transform: scale(0.9); }
 
+/* --- EDIT MODAL STYLING --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+.modal-content {
+    background: #ffffff !important; /* Forces solid background */
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+.modal-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-light);
+    cursor: pointer;
+    line-height: 1;
+}
+
 /* --- RESPONSIVE FIXES --- */
 @media (max-width: 900px) {
     .app-header { padding: 0.8rem 1rem; }
-    .back-btn .text { font-size: 0px; } /* Hides text on mobile */
-    .back-btn .text::before { content: "←"; font-size: 14px; } /* Shows only arrow */
+    .back-btn .text { font-size: 0px; } 
+    .back-btn .text::before { content: "←"; font-size: 14px; }
     .top-nav { padding: 0 1rem; }
     .workspace { padding: 1.5rem 1rem; }
     .split-layout { grid-template-columns: 1fr; gap: 1.5rem; }
