@@ -232,7 +232,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 ========================================= */
 .custom-modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.3s ease; }
 .custom-modal-overlay.active { opacity: 1; visibility: visible; }
-.custom-modal { background: #fff; border-radius: 16px; width: 90%; max-width: 500px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; transform: translateY(20px); transition: 0.3s ease; }
+.custom-modal { background: #ffffff !important; border-radius: 16px; width: 90%; max-width: 500px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; transform: translateY(20px); transition: 0.3s ease; }
 .custom-modal-overlay.active .custom-modal { transform: translateY(0); }
 .custom-modal-header { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
 .custom-modal-header h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: #0f172a; margin: 0; }
@@ -262,3 +262,23 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .action-btn { padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; border: none; text-transform: uppercase;}
 .promote { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
 .delete { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+/* =========================================
+   EDIT MODAL GLOBALS (Fixes Transparent Overlap)
+========================================= */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+    z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 1rem;
+}
+
+.modal-content {
+    background: #ffffff !important; /* This forces the solid background so it isn't transparent */
+    width: 100%; max-width: 500px; position: relative; max-height: 90vh; overflow-y: auto;
+    border-radius: 16px; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.modal-close-btn {
+    position: absolute; top: 15px; right: 15px; background: none; border: none;
+    font-size: 1.5rem; color: #64748b; cursor: pointer; line-height: 1;
+}
