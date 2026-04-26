@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>State Calendar 2026-27 - CDCA/ABCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="stateinfo.css">
+</head>
+<body>
+
+    <header class="chess-graphic-nav">
+        <a href="index.html" class="logo-wrapper">
+            <span class="logo-text">State Events Portal</span>
+        </a>
+    </header>
+
+    <div class="hero-section">
+        <div class="container hero-content">
+            <span class="premium-badge">Official Calendar 2026-27</span>
+            <h2 class="hero-title">All Bihar Chess Association</h2>
+            <p class="hero-subtitle">Bihar State Chess Championship Tournaments & Event Calendar. Affiliated to All India Chess Federation & Recognized by Govt. of Bihar.</p>
+
+            <div class="search-box">
+                <div class="textInputWrapper" style="width: 100%; max-width: 600px; margin: 0 auto;">
+                    <input placeholder="Search Events, Cities, or Dates..." type="text" class="textInput" id="calendarSearch">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container data-container">
+        <div class="table-card">
+
+            <div class="card-header">
+                <div>
+                    <h3 style="color: var(--primary-dark); font-size: 1.2rem;">ABCA State Championships</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 5px;">Mobile: 9142499336 | Email: biharchess2018@gmail.com | Web: www.biharchess.org</p>
+                </div>
+                <div>
+                    <button class="button" onclick="window.print()"><div class="text">PRINT CALENDAR</div></button>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sl.</th>
+                            <th>Event Name</th>
+                            <th>Rating Status</th>
+                            <th>Prize Money</th>
+                            <th>Entry Fee</th>
+                            <th>Date</th>
+                            <th>Place</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendar-tbody">
+                        <tr><td>1</td><td class="event-name">Bihar State Under -7 Open Chess Championship</td><td><span class="status-badge non-rated">Non Rated</span></td><td>No Cash Prize</td><td>750/-</td><td>22-24 Apr.</td><td>Patna</td></tr>
+                        <tr><td>2</td><td class="event-name">Bihar State Under -7 Girls Chess Championship</td><td><span class="status-badge non-rated">Non Rated</span></td><td>No Cash Prize</td><td>750/-</td><td>24-26 Apr.</td><td>Patna</td></tr>
+                        <tr><td>3</td><td class="event-name">Bihar State Under -9 Open Chess Championship</td><td><span class="status-badge non-rated">Non Rated</span></td><td>No Cash Prize</td><td>750/-</td><td>24-26 Apr.</td><td>Patna</td></tr>
+                        <tr><td>4</td><td class="event-name">Bihar State Under -9 Girls Chess Championship</td><td><span class="status-badge non-rated">Non Rated</span></td><td>No Cash Prize</td><td>750/-</td><td>24-26 Apr.</td><td>Patna</td></tr>
+                        <tr><td>5</td><td class="event-name">Bihar State Under -11 Open Chess Championship</td><td><span class="status-badge non-rated">Non Rated</span></td><td>No Cash Prize</td><td>750/-</td><td>15-17 May</td><td>Lakhisarai</td></tr>
+                        <tr><td>6</td><td class="event-name">Bihar State Under -11 Girls Chess Championship</td><td><span class="status-badge non-rated">Non Rated</span></td><td>No Cash Prize</td><td>750/-</td><td>15-17 May</td><td>Lakhisarai</td></tr>
+                        <tr><td>7</td><td class="event-name">Bihar State Sub Junior (U-15) Chess Championship</td><td><span class="status-badge rated">Rated</span></td><td class="prize-text">15000/-</td><td>1000/-</td><td>27-31 May</td><td>Patna</td></tr>
+                        <tr><td>8</td><td class="event-name">Bihar State Sub Junior (U-15) Girls Chess Championship</td><td><span class="status-badge rated">Rated</span></td><td class="prize-text">15000/-</td><td>1000/-</td><td>27-31 May</td><td>Patna</td></tr>
+                        <tr><td>9</td><td class="event-name">Bihar State Senior Rating Chess Championship</td><td><span class="status-badge rated">Rated</span></td><td class="prize-text">50000/-</td><td>1000/-</td><td>16-20 Jun</td><td>*TBD</td></tr>
+                        <tr><td>10</td><td class="event-name">Bihar State Under - 13 Chess Championship</td><td><span class="status-badge non-rated">Non Rated</span></td><td>No Cash Prize</td><td>750/-</td><td>16-19 July</td><td>Katihar</td></tr>
+                        <tr><td>11</td><td class="event-name">Bihar State Under - 13 Girls Chess Championship</td><td><span class="status-badge non-rated">Non Rated</span></td><td>No Cash Prize</td><td>750/-</td><td>16-19 July</td><td>Katihar</td></tr>
+                        <tr><td>12</td><td class="event-name">Bihar State Under - 17 Chess Championship</td><td><span class="status-badge rated">Rated</span></td><td class="prize-text">15000/-</td><td>1000/-</td><td>25-29 July</td><td>Sitamarhi</td></tr>
+
+                        <tr><td>13</td><td class="event-name">Bihar State Under- 17 GirlsChess Championship</td><td><span class="status-badge rated">Rated</span></td><td class="prize-text">15000/-</td><td>1000/-</td><td>25-29 July</td><td>Sitamarhi</td></tr>
+                        <tr><td>14</td><td class="event-name">Bihar State Junior (U-19) Chess Championship</td><td><span class="status-badge rated">Rated</span></td><td class="prize-text">25000/-</td><td>1000/-</td><td>09-13 Sept</td><td>Ara</td></tr>
+                        <tr><td>15</td><td class="event-name">Bihar State Junior (U-19) Girls Chess Championship</td><td><span class="status-badge rated">Rated</span></td><td class="prize-text">25000/-</td><td>1000/-</td><td>09-13 Sept</td><td>Ara</td></tr>
+                        <tr><td>16</td><td class="event-name">Bihar State Women Chess Championship</td><td><span class="status-badge rated">Rated</span></td><td class="prize-text">25000/-</td><td>1000/-</td><td>25-29 Sept</td><td>Saharsa</td></tr>
+                        <tr><td>17</td><td class="event-name">Bihar State Rapid Chess Championship</td><td><span class="status-badge rated">Rated</span></td><td class="prize-text">20000/-</td><td>1000/-</td><td>31 Oct-01 Nov.</td><td>Jehanabad</td></tr>
+                        <tr><td>18</td><td class="event-name">Bihar State Blitz Chess Championship</td><td><span class="status-badge rated">Rated</span></td><td class="prize-text">15000/-</td><td>1000/-</td><td>31 Oct-01 Nov.</td><td>Jehanabad</td></tr>
+                        <tr><td>19</td><td class="event-name">Bihar State Amateur Chess Championship</td><td><span class="status-badge rated">Rated</span></td><td class="prize-text">30000/-</td><td>1000/-</td><td>02-05 Nov.</td><td>Motihari</td></tr>
+                        <tr><td>20</td><td class="event-name">Bihar State Schools Chess Championship</td><td><span class="status-badge non-rated">Non Rated</span></td><td>No Cash Prize</td><td>750/-</td><td>13-15 Nov.</td><td>Muzaffarpur</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-footer">
+                <div class="signatory">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Signature_Placeholder.svg" alt="Signature" style="height: 40px; margin-bottom: 5px; opacity: 0.6;">
+                    <p><strong>Dharmendra Kumar, IA&FL</strong></p>
+                    <p>Hony. Secretary, ABCA</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('calendarSearch').addEventListener('keyup', function() {
+            let filter = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#calendar-tbody tr');
+
+            rows.forEach(row => {
+                let text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? '' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>
