@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Command Center - CDCA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="styles.css"> <link rel="stylesheet" href="admin.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
 </head>
 <body>
 
@@ -22,57 +25,100 @@
     </div>
 
     <div id="admin-content" style="display: none;" class="layout-container">
-        
+
         <aside class="sidebar-nav">
             <div class="user-profile">
                 <div class="avatar">A</div>
                 <div class="user-info">
                     <p class="role-badge">System Admin</p>
-                    <p class="user-email">admin@cdca.in</p>
+                    <p class="user-email" id="admin-email-display">admin@cdca.in</p>
                 </div>
             </div>
             <nav class="tab-list">
                 <button class="nav-btn active" onclick="switchAdminTab('tab-news')">📰 News & Media</button>
                 <button class="nav-btn" onclick="switchAdminTab('tab-players')">♟️ Master Database</button>
+                <a href="adminaccess.html" class="nav-btn direct-link" style="margin-top: 20px; border-top: 1px solid #e2e8f0; border-radius: 0;">🛡️ Review Queue</a>
+                <a href="registered.html" class="nav-btn direct-link">🔒 Private Directory</a>
             </nav>
         </aside>
 
         <main class="workspace">
-            
+
             <div id="tab-news" class="workspace-panel active">
                 <div class="header-flex"><h2>Publishing Desk</h2></div>
                 <div class="split-layout">
                     <div class="form-card">
                         <h3>Draft New Article</h3>
-                        <form id="add-news-form">
+                        <form id="add-news-form" onsubmit="window.addNews(event)">
                             <label>Headline</label>
                             <div class="textInputWrapper"><input type="text" id="news_title" required class="textInput"></div>
-                            <label>Tags</label>
-                            <div class="textInputWrapper"><input type="text" id="news_tags" class="textInput"></div>
-                            <button type="button" class="button" style="width: 100%; margin-top: 15px;"><div class="text">PUBLISH</div></button>
+                            
+                            <div class="grid-2">
+                                <div><label>Category</label><div class="textInputWrapper"><select id="news_category" class="textInput" style="padding: 11px;"><option value="Announcement">Announcement</option><option value="Headline">Headline</option></select></div></div>
+                                <div><label>Tags</label><div class="textInputWrapper"><input type="text" id="news_tags" placeholder="e.g. U-14, State" class="textInput"></div></div>
+                            </div>
+                            
+                            <div class="grid-2">
+                                <div><label>Date</label><div class="textInputWrapper"><input type="date" id="news_date" class="textInput"></div></div>
+                                <div><label>Time</label><div class="textInputWrapper"><input type="time" id="news_time" class="textInput"></div></div>
+                            </div>
+
+                            <label>Image URL (Required for Headlines)</label>
+                            <div class="textInputWrapper"><input type="url" id="news_image" placeholder="https://..." class="textInput"></div>
+                            
+                            <button type="submit" class="button" style="width: 100%; margin-top: 15px;"><div class="text">PUBLISH</div></button>
                         </form>
                     </div>
                     <div class="data-card">
                         <div class="card-title">Live Articles</div>
-                        <table class="modern-table">
-                            <thead><tr><th>Article Info</th><th>Date</th><th style="text-align: right;">Actions</th></tr></thead>
-                            <tbody id="admin-news-tbody"><tr><td colspan="3" style="text-align:center;">No news available.</td></tr></tbody>
-                        </table>
+                        <div style="overflow-x: auto;">
+                            <table class="modern-table">
+                                <thead><tr><th>Article Info</th><th>Date</th><th style="text-align: right;">Actions</th></tr></thead>
+                                <tbody id="admin-news-tbody"><tr><td colspan="3" style="text-align:center;">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div id="tab-players" class="workspace-panel">
                 <div class="header-flex"><h2>Master Player Registry</h2></div>
-                <div class="form-card compact-form mb-4">
-                    <h3>Manual Entry Override</h3>
-                    <form id="add-player-form">
-                        <div class="grid-4">
-                            <div><label>First Name</label><div class="textInputWrapper"><input type="text" id="first_name" required class="textInput"></div></div>
-                            <div><label>CDCA ID</label><div class="textInputWrapper"><input type="text" id="cdca_id" required class="textInput"></div></div>
+                <div class="split-layout">
+                    <div class="form-card compact-form">
+                        <h3>Manual Entry Override</h3>
+                        <form id="add-player-form" onsubmit="window.addPlayer(event)">
+                            <div class="grid-2">
+                                <div><label>First Name</label><div class="textInputWrapper"><input type="text" id="first_name" required class="textInput"></div></div>
+                                <div><label>Last Name</label><div class="textInputWrapper"><input type="text" id="last_name" class="textInput"></div></div>
+                            </div>
+                            <div class="grid-2">
+                                <div><label>CDCA ID</label><div class="textInputWrapper"><input type="text" id="cdca_id" required class="textInput"></div></div>
+                                <div><label>State ID</label><div class="textInputWrapper"><input type="text" id="state_id" class="textInput"></div></div>
+                            </div>
+                            <div class="grid-2">
+                                <div><label>FIDE ID</label><div class="textInputWrapper"><input type="text" id="fide_id" class="textInput"></div></div>
+                                <div><label>Rating</label><div class="textInputWrapper"><input type="number" id="fide_rating" class="textInput"></div></div>
+                            </div>
+                            <div class="grid-2">
+                                <div><label>Titles (CSV)</label><div class="textInputWrapper"><input type="text" id="title" placeholder="e.g. CM, FM" class="textInput"></div></div>
+                                <div><label>Status</label><div class="textInputWrapper"><select id="id_status" class="textInput" style="padding: 11px;"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div></div>
+                            </div>
+                            <button type="submit" class="button" style="margin-top: 10px; width: 100%;"><div class="text">INJECT RECORD</div></button>
+                        </form>
+                    </div>
+                    
+                    <div class="data-card">
+                        <div class="card-title" style="display:flex; justify-content:space-between; align-items:center;">
+                            Database Records
+                            <div class="textInputWrapper" style="width: 200px; margin: 0;"><input type="text" id="searchInput" onkeyup="window.handleGlobalSearch()" placeholder="Search..." class="textInput" style="padding: 8px 12px; font-size:12px;"></div>
                         </div>
-                        <button type="button" class="button" style="margin-top: 10px;"><div class="text">INJECT RECORD</div></button>
-                    </form>
+                        <div style="overflow-x: auto;">
+                            <table class="modern-table">
+                                <thead><tr><th>Player</th><th>CDCA ID</th><th>State ID</th><th>Rating</th><th>Status</th><th style="text-align: right;">Action</th></tr></thead>
+                                <tbody id="admin-players-tbody"><tr><td colspan="6" style="text-align:center;">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -83,28 +129,26 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const authMessage = document.getElementById('auth-message');
             const adminContent = document.getElementById('admin-content');
-            
-            // Wait 1.5 seconds to simulate secure auth feel, then unhide the sleek UI.
+
             setTimeout(async () => {
-                try {
-                    // If you have backend logic hooked up, it executes here.
-                    if (typeof window.verifyAdminAccess === 'function') {
-                        const auth = await window.verifyAdminAccess();
-                        if (!auth.allowed) {
-                            authMessage.innerHTML = "<h2 style='color:red;'>Access Denied. Redirecting...</h2>";
-                            setTimeout(()=> window.location.href='index.html', 1500);
-                            return;
-                        }
+                if (window.verifyAdminAccess) {
+                    const auth = await window.verifyAdminAccess();
+                    if (!auth.allowed) {
+                        authMessage.innerHTML = "<h2 style='color:red;'>Access Denied. Redirecting...</h2>";
+                        setTimeout(()=> window.location.href='index.html', 1500);
+                        return;
                     }
-                    // Success / Bypass Logic
+                    if(auth.email) document.getElementById('admin-email-display').innerText = auth.email;
                     authMessage.style.display = 'none';
                     adminContent.style.display = 'flex';
-                } catch (error) {
-                    console.warn("Backend missing. Bypassing lock for UI testing mode.");
-                    authMessage.style.display = 'none';
-                    adminContent.style.display = 'flex';
+                    
+                    // Initialize Datatables
+                    window.fetchAdminNews();
+                    window.fetchPlayers('admin-players-tbody', true);
+                } else {
+                    authMessage.innerHTML = "<h2 style='color:red;'>System Offline. Cannot reach database.</h2>";
                 }
-            }, 1200);
+            }, 800);
         });
 
         function switchAdminTab(tabId) {
