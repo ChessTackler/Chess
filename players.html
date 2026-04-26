@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Player Registry - CDCA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="players.css">
+    <link rel="stylesheet" href="styles.css"> <link rel="stylesheet" href="players.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
 </head>
 <body>
 
@@ -19,10 +22,10 @@
         <div class="container hero-content">
             <h2 class="hero-title">Master Player Registry</h2>
             <p class="hero-subtitle">Search the official database of registered chess professionals, ratings, and FIDE titles.</p>
-            
+
             <div class="search-box">
                 <div class="textInputWrapper" style="width: 100%; max-width: 600px; margin: 0 auto;">
-                    <input placeholder="Search by Name, CDCA ID, or FIDE ID..." type="text" class="textInput" id="searchInput" onkeyup="handleGlobalSearch()">
+                    <input placeholder="Search by Name, CDCA ID, or FIDE ID..." type="text" class="textInput" id="searchInput" onkeyup="window.handleGlobalSearch()">
                 </div>
             </div>
         </div>
@@ -38,15 +41,15 @@
                         </tr>
                     </thead>
                     <tbody id="public-tbody">
-                        <tr><td colspan="7" class="loading-state">Syncing with Master Database...</td></tr>
+                        <tr><td colspan="7" class="loading-state" style="text-align:center; padding: 2rem;">Syncing with Master Database...</td></tr>
                     </tbody>
                 </table>
             </div>
             <div class="pagination">
                 <span class="pagination-info" id="page-info">Page 1 of 1</span>
                 <div class="pagination-controls" style="display: flex; gap: 10px;">
-                    <button class="button" id="page-prev" onclick="changePage(-1)" disabled><div class="text">Prev</div></button>
-                    <button class="button" id="page-next" onclick="changePage(1)" disabled><div class="text">Next</div></button>
+                    <button class="button" id="page-prev" onclick="window.changePage(-1)" disabled><div class="text">Prev</div></button>
+                    <button class="button" id="page-next" onclick="window.changePage(1)" disabled><div class="text">Next</div></button>
                 </div>
             </div>
         </div>
