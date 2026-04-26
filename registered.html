@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Private Database - CDCA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="registered.css">
+    <link rel="stylesheet" href="styles.css"> <link rel="stylesheet" href="registered.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
 </head>
 <body>
     <header class="app-header">
@@ -13,11 +16,15 @@
             <span class="header-title">Private Directory</span>
         </div>
         <div style="display: flex; gap: 1rem;">
-            <a href="admin.html"><button class="button"><div class="text">DASHBOARD</div></button></a>
+            <a href="admin.html" style="text-decoration:none;"><button class="button"><div class="text">DASHBOARD</div></button></a>
         </div>
     </header>
 
-    <div class="container db-container" id="admin-content">
+    <div id="auth-message" style="text-align: center; margin-top: 100px;">
+        <p style="font-weight: 600; font-size: 1.2rem;">Authenticating Module...</p>
+    </div>
+
+    <div class="container db-container" id="admin-content" style="display: none;">
         <div class="page-header">
             <span class="secure-badge">🔒 Encrypted Access</span>
             <h1 class="portal-title">Registered Players List</h1>
@@ -28,7 +35,7 @@
             <div class="toolbar" style="display:flex; justify-content: space-between; align-items:center;">
                 <h3 style="color: var(--primary-dark);">Directory Search</h3>
                 <div class="textInputWrapper" style="width: 350px; margin: 0;">
-                    <input type="text" id="regSearchInput" placeholder="Search Name or Mobile..." class="textInput">
+                    <input type="text" id="regSearchInput" placeholder="Search Name or Mobile..." class="textInput" onkeyup="window.filterRegisteredList()">
                 </div>
             </div>
             <table class="interactive-table">
@@ -36,10 +43,12 @@
                     <tr><th>Player Name</th><th>Mobile Number</th><th>Generated ID</th><th>Status</th><th style="text-align: right;">Action</th></tr>
                 </thead>
                 <tbody id="registered-tbody">
-                    <tr><td colspan="5" style="text-align:center; padding: 2rem;">No data fetched.</td></tr>
+                    <tr><td colspan="5" style="text-align:center; padding: 2rem;">Loading Encrypted Data...</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
+    
+    <script src="registered.js"></script>
 </body>
 </html>
