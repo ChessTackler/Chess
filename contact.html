@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - CDCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="contact.css">
+</head>
+<body>
+
+    <header class="chess-graphic-nav">
+        <a href="index.html" class="logo-wrapper">
+            <span class="logo-text">State Events Portal</span>
+        </a>
+    </header>
+
+    <div class="form-page-container">
+        <div class="form-header">
+            <span class="premium-badge">Get in Touch</span>
+            <h2 class="form-title">Contact the Association</h2>
+            <p class="form-subtitle">Have questions about upcoming tournaments, registrations, or master database queries? Reach out to our official support team.</p>
+        </div>
+
+        <div class="contact-layout">
+            
+            <div class="premium-card info-card">
+                <h3 class="section-heading">Official Details</h3>
+                
+                <div class="info-block">
+                    <h4>📍 State Headquarters</h4>
+                    <p>All Bihar Chess Association (ABCA)<br>Patna, Bihar, India</p>
+                </div>
+                
+                <div class="info-block">
+                    <h4>📞 Helpdesk / Support</h4>
+                    <p>+91 9142499336</p>
+                </div>
+                
+                <div class="info-block">
+                    <h4>✉️ Email Address</h4>
+                    <p>biharchess2018@gmail.com</p>
+                </div>
+                
+                <div class="info-block">
+                    <h4>🌐 Website</h4>
+                    <p>www.biharchess.org</p>
+                </div>
+            </div>
+
+            <div class="premium-card form-card">
+                <form id="contact-form" onsubmit="event.preventDefault(); alert('Message successfully sent to the Association!');">
+                    <h3 class="section-heading">Send a Message</h3>
+                    
+                    <div class="input-block">
+                        <label>Full Name <span class="req">*</span></label>
+                        <div class="textInputWrapper">
+                            <input type="text" id="contact_name" required placeholder="Enter your full name" class="textInput">
+                        </div>
+                    </div>
+
+                    <div class="input-block">
+                        <label>Email Address <span class="req">*</span></label>
+                        <div class="textInputWrapper">
+                            <input type="email" id="contact_email" required placeholder="player@domain.com" class="textInput">
+                        </div>
+                    </div>
+
+                    <div class="input-block">
+                        <label>Subject Topic</label>
+                        <div class="textInputWrapper">
+                            <input type="text" id="contact_subject" placeholder="e.g. Tournament Query, ID Generation" class="textInput">
+                        </div>
+                    </div>
+
+                    <div class="input-block">
+                        <label>Message <span class="req">*</span></label>
+                        <div class="textInputWrapper" style="height: auto;">
+                            <textarea id="contact_message" required placeholder="How can we help you?" class="textInput" style="resize: vertical; min-height: 120px; padding-top: 15px;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions" style="margin-top: 2rem;">
+                        <button type="submit" class="button" style="width: 100%; padding: 1em;"><div class="text">SEND MESSAGE</div></button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
