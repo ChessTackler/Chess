@@ -1,83 +1,49 @@
-/* =========================================
-   REGISTRATION MODULE SPECIFIC STYLES
-========================================= */
-
-/* File Input Styling */
-.file-input-styled {
-    background: #f8fafc;
-    border: 2px dashed #cbd5e1 !important;
-    padding: 1.5rem !important;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 12px !important;
-    transition: all 0.2s ease;
-    width: 100%;
-    box-sizing: border-box;
+/* registration.css */
+:root {
+    --primary-blue: #1e293b;
+    --accent-orange: #f97316;
+    --bg-color: #f8fafc;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #cbd5e1;
+    --white: #ffffff;
 }
 
-.file-input-styled:hover {
-    border-color: var(--primary-blue) !important;
-    background: #eff6ff;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+body { background-color: var(--bg-color); color: var(--text-dark); line-height: 1.6; }
+.container { margin: 0 auto; width: 100%; }
 
-.file-input-styled::file-selector-button {
-    background: var(--primary-blue);
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-right: 15px;
-    transition: 0.2s;
-}
+/* Reusing sidebar CSS logic from players.css for the header here... */
+.chess-graphic-nav { display: flex; align-items: center; padding: 1rem 2rem; background: var(--white); box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: fixed; width: 100%; top: 0; z-index: 1000; }
+.logo-wrapper { display: flex; align-items: center; gap: 15px; margin: 0 auto; text-decoration: none;}
+.brand-logo { height: 40px; }
+.logo-divider { width: 1px; height: 30px; background: var(--border-color); }
+#nav-checkbox { display: none; }
+.nav-toggle { cursor: pointer; display: flex; flex-direction: column; gap: 5px; }
+.bars { width: 24px; height: 2px; background-color: var(--text-dark); }
 
-.file-input-styled::file-selector-button:hover { 
-    background: var(--primary-dark); 
-}
+/* Form Container & Typography */
+.admin-page-header { margin-top: 2rem; }
+.badge-im { background-color: #e0f2fe; color: #0369a1; padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block;}
+.section-title { font-size: 2.2rem; font-weight: 800; color: var(--primary-blue); letter-spacing: -0.5px; }
 
-/* Payment Layout */
-.payment-section-wrapper {
-    display: flex;
-    gap: 2.5rem;
-    align-items: center;
-    background: #f8fafc;
-    padding: 2rem;
-    border-radius: 16px;
-    border: 1px solid #e2e8f0;
-}
+/* Card & Form Elements */
+.admin-card { background: var(--white); border-radius: 16px; padding: 2.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
+.card-heading { font-size: 1.25rem; font-weight: 700; color: var(--primary-blue); border-bottom: 2px solid #f1f5f9; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+.responsive-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
 
-.qr-code-box {
-    flex-shrink: 0;
-    text-align: center;
-    background: white;
-    padding: 1rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    border: 1px solid #e2e8f0;
-}
+.form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
+.form-group label { font-size: 0.9rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.5rem; }
+.form-group input, .form-group select { padding: 0.8rem 1rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background-color: #f8fafc; transition: all 0.2s; outline: none; }
+.form-group input:focus, .form-group select:focus { border-color: var(--accent-orange); background-color: var(--white); box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1); }
+.file-input-styled { padding: 0.6rem !important; background: var(--white) !important; border: 1px dashed var(--border-color) !important; cursor: pointer; }
 
-.qr-code-box img {
-    border-radius: 8px;
-    width: 150px;
-    height: 150px;
-    object-fit: contain;
-}
+/* Payment Section */
+.payment-section-wrapper { display: flex; flex-wrap: wrap; gap: 2rem; align-items: flex-start; background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); }
+.qr-code-box { flex: 0 0 auto; text-align: center; background: var(--white); padding: 1rem; border-radius: 12px; border: 1px solid var(--border-color); }
+.qr-code-box img { max-width: 150px; height: auto; }
+.payment-upload-box { flex: 1; min-width: 250px; }
 
-.payment-upload-box { 
-    flex-grow: 1; 
-}
-
-/* Mobile Overrides for Payment Box */
-@media (max-width: 768px) {
-    .payment-section-wrapper { 
-        flex-direction: column; 
-        text-align: center; 
-        padding: 1.5rem; 
-        gap: 1.5rem; 
-    }
-    .payment-upload-box { 
-        width: 100%; 
-        text-align: left; 
-    }
-}
+/* Buttons */
+.btn-orange { background-color: var(--accent-orange); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; display: inline-block; }
+.btn-orange:hover { background-color: #ea580c; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2); }
