@@ -5,19 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Queue - CDCA Review</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css"> <link rel="stylesheet" href="adminaccess.css">
-    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="adminaccess.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app.js"></script>
 </head>
 <body>
 
     <header class="app-header">
-        <div class="brand-zone">
-            <span class="header-title">Review Queue Module</span>
+        <div class="brand-zone" style="display: flex; align-items: center; gap: 10px;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16"/><path d="M6 18v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/><path d="M12 12v-6"/><path d="M9 6a3 3 0 1 1 6 0 3 3 0 0 1-6 0"/></svg>
+            <span class="header-title">Review Queue</span>
         </div>
         <div style="display: flex; gap: 1rem;">
-            <a href="admin.html" style="text-decoration:none;"><button class="button"><div class="text">BACK</div></button></a>
+            <a href="admin.html" style="text-decoration:none;"><button class="button"><div class="text">DASHBOARD</div></button></a>
         </div>
     </header>
 
@@ -33,25 +34,23 @@
         </div>
 
         <div class="data-card">
-            <div class="toolbar" style="display: flex; gap: 20px; align-items: center;">
-                <div class="textInputWrapper" style="width: 200px; margin: 0;">
-                    <select id="statusFilter" class="textInput" style="padding: 10px;">
-                        <option value="All">View All</option>
-                        <option value="Pending" selected>Pending Review</option>
-                    </select>
-                </div>
-                <div class="textInputWrapper" style="width: 350px; margin: 0;">
+            <div class="toolbar">
+                <div class="textInputWrapper" style="margin: 0; flex: 1; max-width: 400px;">
                     <input type="text" id="regSearchInput" placeholder="Search UTR, Name, ID..." class="textInput" onkeyup="window.filterRegisteredList()">
                 </div>
+                <span class="badge" style="background:#fff7ed; color:#c2410c; font-size:0.85rem; padding: 8px 12px; border: 1px solid #ffedd5;">Pending Approvals Only</span>
             </div>
-
-            <table class="review-table">
-                <thead>
-                    <tr><th>Player Name</th><th>Contact Data</th><th>Gen. ID</th><th>Status</th><th style="text-align: right;">Action</th></tr>
-                </thead>
-                <tbody id="registered-tbody"> <tr><td colspan="5" style="text-align:center; padding: 2rem;">Loading pending applications...</td></tr>
-                </tbody>
-            </table>
+            
+            <div class="table-responsive">
+                <table class="review-table">
+                    <thead>
+                        <tr><th>Player Name</th><th>Contact Data</th><th>Gen. ID</th><th>Status</th><th style="text-align: right;">Action</th></tr>
+                    </thead>
+                    <tbody id="registered-tbody">
+                        <tr><td colspan="5" style="text-align:center; padding: 2rem;">Loading pending applications...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
     </div>
