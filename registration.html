@@ -3,132 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Player Registration - CDCA</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="styles.css">
+    <title>Official Registration - CDCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="registration.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body style="background-color: #f8fafc;">
-
+<body>
     <header class="chess-graphic-nav">
-        <div class="nav-left">
-            <input type="checkbox" id="nav-checkbox">
-            <label for="nav-checkbox" class="nav-toggle">
-                <div class="bars" id="bar1"></div>
-                <div class="bars" id="bar2"></div>
-                <div class="bars" id="bar3"></div>
-            </label>
-            <div class="sidebar-overlay" onclick="document.getElementById('nav-checkbox').checked = false;"></div>
-            <nav class="sidebar-menu">
-                <div class="sidebar-header-flex">
-                    <div class="menu-header">Menu</div>
-                    <label for="nav-checkbox" class="sidebar-close-btn">&times;</label>
-                </div>
-                <div class="sidebar-list">
-                    <details class="nav-details" open>
-                        <summary class="radio-label">
-                            <div class="radio-circle" style="border-color: var(--accent-orange); background-color: var(--accent-orange);"></div>
-                            <span class="radio-text" style="color: #ffffff;">Players</span>
-                        </summary>
-                        <div class="sub-menu">
-                            <a href="players.html" class="sub-link">Player search</a>
-                            <a href="registration.html" class="sub-link" style="color: var(--accent-orange); font-weight: 600;">New Player registration</a>
-                        </div>
-                    </details>
-                    <details class="nav-details"><summary class="radio-label"><div class="radio-circle"></div><span class="radio-text">Calendar</span></summary><div class="sub-menu"><a href="CDCAevents.html" class="sub-link">CDCA Events</a><a href="stateinfo.html" class="sub-link">State Events</a><a href="onlineentry.html" class="sub-link">Online Entry</a></div></details>
-                    <details class="nav-details"><summary class="radio-label"><div class="radio-circle"></div><span class="radio-text">Information</span></summary><div class="sub-menu"><a href="officials.html" class="sub-link">Office Bearers</a><a href="Committees.html" class="sub-link">Committees</a><a href="contact.html" class="sub-link">Contact</a></div></details>
-                    <a href="#" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">Archive</span></a>
-                    <a href="#" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">Rankings</span></a>
-                    <a href="#" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">News & Media</span></a>
-                </div>
-                <div id="sidebar-auth" class="sidebar-auth-section"></div>
-            </nav>
-        </div>
-
         <a href="index.html" class="logo-wrapper">
-            <img src="LogoCDCA.png" alt="CDCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=CDCA'">
+            <img src="LogoCDCA.png" alt="CDCA" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=CDCA'">
             <div class="logo-divider"></div>
-            <img src="LogoABCA.png" alt="ABCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA'">
+            <span class="logo-text">Player Registration</span>
         </a>
-        <div id="main-nav"></div>
     </header>
 
-    <div class="container" style="max-width: 900px; padding-top: 3rem; padding-bottom: 5rem;">
-        
-        <div class="admin-page-header" style="text-align: center; margin-bottom: 3rem;">
-            <span class="badge badge-im" style="margin-bottom: 1rem; font-size: 0.9rem;">Official Portal</span>
-            <h2 class="section-title" style="margin-bottom: 0.5rem; text-align: center;">New Player Registration</h2>
-            <p style="color: var(--text-muted); font-size: 1.1rem;">Register to generate your official CDCA ID and join the database.</p>
+    <div class="form-page-container">
+        <div class="form-header">
+            <span class="premium-badge">New Entrant</span>
+            <h2 class="form-title">Join the Federation</h2>
+            <p class="form-subtitle">Complete this official application to generate your CDCA ID and establish your public profile in the registry.</p>
         </div>
 
-        <div class="admin-card">
+        <div class="premium-card form-card">
             <form id="public-registration-form" onsubmit="window.submitRegistration(event)">
-                
-                <h3 class="card-heading">1. Personal Information</h3>
-                <div class="responsive-grid-2">
-                    <div class="form-group"><label>First Name*</label><input type="text" id="reg_first_name" required placeholder="Enter first name"></div>
-                    <div class="form-group"><label>Last Name</label><input type="text" id="reg_last_name" placeholder="Enter last name"></div>
-                    <div class="form-group">
-                        <label>Gender*</label>
-                        <select id="reg_gender" required>
-                            <option value="" disabled selected>Select Gender</option>
-                            <option value="Boy">Male (Boy)</option>
-                            <option value="Girl">Female (Girl)</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>Date of Birth*</label><input type="date" id="reg_dob" required></div>
-                    <div class="form-group"><label>Email Address*</label><input type="email" id="reg_email" required placeholder="example@gmail.com"></div>
-                    <div class="form-group"><label>Phone Number*</label><input type="tel" id="reg_phone" required placeholder="+91 00000 00000"></div>
-                </div>
 
-                <h3 class="card-heading" style="margin-top: 2.5rem;">2. Verification Documents</h3>
-                <div class="responsive-grid-2">
-                    <div class="form-group">
-                        <label>Passport Size Photo* (JPG/PNG)</label>
-                        <input type="file" id="reg_photo" accept="image/*" required class="file-input-styled">
-                    </div>
-                    <div class="form-group">
-                        <label>Aadhaar Card Copy* (PDF/JPG)</label>
-                        <input type="file" id="reg_aadhaar" accept="image/*,.pdf" required class="file-input-styled">
-                    </div>
-                </div>
-
-                <h3 class="card-heading" style="margin-top: 2.5rem;">3. Registration Fee Payment</h3>
-                <div class="payment-section-wrapper">
-                    <div class="qr-code-box">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=cdca@ybl&pn=CDCA&cu=INR" alt="Scan to Pay" title="Mock QR Code">
-                        <p style="margin-top: 10px; font-weight: 600; font-size: 0.9rem;">Scan to Pay ₹500</p>
-                    </div>
-                    <div class="payment-upload-box">
-                        <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 0.95rem;">After scanning the QR code and completing your payment, please upload a screenshot of the successful transaction.</p>
-                        <div class="form-group" style="margin: 0;">
-                            <label>Upload Payment Proof*</label>
-                            <input type="file" id="reg_payment_proof" accept="image/*,.pdf" required class="file-input-styled">
+                <div class="form-section">
+                    <h3 class="section-heading"><span class="step-num">1</span> Personal Details</h3>
+                    <div class="form-grid">
+                        <div class="input-group"><label>First Name <span class="req">*</span></label><input type="text" id="reg_first_name" required placeholder="Magnus"></div>
+                        <div class="input-group"><label>Last Name</label><input type="text" id="reg_last_name" placeholder="Carlsen"></div>
+                        <div class="input-group">
+                            <label>Gender <span class="req">*</span></label>
+                            <select id="reg_gender" required>
+                                <option value="" disabled selected>Select Classification</option>
+                                <option value="Boy">Male (Open)</option>
+                                <option value="Girl">Female (Women's)</option>
+                            </select>
                         </div>
-                        <div class="form-group" style="margin-top: 1rem;">
-                            <label>Transaction ID / UTR No.*</label>
-                            <input type="text" id="reg_utr" required placeholder="e.g., 312345678901">
+                        <div class="input-group"><label>Date of Birth <span class="req">*</span></label><input type="date" id="reg_dob" required></div>
+                        <div class="input-group"><label>Official Email <span class="req">*</span></label><input type="email" id="reg_email" required placeholder="player@domain.com"></div>
+                        <div class="input-group"><label>Mobile Number <span class="req">*</span></label><input type="tel" id="reg_phone" required placeholder="+91 00000 00000"></div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-heading"><span class="step-num">2</span> Identity Verification</h3>
+                    <div class="form-grid">
+                        <div class="input-group file-group">
+                            <label>Passport Size Photo <span class="req">*</span> <small>(JPG/PNG)</small></label>
+                            <input type="file" id="reg_photo" accept="image/*" required>
+                        </div>
+                        <div class="input-group file-group">
+                            <label>Govt. ID (Aadhaar) <span class="req">*</span> <small>(PDF/JPG)</small></label>
+                            <input type="file" id="reg_aadhaar" accept="image/*,.pdf" required>
                         </div>
                     </div>
                 </div>
 
-                <div style="margin-top: 3rem; text-align: center;">
-                    <button type="submit" class="btn-orange" id="reg-submit-btn" style="width: 100%; max-width: 400px; padding: 1rem; font-size: 1.1rem;">
-                        Complete Registration
-                    </button>
-                    <p style="margin-top: 15px; font-size: 0.85rem; color: var(--text-muted);">By clicking complete, you agree to the Terms & Conditions of CDCA.</p>
+                <div class="form-section">
+                    <h3 class="section-heading"><span class="step-num">3</span> Registration Fee</h3>
+                    <div class="payment-box">
+                        <div class="qr-col">
+                            <div class="qr-frame">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=cdca@ybl&pn=CDCA&cu=INR" alt="QR Code">
+                            </div>
+                            <p class="fee-text">Scan & Pay <strong>₹500.00</strong></p>
+                        </div>
+                        <div class="payment-details-col">
+                            <p class="payment-instructions">To finalize your application, remit the processing fee via the QR code. Upload your successful payment receipt below.</p>
+                            <div class="input-group file-group">
+                                <label>Payment Proof Screenshot <span class="req">*</span></label>
+                                <input type="file" id="reg_payment_proof" accept="image/*,.pdf" required>
+                            </div>
+                            <div class="input-group mt-3">
+                                <label>12-Digit Transaction UTR <span class="req">*</span></label>
+                                <input type="text" id="reg_utr" required placeholder="e.g. 312345678901">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-gold" id="reg-submit-btn">Submit Application</button>
+                    <p class="terms-text">By submitting, you agree to the Federation's Code of Conduct.</p>
                 </div>
 
             </form>
         </div>
     </div>
-
     <script src="app.js"></script>
-    
     <script src="registration.js"></script>
 </body>
 </html>
