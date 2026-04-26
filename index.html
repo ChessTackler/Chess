@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CDCA & ABCA - Official Webpage</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="styles.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -25,59 +27,23 @@
                     <div class="menu-header">Menu</div>
                     <label for="nav-checkbox" class="sidebar-close-btn">&times;</label>
                 </div>
-                
+
                 <div class="sidebar-list">
                     <details class="nav-details">
-                        <summary class="radio-label">
-                            <div class="radio-circle"></div>
-                            <span class="radio-text">Players</span>
-                        </summary>
+                        <summary class="radio-label"><div class="radio-circle"></div><span class="radio-text">Players</span></summary>
                         <div class="sub-menu">
                             <a href="players.html" class="sub-link">Player search</a>
                             <a href="registration.html" class="sub-link">New Player registration</a>
                         </div>
                     </details>
-
                     <details class="nav-details">
-                        <summary class="radio-label">
-                            <div class="radio-circle"></div>
-                            <span class="radio-text">Calendar</span>
-                        </summary>
-                        <div class="sub-menu">
-                            <a href="CDCAevents.html" class="sub-link">CDCA Events</a>
-                            <a href="stateinfo.html" class="sub-link">State Events</a>
-                            <a href="onlineentry.html" class="sub-link">Online Entry</a>
-                        </div>
-                    </details>
-
-                    <details class="nav-details">
-                        <summary class="radio-label">
-                            <div class="radio-circle"></div>
-                            <span class="radio-text">Information</span>
-                        </summary>
+                        <summary class="radio-label"><div class="radio-circle"></div><span class="radio-text">Information</span></summary>
                         <div class="sub-menu">
                             <a href="officials.html" class="sub-link">Office Bearers</a>
-                            <a href="Committees.html" class="sub-link">Committees</a>
                             <a href="contact.html" class="sub-link">Contact</a>
                         </div>
                     </details>
-
-                    <a href="#" class="radio-label direct-link">
-                        <div class="radio-circle"></div>
-                        <span class="radio-text">Archive</span>
-                    </a>
-                    
-                    <a href="#" class="radio-label direct-link">
-                        <div class="radio-circle"></div>
-                        <span class="radio-text">Rankings</span>
-                    </a>
-
-                    <a href="#" class="radio-label direct-link">
-                        <div class="radio-circle"></div>
-                        <span class="radio-text">News & Media</span>
-                    </a>
                 </div>
-
                 <div id="sidebar-auth" class="sidebar-auth-section"></div>
             </nav>
         </div>
@@ -91,10 +57,53 @@
         <div id="main-nav"></div>
     </header>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Official CDCA webpage & database.</h1>
-            <p>Explore official player rankings, secure your member data, and stay up to date with the latest announcements.</p>
+    <section class="modern-hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Chapra District <br>Chess Association</h1>
+                <p>The official hub for chess in Chapra. Explore official player rankings, register for state-level tournaments, and master the game with certified arbiters and instructors.</p>
+                
+                <div class="hero-ctas">
+                    <a href="players.html" class="btn-primary-modern">Player Database</a>
+                    <a href="registration.html" class="btn-outline-modern">Register Now</a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <h3>500+</h3>
+                        <p>Registered Players</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>50+</h3>
+                        <p>Tournaments Held</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>100%</h3>
+                        <p>Commitment</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="visual-circle"></div>
+                
+                <img src="LogoCDCA.png" alt="CDCA Official Logo" class="main-hero-logo" onerror="this.src='https://via.placeholder.com/350x350?text=CDCA'">
+                
+                <div class="floating-badge badge-1">
+                    <span class="badge-icon">🏆</span>
+                    Official Rankings
+                </div>
+                
+                <div class="floating-badge badge-2">
+                    <span class="badge-icon">♟️</span>
+                    State Events
+                </div>
+                
+                <div class="floating-badge badge-3">
+                    <span class="badge-icon">📊</span>
+                    Master Database
+                </div>
+            </div>
         </div>
     </section>
 
@@ -107,7 +116,7 @@
             <p style="color: var(--text-muted);">Loading headlines...</p>
         </div>
 
-        <div class="news-header">
+        <div class="news-header" style="margin-top: 4rem;">
             <div class="header-line"></div>
             <h2>Announcements</h2>
         </div>
