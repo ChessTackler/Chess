@@ -37,14 +37,6 @@
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
                     Master Database
                 </button>
-                <a href="adminaccess.html" class="nav-btn direct-link">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                    Review Queue
-                </a>
-                <a href="registered.html" class="nav-btn direct-link">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                    Private Directory
-                </a>
             </div>
         </nav>
     </div>
@@ -74,7 +66,7 @@
                             <div><label>Time</label><div class="textInputWrapper"><input type="time" id="news_time" class="textInput"></div></div>
                         </div>
 
-                        <label>Image URL (Required for Headlines)</label>
+                        <label>Image URL</label>
                         <div class="textInputWrapper"><input type="url" id="news_image" placeholder="https://..." class="textInput"></div>
 
                         <button type="submit" class="button" style="width: 100%; margin-top: 15px;"><div class="text">PUBLISH</div></button>
@@ -134,6 +126,31 @@
         </div>
     </main>
 
+    <div id="edit-article-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content form-card">
+            <button class="modal-close-btn" onclick="closeEditModal()">×</button>
+            <h3 style="margin-top:0;">✏️ Edit Article</h3>
+            <form id="edit-news-form" onsubmit="window.updateNews(event)">
+                <input type="hidden" id="edit_news_id">
+                
+                <label>Article Title</label>
+                <div class="textInputWrapper"><input type="text" id="edit_news_title" required class="textInput"></div>
+
+                <div class="grid-2">
+                    <div><label>Category</label><div class="textInputWrapper"><select id="edit_news_category" class="textInput" style="padding: 11px;"><option value="Announcement">Announcement</option><option value="Headline">Headline</option></select></div></div>
+                    <div><label>Tags</label><div class="textInputWrapper"><input type="text" id="edit_news_tags" class="textInput"></div></div>
+                </div>
+
+                <div class="grid-2">
+                    <div><label>Date</label><div class="textInputWrapper"><input type="date" id="edit_news_date" class="textInput"></div></div>
+                    <div><label>Time</label><div class="textInputWrapper"><input type="time" id="edit_news_time" class="textInput"></div></div>
+                </div>
+
+                <button type="submit" class="button" style="width: 100%; margin-top: 15px;"><div class="text">SAVE CHANGES</div></button>
+            </form>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const authMessage = document.getElementById('auth-message');
@@ -171,9 +188,18 @@
                 if(window.handleLogout) {
                     window.handleLogout();
                 } else {
-                    window.location.href = 'index.html'; // Fallback
+                    window.location.href = 'index.html'; 
                 }
             }
+        }
+
+        // Functions to handle the new Edit Modal UI
+        function openEditModal() {
+            document.getElementById('edit-article-modal').style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-article-modal').style.display = 'none';
         }
     </script>
 </body>
