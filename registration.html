@@ -6,13 +6,11 @@
     <title>Official Registration - CDCA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="registration.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+    
     <header class="chess-graphic-nav">
         <a href="index.html" class="logo-wrapper">
-            <img src="LogoCDCA.png" alt="CDCA" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=CDCA'">
-            <div class="logo-divider"></div>
             <span class="logo-text">Player Registration</span>
         </a>
     </header>
@@ -30,68 +28,79 @@
                 <div class="form-section">
                     <h3 class="section-heading"><span class="step-num">1</span> Personal Details</h3>
                     <div class="form-grid">
-                        <div class="input-group"><label>First Name <span class="req">*</span></label><input type="text" id="reg_first_name" required placeholder="Magnus"></div>
-                        <div class="input-group"><label>Last Name</label><input type="text" id="reg_last_name" placeholder="Carlsen"></div>
-                        <div class="input-group">
-                            <label>Gender <span class="req">*</span></label>
-                            <select id="reg_gender" required>
-                                <option value="" disabled selected>Select Classification</option>
-                                <option value="Boy">Male (Open)</option>
-                                <option value="Girl">Female (Women's)</option>
-                            </select>
+                        <div class="input-block">
+                            <label>First Name <span class="req">*</span></label>
+                            <div class="textInputWrapper"><input type="text" id="reg_first_name" required placeholder="First Name" class="textInput"></div>
                         </div>
-                        <div class="input-group"><label>Date of Birth <span class="req">*</span></label><input type="date" id="reg_dob" required></div>
-                        <div class="input-group"><label>Official Email <span class="req">*</span></label><input type="email" id="reg_email" required placeholder="player@domain.com"></div>
-                        <div class="input-group"><label>Mobile Number <span class="req">*</span></label><input type="tel" id="reg_phone" required placeholder="+91 00000 00000"></div>
+                        <div class="input-block">
+                            <label>Last Name</label>
+                            <div class="textInputWrapper"><input type="text" id="reg_last_name" placeholder="Last Name" class="textInput"></div>
+                        </div>
+                        <div class="input-block">
+                            <label>Gender <span class="req">*</span></label>
+                            <div class="textInputWrapper">
+                                <select id="reg_gender" required class="textInput">
+                                    <option value="" disabled selected>Select Classification</option>
+                                    <option value="Boy">Male (Open)</option><option value="Girl">Female (Women's)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-block">
+                            <label>Date of Birth <span class="req">*</span></label>
+                            <div class="textInputWrapper"><input type="date" id="reg_dob" required class="textInput"></div>
+                        </div>
+                        <div class="input-block">
+                            <label>Official Email <span class="req">*</span></label>
+                            <div class="textInputWrapper"><input type="email" id="reg_email" required placeholder="player@domain.com" class="textInput"></div>
+                        </div>
+                        <div class="input-block">
+                            <label>Mobile Number <span class="req">*</span></label>
+                            <div class="textInputWrapper"><input type="tel" id="reg_phone" required placeholder="+91 00000 00000" class="textInput"></div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-section">
                     <h3 class="section-heading"><span class="step-num">2</span> Identity Verification</h3>
                     <div class="form-grid">
-                        <div class="input-group file-group">
-                            <label>Passport Size Photo <span class="req">*</span> <small>(JPG/PNG)</small></label>
+                        <div class="input-block file-group">
+                            <label>Passport Size Photo <span class="req">*</span></label>
                             <input type="file" id="reg_photo" accept="image/*" required>
                         </div>
-                        <div class="input-group file-group">
-                            <label>Govt. ID (Aadhaar) <span class="req">*</span> <small>(PDF/JPG)</small></label>
+                        <div class="input-block file-group">
+                            <label>Govt. ID (Aadhaar) <span class="req">*</span></label>
                             <input type="file" id="reg_aadhaar" accept="image/*,.pdf" required>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-section">
-                    <h3 class="section-heading"><span class="step-num">3</span> Registration Fee</h3>
+                    <h3 class="section-heading"><span class="step-num">3</span> Processing Fee</h3>
                     <div class="payment-box">
                         <div class="qr-col">
-                            <div class="qr-frame">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=cdca@ybl&pn=CDCA&cu=INR" alt="QR Code">
-                            </div>
+                            <div class="qr-frame"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=cdca@ybl&pn=CDCA&cu=INR" alt="QR Code"></div>
                             <p class="fee-text">Scan & Pay <strong>₹500.00</strong></p>
                         </div>
                         <div class="payment-details-col">
                             <p class="payment-instructions">To finalize your application, remit the processing fee via the QR code. Upload your successful payment receipt below.</p>
-                            <div class="input-group file-group">
+                            <div class="input-block file-group">
                                 <label>Payment Proof Screenshot <span class="req">*</span></label>
                                 <input type="file" id="reg_payment_proof" accept="image/*,.pdf" required>
                             </div>
-                            <div class="input-group mt-3">
+                            <div class="input-block" style="margin-top: 15px;">
                                 <label>12-Digit Transaction UTR <span class="req">*</span></label>
-                                <input type="text" id="reg_utr" required placeholder="e.g. 312345678901">
+                                <div class="textInputWrapper"><input type="text" id="reg_utr" required placeholder="e.g. 312345678901" class="textInput"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn-gold" id="reg-submit-btn">Submit Application</button>
+                    <button type="submit" class="button" style="width: 100%; max-width: 400px; padding: 1.2em;"><div class="text">SUBMIT APPLICATION</div></button>
                     <p class="terms-text">By submitting, you agree to the Federation's Code of Conduct.</p>
                 </div>
-
             </form>
         </div>
     </div>
-    <script src="app.js"></script>
-    <script src="registration.js"></script>
 </body>
 </html>
