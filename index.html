@@ -33,7 +33,7 @@
                         <div class="sub-menu"><a href="CDCAevents.html" class="sub-link">CDCA Events</a><a href="stateinfo.html" class="sub-link">State Events</a><a href="onlineentry.html" class="sub-link">Online Entry</a></div>
                     </details>
                     <details class="nav-details"><summary class="radio-label"><div class="radio-circle"></div><span class="radio-text">Information</span></summary>
-                        <div class="sub-menu"><a href="officials.html" class="sub-link">Office Bearers</a><a href="contact.html" class="sub-link">Contact</a></div>
+                        <div class="sub-menu"><a href="officials.html" class="sub-link">Office Bearers</a><a href="Committees.html" class="sub-link">Committees</a><a href="contact.html" class="sub-link">Contact</a></div>
                     </details>
                     <a href="#" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">Archive</span></a>
                     <a href="#" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">Rankings</span></a>
@@ -86,10 +86,9 @@
         <div class="champ-grid">
             <div class="champ-card" id="open-champ-card">
                 <div class="champ-info">
-                    <img src="https://flagcdn.com/w40/in.png" alt="Flag" class="champ-flag" id="open-champ-flag">
+                    <div class="champ-flag-emoji" id="open-champ-flag">🇮🇳</div>
                     <h3 class="champ-name" id="open-champ-name">Gukesh D</h3>
                     <p class="champ-title-text" id="open-champ-title">World Chess Champion</p>
-                    
                     <div class="champ-ratings">
                         <div class="rating-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg><span id="open-champ-std">2777</span></div>
                         <div class="rating-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span id="open-champ-rap">2654</span></div>
@@ -101,10 +100,9 @@
 
             <div class="champ-card" id="women-champ-card">
                 <div class="champ-info">
-                    <img src="https://flagcdn.com/w40/cn.png" alt="Flag" class="champ-flag" id="women-champ-flag">
+                    <div class="champ-flag-emoji" id="women-champ-flag">🇨🇳</div>
                     <h3 class="champ-name" id="women-champ-name">Ju, Wenjun</h3>
                     <p class="champ-title-text" id="women-champ-title">Women's World Chess Champion</p>
-                    
                     <div class="champ-ratings">
                         <div class="rating-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg><span id="women-champ-std">2561</span></div>
                         <div class="rating-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span id="women-champ-rap">2542</span></div>
@@ -132,10 +130,9 @@
     </div>
 
     <script src="app.js"></script>
-
     <script>
     document.addEventListener('DOMContentLoaded', async () => {
-        if(!window.supabaseClient) return; // If no DB, the hardcoded HTML acts as the default
+        if(!window.supabaseClient) return; 
         try {
             const { data, error } = await window.supabaseClient.from('champions_data').select('*');
             if(data && !error) {
@@ -147,12 +144,11 @@
                         document.getElementById(`${prefix}-champ-rap`).innerText = champ.rating_rap || '-';
                         document.getElementById(`${prefix}-champ-bli`).innerText = champ.rating_bli || '-';
                         if(champ.image_url) document.getElementById(`${prefix}-champ-img`).src = champ.image_url;
-                        
                         if(prefix !== 'district') {
                             document.getElementById(`${prefix}-champ-title`).innerText = champ.title;
-                            if(champ.flag_url) document.getElementById(`${prefix}-champ-flag`).src = champ.flag_url;
+                            if(champ.flag_emoji) document.getElementById(`${prefix}-champ-flag`).innerText = champ.flag_emoji;
                         } else {
-                            document.getElementById(`${prefix}-champ-year`).innerText = champ.title; // Using title field for Year/Subtitle
+                            document.getElementById(`${prefix}-champ-year`).innerText = champ.title;
                         }
                     }
                 });
