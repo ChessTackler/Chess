@@ -6,9 +6,13 @@
     <title>Official Registration - CDCA</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="registration.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+    <script src="registration.js"></script>
 </head>
 <body>
-    
+
     <header class="chess-graphic-nav">
         <a href="index.html" class="logo-wrapper">
             <span class="logo-text">Player Registration</span>
@@ -96,7 +100,9 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="button" style="width: 100%; max-width: 400px; padding: 1.2em;"><div class="text">SUBMIT APPLICATION</div></button>
+                    <button type="submit" id="reg-submit-btn" class="button" style="width: 100%; max-width: 400px; padding: 1.2em;">
+                        <div class="text">SUBMIT APPLICATION</div>
+                    </button>
                     <p class="terms-text">By submitting, you agree to the Federation's Code of Conduct.</p>
                 </div>
             </form>
