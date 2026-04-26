@@ -4,223 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CDCA & ABCA - Official Webpage</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    <style>
-        /* -------------------------------------
-           MODERN SAAS HERO SECTION STYLES
-           ------------------------------------- */
-        .modern-hero {
-            background-color: #ffffff;
-            position: relative;
-            overflow: hidden;
-            padding: 6rem 5%;
-            min-height: 80vh;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Subtle background glow mimicking the reference image */
-        .modern-hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(235,244,255,1) 0%, rgba(255,255,255,0) 70%);
-            z-index: 0;
-            transform: translate(20%, -20%);
-        }
-
-        .hero-container {
-            max-width: 1250px;
-            margin: 0 auto;
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: 4rem;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Left Side Content */
-        .hero-content h1 {
-            font-size: clamp(2.8rem, 5vw, 4.2rem);
-            font-weight: 800;
-            color: #111827;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.02em;
-        }
-
-        .hero-content p {
-            font-size: 1.15rem;
-            color: #4b5563;
-            line-height: 1.6;
-            margin-bottom: 2.5rem;
-            max-width: 550px;
-        }
-
-        .hero-ctas {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 4rem;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary-modern {
-            background: #6366f1; /* Modern Indigo/Purple hue from reference */
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border: 2px solid #6366f1;
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
-        }
-
-        .btn-primary-modern:hover {
-            background: #4f46e5;
-            border-color: #4f46e5;
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(99, 102, 241, 0.35);
-        }
-
-        .btn-outline-modern {
-            background: transparent;
-            color: #374151;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            border: 2px solid #e5e7eb;
-            transition: all 0.3s ease;
-        }
-
-        .btn-outline-modern:hover {
-            border-color: #111827;
-            color: #111827;
-        }
-
-        /* Hero Statistics */
-        .hero-stats {
-            display: flex;
-            gap: 3rem;
-            border-top: 1px solid #f3f4f6;
-            padding-top: 2rem;
-        }
-
-        .stat-item h3 {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #111827;
-            margin-bottom: 0.2rem;
-        }
-
-        .stat-item p {
-            font-size: 0.85rem;
-            color: #6b7280;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 600;
-        }
-
-        /* Right Side Visuals */
-        .hero-visual {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-        }
-
-        /* Circular dashed lines behind the logo (mimicking reference) */
-        .visual-circle {
-            position: absolute;
-            width: 450px;
-            height: 450px;
-            border: 1px dashed rgba(99, 102, 241, 0.3);
-            border-radius: 50%;
-            z-index: 0;
-        }
-
-        .main-hero-logo {
-            width: 80%;
-            max-width: 400px;
-            height: auto;
-            object-fit: contain;
-            position: relative;
-            z-index: 2;
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1));
-            animation: float 6s ease-in-out infinite;
-        }
-
-        /* Floating Pills/Badges */
-        .floating-badge {
-            position: absolute;
-            background: #ffffff;
-            padding: 0.7rem 1.2rem;
-            border-radius: 50px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #374151;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            z-index: 3;
-            border: 1px solid #f3f4f6;
-        }
-
-        /* Adding the small green icon dots from the reference */
-        .badge-icon {
-            width: 24px;
-            height: 24px;
-            background: #d1fae5;
-            color: #059669;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-        }
-
-        .badge-1 { top: 10%; right: 0; transform: translateX(20%); animation: float 5s ease-in-out infinite alternate; }
-        .badge-2 { bottom: 25%; left: 0; transform: translateX(-10%); animation: float 7s ease-in-out infinite alternate-reverse; }
-        .badge-3 { bottom: 5%; right: 10%; animation: float 6s ease-in-out infinite alternate; }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 992px) {
-            .hero-container { grid-template-columns: 1fr; text-align: center; gap: 3rem; }
-            .hero-content p { margin: 0 auto 2rem auto; }
-            .hero-ctas { justify-content: center; }
-            .hero-stats { justify-content: center; gap: 2rem; }
-            .badge-1 { right: 10%; }
-            .badge-2 { left: 10%; }
-        }
-
-        @media (max-width: 600px) {
-            .hero-content h1 { font-size: 2.2rem; }
-            .modern-hero { padding: 4rem 5%; }
-            .hero-stats { flex-direction: column; gap: 1.5rem; align-items: center; }
-            .visual-circle { width: 300px; height: 300px; }
-            .floating-badge { font-size: 0.8rem; padding: 0.5rem 1rem; }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -251,6 +40,19 @@
                             <a href="registration.html" class="sub-link">New Player registration</a>
                         </div>
                     </details>
+
+                    <details class="nav-details">
+                        <summary class="radio-label">
+                            <div class="radio-circle"></div>
+                            <span class="radio-text">Calendar</span>
+                        </summary>
+                        <div class="sub-menu">
+                            <a href="CDCAevents.html" class="sub-link">CDCA Events</a>
+                            <a href="stateinfo.html" class="sub-link">State Events</a>
+                            <a href="onlineentry.html" class="sub-link">Online Entry</a>
+                        </div>
+                    </details>
+
                     <details class="nav-details">
                         <summary class="radio-label">
                             <div class="radio-circle"></div>
@@ -258,9 +60,25 @@
                         </summary>
                         <div class="sub-menu">
                             <a href="officials.html" class="sub-link">Office Bearers</a>
+                            <a href="Committees.html" class="sub-link">Committees</a>
                             <a href="contact.html" class="sub-link">Contact</a>
                         </div>
                     </details>
+
+                    <a href="#" class="radio-label direct-link">
+                        <div class="radio-circle"></div>
+                        <span class="radio-text">Archive</span>
+                    </a>
+
+                    <a href="#" class="radio-label direct-link">
+                        <div class="radio-circle"></div>
+                        <span class="radio-text">Rankings</span>
+                    </a>
+
+                    <a href="#" class="radio-label direct-link">
+                        <div class="radio-circle"></div>
+                        <span class="radio-text">News & Media</span>
+                    </a>
                 </div>
                 <div id="sidebar-auth" class="sidebar-auth-section"></div>
             </nav>
@@ -277,6 +95,7 @@
 
     <section class="modern-hero">
         <div class="hero-container">
+            
             <div class="hero-content">
                 <h1>Chapra District <br>Chess Association</h1>
                 <p>The official hub for chess in Chapra. Explore official player rankings, register for state-level tournaments, and master the game with certified arbiters and instructors.</p>
@@ -304,24 +123,22 @@
 
             <div class="hero-visual">
                 <div class="visual-circle"></div>
-                
                 <img src="LogoCDCA.png" alt="CDCA Official Logo" class="main-hero-logo" onerror="this.src='https://via.placeholder.com/350x350?text=CDCA'">
                 
                 <div class="floating-badge badge-1">
                     <span class="badge-icon">🏆</span>
                     Official Rankings
                 </div>
-                
                 <div class="floating-badge badge-2">
                     <span class="badge-icon">♟️</span>
                     State Events
                 </div>
-                
                 <div class="floating-badge badge-3">
                     <span class="badge-icon">📊</span>
                     Master Database
                 </div>
             </div>
+
         </div>
     </section>
 
