@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Database - CDCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="registered.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="brand-zone">
+            <span class="header-title">Private Directory</span>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+            <a href="admin.html"><button class="button"><div class="text">DASHBOARD</div></button></a>
+        </div>
+    </header>
+
+    <div class="container db-container" id="admin-content">
+        <div class="page-header">
+            <span class="secure-badge">🔒 Encrypted Access</span>
+            <h1 class="portal-title">Registered Players List</h1>
+            <p class="portal-subtitle">Click on any player row below to securely expand and view their private documents and details.</p>
+        </div>
+
+        <div class="data-card">
+            <div class="toolbar" style="display:flex; justify-content: space-between; align-items:center;">
+                <h3 style="color: var(--primary-dark);">Directory Search</h3>
+                <div class="textInputWrapper" style="width: 350px; margin: 0;">
+                    <input type="text" id="regSearchInput" placeholder="Search Name or Mobile..." class="textInput">
+                </div>
+            </div>
+            <table class="interactive-table">
+                <thead>
+                    <tr><th>Player Name</th><th>Mobile Number</th><th>Generated ID</th><th>Status</th><th style="text-align: right;">Action</th></tr>
+                </thead>
+                <tbody id="registered-tbody">
+                    <tr><td colspan="5" style="text-align:center; padding: 2rem;">No data fetched.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
