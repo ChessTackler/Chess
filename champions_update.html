@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Champions - CDCA Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body style="background-color: #f1f5f9;">
+
+    <header class="chess-admin-header">
+        <a href="index.html" class="header-logos">
+            <img src="LogoCDCA.png" alt="CDCA Logo" onerror="this.src='https://via.placeholder.com/120x42?text=CDCA'">
+            <div class="logo-sep"></div>
+            <img src="LogoABCA.png" alt="ABCA Logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA'">
+        </a>
+
+        <div class="header-actions">
+            <a href="adminportal.html" class="btn-orange" style="background: transparent; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1rem; box-shadow: none;">Dashboard</a>
+            <button onclick="triggerLogoutUI()" class="admin-logout-btn" title="Log Out">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                <span>Log Out</span>
+            </button>
+        </div>
+    </header>
+
+    <div id="auth-message" class="admin-auth-loader">
+        <div class="loader"></div>
+        Authenticating Secure Access...
+    </div>
+
+    <div id="admin-content" style="display: none;" class="container">
+        <div class="admin-page-header">
+            <span class="badge badge-im" style="margin-bottom: 10px;">Admin Module</span>
+            <h2 class="section-title" style="text-align: left; margin-bottom: 0.5rem; font-size: 2.2rem;">Update Champions</h2>
+            <p style="color: var(--text-muted); font-size: 1.05rem;">Modify the World and District Champions displayed on the public homepage.</p>
+        </div>
+
+        <div class="admin-layout-flex">
+            <div class="admin-card">
+                <h3 class="card-heading">🌐 Open World Champion</h3>
+                <form onsubmit="saveChampion(event, 'Open')">
+                    <div class="form-group"><label>Player Name</label><input type="text" id="Open_name" required></div>
+                    <div class="form-group"><label>Title Subtext</label><input type="text" id="Open_title" required></div>
+                    <div class="responsive-grid-4" style="grid-template-columns: 1fr 1fr 1fr;">
+                        <div class="form-group"><label>Standard</label><input type="number" id="Open_std"></div>
+                        <div class="form-group"><label>Rapid</label><input type="number" id="Open_rap"></div>
+                        <div class="form-group"><label>Blitz</label><input type="number" id="Open_bli"></div>
+                    </div>
+                    <div class="form-group"><label>Flag Icon URL (.png)</label><input type="url" id="Open_flag"></div>
+                    <div class="form-group"><label>Transparent Image URL</label><input type="url" id="Open_img"></div>
+                    <button type="submit" class="btn-orange" style="width: 100%;">Save Update</button>
+                </form>
+            </div>
+
+            <div class="admin-card">
+                <h3 class="card-heading">👑 Women's World Champion</h3>
+                <form onsubmit="saveChampion(event, 'Women')">
+                    <div class="form-group"><label>Player Name</label><input type="text" id="Women_name" required></div>
+                    <div class="form-group"><label>Title Subtext</label><input type="text" id="Women_title" required></div>
+                    <div class="responsive-grid-4" style="grid-template-columns: 1fr 1fr 1fr;">
+                        <div class="form-group"><label>Standard</label><input type="number" id="Women_std"></div>
+                        <div class="form-group"><label>Rapid</label><input type="number" id="Women_rap"></div>
+                        <div class="form-group"><label>Blitz</label><input type="number" id="Women_bli"></div>
+                    </div>
+                    <div class="form-group"><label>Flag Icon URL (.png)</label><input type="url" id="Women_flag"></div>
+                    <div class="form-group"><label>Transparent Image URL</label><input type="url" id="Women_img"></div>
+                    <button type="submit" class="btn-orange" style="width: 100%;">Save Update</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="admin-card" style="margin-top: 2rem;">
+            <h3 class="card-heading">🏆 Current District Champion</h3>
+            <form onsubmit="saveChampion(event, 'District')">
+                <div class="responsive-grid-2">
+                    <div class="form-group"><label>Player Name</label><input type="text" id="District_name" required></div>
+                    <div class="form-group"><label>Year / Subtitle (e.g. Chapra 2026)</label><input type="text" id="District_title" required></div>
+                </div>
+                <div class="responsive-grid-4" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <div class="form-group"><label>Standard Rating</label><input type="number" id="District_std"></div>
+                    <div class="form-group"><label>Rapid Rating</label><input type="number" id="District_rap"></div>
+                    <div class="form-group"><label>Blitz Rating</label><input type="number" id="District_bli"></div>
+                </div>
+                <div class="form-group"><label>Portrait Image URL</label><input type="url" id="District_img"></div>
+                <button type="submit" class="btn-orange" style="width: 100%; max-width: 300px;">Update District Champion</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const authMessage = document.getElementById('auth-message');
+            const adminContent = document.getElementById('admin-content');
+
+            let auth = { allowed: false };
+            if(typeof window.verifyAdminAccess === 'function') {
+                auth = await window.verifyAdminAccess();
+            } else {
+                auth.allowed = true; // Fallback for UI testing
+            }
+
+            if (!auth.allowed) {
+                authMessage.innerHTML = "<span style='color: #ef4444; font-size: 1.2rem;'>Access Denied. Redirecting...</span>";
+                setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+            } else {
+                authMessage.style.display = 'none';
+                adminContent.style.display = 'block';
+                loadCurrentData();
+            }
+        });
+
+        async function loadCurrentData() {
+            if(!window.supabaseClient) return;
+            const { data } = await window.supabaseClient.from('champions_data').select('*');
+            if(data) {
+                data.forEach(champ => {
+                    const cat = champ.category; // 'Open', 'Women', 'District'
+                    if(document.getElementById(`${cat}_name`)) {
+                        document.getElementById(`${cat}_name`).value = champ.name || '';
+                        document.getElementById(`${cat}_title`).value = champ.title || '';
+                        document.getElementById(`${cat}_std`).value = champ.rating_std || '';
+                        document.getElementById(`${cat}_rap`).value = champ.rating_rap || '';
+                        document.getElementById(`${cat}_bli`).value = champ.rating_bli || '';
+                        document.getElementById(`${cat}_img`).value = champ.image_url || '';
+                        if(document.getElementById(`${cat}_flag`)) document.getElementById(`${cat}_flag`).value = champ.flag_url || '';
+                    }
+                });
+            }
+        }
+
+        async function saveChampion(e, category) {
+            e.preventDefault();
+            if(!window.supabaseClient) { alert("Supabase not connected."); return; }
+
+            const payload = {
+                category: category,
+                name: document.getElementById(`${category}_name`).value,
+                title: document.getElementById(`${category}_title`).value,
+                rating_std: document.getElementById(`${category}_std`).value || null,
+                rating_rap: document.getElementById(`${category}_rap`).value || null,
+                rating_bli: document.getElementById(`${category}_bli`).value || null,
+                image_url: document.getElementById(`${category}_img`).value || null,
+            };
+
+            if(document.getElementById(`${category}_flag`)) {
+                payload.flag_url = document.getElementById(`${category}_flag`).value || null;
+            }
+
+            // Using upsert with category as primary key
+            const { error } = await window.supabaseClient.from('champions_data').upsert([payload], { onConflict: 'category' });
+            
+            if(error) {
+                if(typeof window.uiAlert === 'function') window.uiAlert("Error", error.message, true);
+                else alert(error.message);
+            } else {
+                if(typeof window.uiAlert === 'function') window.uiAlert("Success", `${category} Champion updated!`);
+                else alert("Saved successfully!");
+            }
+        }
+
+        function triggerLogoutUI() {
+            if(typeof window.uiConfirm === 'function') {
+                window.uiConfirm('Sign Out?', 'Are you sure you want to log out?', 'Log Out', () => {
+                    if(typeof window.handleLogout === 'function') window.handleLogout();
+                    else window.location.href = 'index.html';
+                });
+            } else {
+                if(confirm("Are you sure you want to log out?")) window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
