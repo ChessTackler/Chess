@@ -175,8 +175,8 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .champions-header { font-size: 2rem; color: #1e293b; font-weight: 600; margin-bottom: 2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
 .district-specific-header { font-size: 1.4rem; padding-bottom: 18px; margin-bottom: 2rem; }
 
-/* Grid setups */
-.champ-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+/* Grid setups - FORCED 1fr 1fr ON DESKTOP */
+.champ-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
 .champ-grid-single { display: flex; justify-content: center; height: 100%; width: 100%; }
 
 /* The World Champion Cards */
@@ -185,7 +185,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     position: relative; overflow: visible; box-shadow: 0 8px 24px rgba(0,0,0,0.06); 
     border: 1px solid #ffffff; display: flex; flex-direction: column; min-height: 260px;
     width: 100%;
-    max-width: 450px; 
+    max-width: none; /* Let grid control the width */
 }
 
 .champ-info { flex: 1; z-index: 2; position: relative; width: 60%; }
@@ -249,11 +249,14 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     .stat-item h3 { font-size: 1.5rem; }
     .stat-item p { font-size: 0.75rem; }
 
+    /* Collapse to 1 card per row on mobile screens */
+    .champ-grid { grid-template-columns: 1fr; }
+
     .champ-card { padding: 1.5rem; min-height: 220px; max-width: 100%; }
     .champ-info { width: 55%; }
     .champ-name { font-size: 1.3rem; }
     .champ-img-wrapper { width: 45%; height: 105%; max-width: 150px; }
-    
+
     .district-champ-card { flex-direction: column; text-align: center; gap: 1rem; padding: 2rem; }
     .dc-ratings { justify-content: center; width: 100%; }
 }
@@ -325,12 +328,8 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .footer-graphic {
     position: relative;
     width: 100%;
-    height: 550px; /* Huge space */
-    
-    /* The 3D wood room background */
-    background: radial-gradient(ellipse at 50% 60%, #8c4723 0%, #4a220d 45%, #210d04 80%, #110501 100%);
-    box-shadow: inset 0 20px 50px rgba(0,0,0,0.7); /* Deep shadow at the top to blend the transition from the white page */
-    
+    height: 450px; /* Reduced from 550px so it spans beautifully into normal background */
+    background: transparent; /* Top half remains normal (transparent shows body background) */
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -338,7 +337,20 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     padding-bottom: 3rem;
 }
 
-/* Pure CSS floor perspective lines! */
+/* The 3D wood room background ONLY for the bottom 45% */
+.footer-graphic::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 45%; 
+    background: radial-gradient(ellipse at 50% 100%, #8c4723 0%, #4a220d 45%, #210d04 80%, #110501 100%);
+    box-shadow: inset 0 15px 30px rgba(0,0,0,0.6); /* Adds drop-shadow edge between white space and wood */
+    z-index: 0;
+}
+
+/* Pure CSS floor perspective lines overlaying the wood */
 .footer-graphic::after {
     content: '';
     position: absolute;
@@ -353,18 +365,18 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     z-index: 1;
 }
 
-/* Brilliant glowing halo placed exactly behind the image so the 'multiply' blend mode doesn't ruin the colors of the white chess pieces */
+/* Flatter glowing halo */
 .shape-yellow-glow {
     position: absolute;
-    width: 550px;
-    height: 350px;
-    background: radial-gradient(ellipse at center, rgba(255, 245, 220, 1) 0%, rgba(255, 230, 180, 0.9) 40%, transparent 75%);
-    bottom: 2rem;
+    width: 450px;
+    height: 120px; 
+    background: radial-gradient(ellipse at center, rgba(255, 245, 220, 0.8) 0%, rgba(255, 230, 180, 0.4) 40%, transparent 75%);
+    bottom: 2.5rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
     border-radius: 50%;
-    filter: blur(25px);
+    filter: blur(15px);
     pointer-events: none;
 }
 
@@ -376,8 +388,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     max-width: 90%;
     object-fit: contain;
     transform-origin: bottom center;
-    
-    /* Crucial trick: This removes the solid white background of the image and drops it perfectly onto the glowing halo and dark wood floor */
+    /* This drops the white background perfectly over both the wood AND transparent top */
     mix-blend-mode: multiply; 
 }
 
@@ -385,7 +396,6 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     padding: 1.5rem;
     text-align: center;
     font-size: 0.9rem;
-    /* Rich dark brown text background to match the bottom edge of the 3D room */
     background-color: #110501;
     color: rgba(255, 255, 255, 0.6);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -394,7 +404,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 }
 
 @media (max-width: 768px) {
-    .footer-graphic { height: 400px; }
-    .footer-board-img { max-height: 280px; }
-    .shape-yellow-glow { width: 350px; height: 250px; }
+    .footer-graphic { height: 350px; padding-bottom: 2rem; }
+    .footer-board-img { max-height: 240px; }
+    .shape-yellow-glow { width: 300px; height: 80px; bottom: 1.5rem; }
 }
