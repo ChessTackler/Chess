@@ -179,35 +179,42 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .champ-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
 .champ-grid-single { display: flex; justify-content: center; height: 100%; width: 100%; }
 
-/* The Card Itself (Fixed Max-Width so it NEVER stretches full screen) */
+/* The World Champion Cards */
 .champ-card {
     background: linear-gradient(145deg, #f8fafc, #e2e8f0); border-radius: 16px; padding: 2rem; 
     position: relative; overflow: visible; box-shadow: 0 8px 24px rgba(0,0,0,0.06); 
     border: 1px solid #ffffff; display: flex; flex-direction: column; min-height: 260px;
     width: 100%;
-    max-width: 450px; /* Constrains card size elegantly */
+    max-width: 450px; 
 }
-
-/* For district section specifically, center it and ensure it matches sizes */
-#district-champ-card { margin: 0 auto; }
 
 .champ-info { flex: 1; z-index: 2; position: relative; width: 60%; }
 .champ-name { font-size: 1.6rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem; }
 .champ-title-text { font-size: 0.95rem; color: #475569; margin-bottom: 1.5rem; line-height: 1.4; font-weight: 500; }
-
 .champ-flag-emoji { 
     width: 36px; height: 36px; border-radius: 50%; background: #ffffff; 
     display: flex; align-items: center; justify-content: center; font-size: 1.3rem; 
     margin-bottom: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; 
 }
-.district-badge { background: #fef3c7; border-color: #fde68a; } 
-
 .champ-ratings { display: flex; gap: 1.5rem; margin-top: auto; flex-wrap: wrap; }
 .rating-item { display: flex; flex-direction: column; align-items: center; gap: 6px; color: #0f172a; font-weight: 700; font-size: 1.05rem; }
 .rating-item svg { width: 22px; height: 22px; color: #475569; }
-
 .champ-img-wrapper { position: absolute; right: 0; bottom: 0; width: 45%; max-width: 200px; height: 110%; z-index: 1; display: flex; align-items: flex-end; justify-content: flex-end; }
 .champ-img-wrapper img { width: 100%; height: 100%; object-fit: contain; object-position: bottom right; filter: drop-shadow(-5px 5px 10px rgba(0,0,0,0.1)); border-bottom-right-radius: 16px; }
+
+/* The District Champion Card (Fixed Horizontal Layout) */
+.district-champ-card { 
+    background: #ffffff; border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: row; align-items: center; gap: 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; width: 100%; max-width: 450px; height: fit-content; margin: 0 auto;
+}
+.dc-img-wrapper { position: relative; flex-shrink: 0; }
+.dc-img { width: 110px; height: 110px; border-radius: 12px; object-fit: cover; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+.dc-badge { position: absolute; top: -10px; left: -10px; width: 32px; height: 32px; border-radius: 50%; background: #fef3c7; border: 1px solid #fde68a; display: flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.dc-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.dc-name { font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 0.2rem; line-height: 1.2; }
+.dc-year { font-size: 0.9rem; color: #64748b; font-weight: 500; margin-bottom: 1rem; }
+.dc-ratings { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.rating-item-sm { display: flex; align-items: center; gap: 5px; color: #0f172a; font-weight: 700; font-size: 0.95rem; }
+.rating-item-sm svg { width: 18px; height: 18px; color: #475569; }
 
 /* =========================================
    RESPONSIVE MOBILE OVERRIDES
@@ -242,11 +249,13 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     .stat-item h3 { font-size: 1.5rem; }
     .stat-item p { font-size: 0.75rem; }
 
-    /* Make sure cards aren't too small on phones */
     .champ-card { padding: 1.5rem; min-height: 220px; max-width: 100%; }
     .champ-info { width: 55%; }
     .champ-name { font-size: 1.3rem; }
     .champ-img-wrapper { width: 45%; height: 105%; max-width: 150px; }
+    
+    .district-champ-card { flex-direction: column; text-align: center; gap: 1rem; padding: 2rem; }
+    .dc-ratings { justify-content: center; width: 100%; }
 }
 
 /* =========================================
@@ -304,12 +313,11 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 }
 
 /* =========================================
-   FOOTER (MASSIVE HEIGHT & 3D GRAPHICS)
+   FOOTER (PURE CSS 3D WOODY ROOM)
 ========================================= */
 .site-footer {
     width: 100%;
     margin-top: auto;
-    background-color: #ffffff;
     display: flex;
     flex-direction: column;
 }
@@ -317,97 +325,76 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .footer-graphic {
     position: relative;
     width: 100%;
-    height: 600px; /* HUGE SPACE as requested */
+    height: 550px; /* Huge space */
+    
+    /* The 3D wood room background */
+    background: radial-gradient(ellipse at 50% 60%, #8c4723 0%, #4a220d 45%, #210d04 80%, #110501 100%);
+    box-shadow: inset 0 20px 50px rgba(0,0,0,0.7); /* Deep shadow at the top to blend the transition from the white page */
+    
     overflow: hidden;
-    background-color: #ffffff;
     display: flex;
     justify-content: center;
-    align-items: flex-end; /* Align image to bottom so base touches text */
-    padding-bottom: 2rem;
+    align-items: flex-end; /* Align board to bottom */
+    padding-bottom: 3rem;
 }
 
-/* Faded yellow glowing area */
+/* Pure CSS floor perspective lines! */
+.footer-graphic::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 45%;
+    background: repeating-linear-gradient(to right, transparent, transparent 30px, rgba(0,0,0,0.15) 31px, rgba(0,0,0,0.15) 33px);
+    transform: perspective(600px) rotateX(65deg);
+    transform-origin: bottom center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Brilliant glowing halo placed exactly behind the image so the 'multiply' blend mode doesn't ruin the colors of the white chess pieces */
 .shape-yellow-glow {
     position: absolute;
-    width: 800px;
-    height: 800px;
-    background: radial-gradient(circle, rgba(250, 204, 21, 0.25) 0%, transparent 60%);
-    top: 50%;
+    width: 550px;
+    height: 350px;
+    background: radial-gradient(ellipse at center, rgba(255, 245, 220, 1) 0%, rgba(255, 230, 180, 0.9) 40%, transparent 75%);
+    bottom: 2rem;
     left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-    pointer-events: none;
-}
-
-/* Yellow diagonal streak */
-.shape-yellow-streak {
-    position: absolute;
-    width: 150%;
-    height: 60px;
-    background: linear-gradient(90deg, transparent, rgba(253, 224, 71, 0.4), transparent);
-    top: 60%;
-    left: -25%;
-    transform: rotate(-25deg);
+    transform: translateX(-50%);
     z-index: 2;
-    filter: blur(8px);
-    pointer-events: none;
-}
-
-/* Woody brown 3D curved shapes */
-.shape-woody-curve {
-    position: absolute;
-    width: 150%;
-    height: 400px;
     border-radius: 50%;
-    border-bottom: 35px solid rgba(139, 69, 19, 0.3);
-    bottom: -10%;
-    left: -25%;
-    transform: rotate(-5deg);
-    z-index: 2;
-    filter: blur(6px) drop-shadow(0 15px 15px rgba(0,0,0,0.15));
-    pointer-events: none;
-}
-.shape-woody-curve-top {
-    position: absolute;
-    width: 140%;
-    height: 450px;
-    border-radius: 50%;
-    border-top: 25px solid rgba(160, 82, 45, 0.2);
-    top: 5%;
-    right: -20%;
-    transform: rotate(15deg);
-    z-index: 2;
-    filter: blur(8px);
+    filter: blur(25px);
     pointer-events: none;
 }
 
 .footer-board-img {
     position: relative;
     z-index: 5;
-    max-height: 450px; /* Big enough to showcase the 3D details */
+    max-height: 400px; 
     width: auto;
     max-width: 90%;
     object-fit: contain;
     transform-origin: bottom center;
-    mix-blend-mode: darken; /* Ensures the white bg of the image turns transparent so shapes show! */
+    
+    /* Crucial trick: This removes the solid white background of the image and drops it perfectly onto the glowing halo and dark wood floor */
+    mix-blend-mode: multiply; 
 }
 
 .footer-content {
     padding: 1.5rem;
     text-align: center;
     font-size: 0.9rem;
-    color: var(--text-muted);
-    border-top: 1px solid var(--border-color);
-    background-color: #f8fafc;
+    /* Rich dark brown text background to match the bottom edge of the 3D room */
+    background-color: #110501;
+    color: rgba(255, 255, 255, 0.6);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     z-index: 10;
 }
 
 @media (max-width: 768px) {
-    .footer-graphic {
-        height: 450px; /* Scale down slightly for mobile but keep huge space */
-    }
-    .footer-board-img {
-        max-height: 350px; 
-    }
+    .footer-graphic { height: 400px; }
+    .footer-board-img { max-height: 280px; }
+    .shape-yellow-glow { width: 350px; height: 250px; }
 }
