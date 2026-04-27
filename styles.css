@@ -152,7 +152,41 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .news-list-item:hover .news-list-title { color: var(--primary-blue); }
 
 /* =========================================
-   MASTER CHAMPIONS LAYOUT (SIDE-BY-SIDE)
+   WRAPPER & SVG BACKGROUND PIECES
+========================================= */
+.champions-bg-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden; /* Contains the giant SVGs so they don't break page width */
+    padding-top: 2rem;
+}
+
+.bg-piece {
+    position: absolute;
+    z-index: 0;
+    opacity: 0.4; /* Soft transparency to blend into background */
+    pointer-events: none; /* Allows clicking right through them */
+    filter: drop-shadow(10px 20px 20px rgba(0,0,0,0.05));
+}
+
+.piece-left {
+    left: -8%;
+    top: 5%;
+    height: 90%;
+    width: auto;
+    max-width: 400px;
+}
+
+.piece-right {
+    right: -5%;
+    top: -5%;
+    height: 110%;
+    width: auto;
+    max-width: 450px;
+}
+
+/* =========================================
+   MASTER CHAMPIONS LAYOUT
 ========================================= */
 .champions-master-container {
     display: flex;
@@ -162,6 +196,8 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     margin: 0 auto 5rem auto;
     padding: 0 5%;
     align-items: stretch;
+    position: relative;
+    z-index: 10; /* Keeps cards above SVGs */
 }
 .world-section {
     flex: 2;
@@ -175,17 +211,16 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .champions-header { font-size: 2rem; color: #1e293b; font-weight: 600; margin-bottom: 2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
 .district-specific-header { font-size: 1.4rem; padding-bottom: 18px; margin-bottom: 2rem; }
 
-/* Grid setups - FORCED 1fr 1fr ON DESKTOP */
 .champ-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
 .champ-grid-single { display: flex; justify-content: center; height: 100%; width: 100%; }
 
-/* The World Champion Cards */
 .champ-card {
-    background: linear-gradient(145deg, #f8fafc, #e2e8f0); border-radius: 16px; padding: 2rem; 
-    position: relative; overflow: visible; box-shadow: 0 8px 24px rgba(0,0,0,0.06); 
+    background: linear-gradient(145deg, #ffffff, #f8fafc); border-radius: 16px; padding: 2rem; 
+    position: relative; overflow: visible; box-shadow: 0 8px 30px rgba(0,0,0,0.08); 
     border: 1px solid #ffffff; display: flex; flex-direction: column; min-height: 260px;
     width: 100%;
-    max-width: none; /* Let grid control the width */
+    max-width: none;
+    backdrop-filter: blur(10px); /* Gives slight glass effect over SVG background */
 }
 
 .champ-info { flex: 1; z-index: 2; position: relative; width: 60%; }
@@ -202,9 +237,8 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .champ-img-wrapper { position: absolute; right: 0; bottom: 0; width: 45%; max-width: 200px; height: 110%; z-index: 1; display: flex; align-items: flex-end; justify-content: flex-end; }
 .champ-img-wrapper img { width: 100%; height: 100%; object-fit: contain; object-position: bottom right; filter: drop-shadow(-5px 5px 10px rgba(0,0,0,0.1)); border-bottom-right-radius: 16px; }
 
-/* The District Champion Card (Fixed Horizontal Layout) */
 .district-champ-card { 
-    background: #ffffff; border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: row; align-items: center; gap: 1.5rem; box-shadow: 0 8px 24px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; width: 100%; max-width: 450px; height: fit-content; margin: 0 auto;
+    background: #ffffff; border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: row; align-items: center; gap: 1.5rem; box-shadow: 0 8px 30px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; width: 100%; max-width: 450px; height: fit-content; margin: 0 auto;
 }
 .dc-img-wrapper { position: relative; flex-shrink: 0; }
 .dc-img { width: 110px; height: 110px; border-radius: 12px; object-fit: cover; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
@@ -249,7 +283,6 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     .stat-item h3 { font-size: 1.5rem; }
     .stat-item p { font-size: 0.75rem; }
 
-    /* Collapse to 1 card per row on mobile screens */
     .champ-grid { grid-template-columns: 1fr; }
 
     .champ-card { padding: 1.5rem; min-height: 220px; max-width: 100%; }
@@ -259,64 +292,13 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 
     .district-champ-card { flex-direction: column; text-align: center; gap: 1rem; padding: 2rem; }
     .dc-ratings { justify-content: center; width: 100%; }
+    
+    /* Hide SVGs on very small screens to avoid clutter */
+    .bg-piece { display: none; }
 }
 
 /* =========================================
-   INJECTED MODAL & BADGE SYSTEM CSS
-========================================= */
-.custom-modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.3s ease; }
-.custom-modal-overlay.active { opacity: 1; visibility: visible; }
-.custom-modal { background: #ffffff !important; border-radius: 16px; width: 90%; max-width: 500px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; transform: translateY(20px); transition: 0.3s ease; }
-.custom-modal-overlay.active .custom-modal { transform: translateY(0); }
-.custom-modal-header { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
-.custom-modal-header h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: #0f172a; margin: 0; }
-.close-modal-btn { background: transparent; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b; }
-.custom-modal-body { padding: 1.5rem; max-height: 70vh; overflow-y: auto; }
-.custom-modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 10px; background: #f8fafc; }
-.modal-btn { padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; font-size: 0.9rem; transition: 0.2s; }
-.modal-btn-cancel { background: #e2e8f0; color: #475569; }
-.modal-btn-confirm { background: #2563eb; color: #fff; }
-.modal-btn-danger { background: #ef4444; color: #fff; }
-.modal-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-.responsive-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-.form-group { margin-bottom: 1rem; display: flex; flex-direction: column; text-align: left; }
-.form-group label { font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: #475569; }
-.form-group input, .form-group select { padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; }
-
-.badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
-.status-active { background: #dcfce7; color: #166534; }
-.status-inactive { background: #fee2e2; color: #991b1b; }
-.badge-default { background: #f1f5f9; color: #475569; }
-.badge-gm { background: #fef08a; color: #854d0e; }
-.badge-im { background: #e0f2fe; color: #0369a1; }
-.badge-fm { background: #fce7f3; color: #be185d; }
-.badge-cm { background: #dcfce7; color: #166534; }
-.title-badges-container { display: flex; gap: 5px; flex-wrap: wrap; }
-
-.action-btn { padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; border: none; text-transform: uppercase;}
-.promote { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
-.delete { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
-
-/* =========================================
-   EDIT MODAL GLOBALS
-========================================= */
-.modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
-    z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 1rem;
-}
-.modal-content {
-    background: #ffffff !important; 
-    width: 100%; max-width: 500px; position: relative; max-height: 90vh; overflow-y: auto;
-    border-radius: 16px; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-}
-.modal-close-btn {
-    position: absolute; top: 15px; right: 15px; background: none; border: none;
-    font-size: 1.5rem; color: #64748b; cursor: pointer; line-height: 1;
-}
-
-/* =========================================
-   FOOTER (PURE CSS 3D WOODY ROOM)
+   FOOTER (PURE CSS 3D WOODY ROOM UPDATE)
 ========================================= */
 .site-footer {
     width: 100%;
@@ -328,8 +310,8 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .footer-graphic {
     position: relative;
     width: 100%;
-    height: 450px; 
-    background: transparent !important; /* Forces top half to be transparent */
+    height: 500px; 
+    background: transparent !important; 
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -337,65 +319,59 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     padding-bottom: 3rem;
 }
 
-/* The 3D wood room background ONLY for the bottom 45% */
+/* 3D Wood floor effect with perspective */
 .footer-graphic::before {
     content: '';
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 45%; 
-    background: radial-gradient(ellipse at 50% 100%, #8c4723 0%, #4a220d 45%, #210d04 80%, #110501 100%) !important;
-    box-shadow: inset 0 15px 30px rgba(0,0,0,0.6); 
+    height: 55%; 
+    /* Complex gradient layering to mimic wood planks */
+    background-color: #3e1f0e;
+    background-image: 
+        linear-gradient(rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 25%), /* Shadow drop from top edge */
+        repeating-linear-gradient(to right, transparent, transparent 38px, rgba(0,0,0,0.5) 40px), /* The plank lines */
+        radial-gradient(ellipse at center, rgba(255, 180, 100, 0.15) 0%, rgba(0, 0, 0, 0.7) 100%); /* Center lighting */
+    
+    /* The 3D CSS magic */
+    transform: perspective(500px) rotateX(65deg) scaleX(1.5);
+    transform-origin: bottom center;
+    box-shadow: inset 0 20px 40px rgba(0,0,0,0.8); 
     z-index: 0;
 }
 
-/* Pure CSS floor perspective lines overlaying the wood */
-.footer-graphic::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 45%;
-    background: repeating-linear-gradient(to right, transparent, transparent 30px, rgba(0,0,0,0.15) 31px, rgba(0,0,0,0.15) 33px);
-    transform: perspective(600px) rotateX(65deg);
-    transform-origin: bottom center;
-    pointer-events: none;
-    z-index: 1;
-}
-
-/* Flatter glowing halo */
+/* Central glowing spot on the floor */
 .shape-yellow-glow {
     position: absolute;
-    width: 450px;
-    height: 120px; 
-    background: radial-gradient(ellipse at center, rgba(255, 245, 220, 0.8) 0%, rgba(255, 230, 180, 0.4) 40%, transparent 75%);
-    bottom: 2.5rem;
+    width: 500px;
+    height: 150px; 
+    background: radial-gradient(ellipse at center, rgba(255, 230, 180, 0.6) 0%, rgba(255, 200, 100, 0.2) 40%, transparent 70%);
+    bottom: 2rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
     border-radius: 50%;
-    filter: blur(15px);
+    filter: blur(20px);
     pointer-events: none;
 }
 
 .footer-board-img {
     position: relative;
     z-index: 5;
-    max-height: 400px; 
+    max-height: 420px; 
     width: auto;
     max-width: 90%;
     object-fit: contain;
     transform-origin: bottom center;
-    mix-blend-mode: multiply; /* Drops white bg over transparent AND wood */
+    mix-blend-mode: multiply; 
 }
 
 .footer-content {
     padding: 1.5rem;
     text-align: center;
     font-size: 0.9rem;
-    background-color: #110501;
+    background-color: #0a0402;
     color: rgba(255, 255, 255, 0.6);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
