@@ -152,7 +152,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .news-list-item:hover .news-list-title { color: var(--primary-blue); }
 
 /* =========================================
-   CHAMPIONS & PERSON OF THE DAY SECTION
+   CHAMPIONS GRID SECTION (Unified Layout)
 ========================================= */
 .champions-container { max-width: 1200px; margin: 0 auto 5rem auto; padding: 0 5%; }
 .champions-header { font-size: 2rem; color: #1e293b; font-weight: 600; margin-bottom: 2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
@@ -163,7 +163,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     position: relative; overflow: visible; box-shadow: 0 8px 24px rgba(0,0,0,0.06); 
     border: 1px solid #ffffff; display: flex; flex-direction: column; min-height: 260px;
 }
-.champ-info { flex: 1; z-index: 2; position: relative; width: 55%; }
+.champ-info { flex: 1; z-index: 2; position: relative; width: 60%; }
 .champ-name { font-size: 1.6rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem; }
 .champ-title-text { font-size: 0.95rem; color: #475569; margin-bottom: 1.5rem; line-height: 1.4; font-weight: 500; }
 
@@ -172,28 +172,22 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     display: flex; align-items: center; justify-content: center; font-size: 1.3rem; 
     margin-bottom: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; 
 }
+.district-badge { background: #fef3c7; border-color: #fde68a; } /* Gold tint for district badge */
 
 .champ-ratings { display: flex; gap: 1.5rem; margin-top: auto; flex-wrap: wrap; }
 .rating-item { display: flex; flex-direction: column; align-items: center; gap: 6px; color: #0f172a; font-weight: 700; font-size: 1.05rem; }
 .rating-item svg { width: 22px; height: 22px; color: #475569; }
 
 .champ-img-wrapper { position: absolute; right: 0; bottom: 0; width: 45%; max-width: 250px; height: 110%; z-index: 1; display: flex; align-items: flex-end; justify-content: flex-end; }
-.champ-img-wrapper img { width: 100%; height: 100%; object-fit: contain; object-position: bottom right; filter: drop-shadow(-5px 5px 10px rgba(0,0,0,0.1)); }
-
-.district-header { font-size: 1.2rem; color: #1e293b; font-weight: 600; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
-.district-champ-card { background: #ffffff; border-radius: 12px; padding: 1.5rem; display: flex; align-items: center; gap: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; }
-.dc-img { width: 100px; height: 100px; border-radius: 12px; object-fit: cover; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-.dc-info { flex: 1; }
-.dc-name { font-size: 1.4rem; font-weight: 700; color: #0f172a; margin-bottom: 0.2rem; }
-.dc-year { font-size: 0.95rem; color: #94a3b8; font-weight: 500; margin-bottom: 1rem; }
-.dc-ratings { display: flex; gap: 1.5rem; }
+/* Modified border radius logic for the newly formatted district placeholder image so it doesn't look weird bleeding off */
+.champ-img-wrapper img { width: 100%; height: 100%; object-fit: contain; object-position: bottom right; filter: drop-shadow(-5px 5px 10px rgba(0,0,0,0.1)); border-bottom-right-radius: 16px; }
 
 /* =========================================
    RESPONSIVE OVERRIDES (DESKTOP SPECIFIC FIXES)
 ========================================= */
 @media (min-width: 993px) {
-    .champ-grid { grid-template-columns: 1fr 1fr; gap: 3rem; }
-    .district-champ-card { max-width: 800px; margin: 0 auto; } /* Prevents awkward stretching on big screens */
+    /* 3 column layout across desktop to fit District side-by-side */
+    .champ-grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
 }
 
 /* =========================================
@@ -229,9 +223,6 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     .champ-info { width: 55%; }
     .champ-name { font-size: 1.3rem; }
     .champ-img-wrapper { width: 45%; height: 105%; }
-
-    .district-champ-card { flex-direction: column; text-align: center; gap: 1rem; }
-    .dc-ratings { justify-content: center; }
 }
 
 /* =========================================
@@ -271,27 +262,25 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .delete { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 
 /* =========================================
-   EDIT MODAL GLOBALS (Fixes Transparent Overlap)
+   EDIT MODAL GLOBALS
 ========================================= */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
     z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 1rem;
 }
-
 .modal-content {
-    background: #ffffff !important; /* This forces the solid background so it isn't transparent */
+    background: #ffffff !important; 
     width: 100%; max-width: 500px; position: relative; max-height: 90vh; overflow-y: auto;
     border-radius: 16px; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
 }
-
 .modal-close-btn {
     position: absolute; top: 15px; right: 15px; background: none; border: none;
     font-size: 1.5rem; color: #64748b; cursor: pointer; line-height: 1;
 }
 
 /* =========================================
-   FOOTER (NEW)
+   FOOTER (UPGRADED 3D GRAPHIC LAYOUT)
 ========================================= */
 .site-footer {
     width: 100%;
@@ -300,25 +289,103 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     display: flex;
     flex-direction: column;
 }
+
+/* Container for the 3D board and background layers */
 .footer-graphic {
+    position: relative;
     width: 100%;
-    height: 80px; 
+    padding: 3rem 1rem; /* Space around image */
     overflow: hidden;
+    background-color: #ffffff;
     display: flex;
     justify-content: center;
-    background-color: #f8fafc;
+    align-items: center;
+    /* Soft ambient yellow background glow */
+    background-image: radial-gradient(ellipse at 50% 50%, rgba(250, 204, 21, 0.08) 0%, transparent 70%);
 }
+
+/* Faded yellow glowing area (simulating the yellow lines) */
+.swoosh-yellow-glow {
+    position: absolute;
+    width: 80%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(250, 204, 21, 0.25) 0%, transparent 60%);
+    top: -20%;
+    left: -10%;
+    z-index: 0;
+    transform: rotate(20deg);
+    filter: blur(20px);
+}
+/* Yellow diagonal streak */
+.swoosh-yellow-diagonal {
+    position: absolute;
+    width: 120%;
+    height: 60px;
+    background: linear-gradient(90deg, transparent, rgba(250, 204, 21, 0.3), transparent);
+    top: 60%;
+    left: -10%;
+    z-index: 1;
+    transform: rotate(-25deg);
+    filter: blur(8px);
+}
+
+/* Woody brown 3D curved shapes (simulating the red lines) */
+.swoosh-woody-curve-bottom {
+    position: absolute;
+    width: 140%;
+    height: 250px;
+    border-radius: 50%;
+    border-bottom: 25px solid rgba(139, 69, 19, 0.25); /* Woody brown color */
+    bottom: 10%;
+    left: -20%;
+    transform: rotate(-8deg);
+    filter: blur(5px);
+    z-index: 1;
+}
+.swoosh-woody-curve-top {
+    position: absolute;
+    width: 150%;
+    height: 300px;
+    border-radius: 50%;
+    border-top: 18px solid rgba(139, 69, 19, 0.15); /* Woody brown color */
+    top: 15%;
+    right: -25%;
+    transform: rotate(12deg);
+    filter: blur(4px);
+    z-index: 1;
+}
+
+/* The actual 3D chess image */
 .footer-board-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    opacity: 0.5; /* Slightly faded so it isn't too distracting */
+    position: relative;
+    z-index: 2; /* Sits above the background swooshes */
+    max-width: 100%;
+    height: auto;
+    width: 500px; /* Constrained base size for desktop */
+    object-fit: contain;
+    /* Adding a heavy drop shadow gives it a superior 3D pop over the swooshes */
+    filter: drop-shadow(0 25px 35px rgba(0,0,0,0.25));
+    transition: transform 0.3s ease;
 }
+.footer-board-img:hover {
+    transform: translateY(-5px); /* Tiny interaction effect */
+}
+
 .footer-content {
     padding: 1.5rem;
     text-align: center;
     font-size: 0.9rem;
     color: var(--text-muted);
     border-top: 1px solid var(--border-color);
+    background-color: #f8fafc;
+    position: relative;
+    z-index: 10;
+}
+
+/* Small mobile constraint for the footer image */
+@media (max-width: 768px) {
+    .footer-board-img {
+        width: 90%; 
+        max-width: 350px;
+    }
 }
