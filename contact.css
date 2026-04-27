@@ -48,9 +48,31 @@ body {
 
 .premium-card { background: #ffffff; border-radius: 20px; padding: 2.5rem; box-shadow: var(--shadow-premium); border: 1px solid var(--border-soft); display: flex; flex-direction: column;}
 
-/* Logo & Heading Integration */
-.card-header-flex { display: flex; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px dashed #cbd5e1; padding-bottom: 1.2rem; }
-.org-logo { max-width: 65px; height: auto; object-fit: contain; margin-right: 15px; }
+/* --- LOGO & HEADING FIXES --- */
+.card-header-flex { 
+    display: flex; 
+    align-items: center; 
+    margin-bottom: 1.5rem; 
+    border-bottom: 1px dashed #cbd5e1; 
+    padding-bottom: 1.2rem; 
+}
+
+.org-logo { 
+    width: 70px;          /* STRICT fixed width */
+    height: 70px;         /* STRICT fixed height */
+    object-fit: contain;  /* Keeps aspect ratio without stretching */
+    margin-right: 15px; 
+    flex-shrink: 0;       /* CRITICAL: Stops flexbox from ignoring the width */
+}
+
+/* Circular Logo Modifier */
+.logo-circle {
+    border-radius: 50%;
+    background-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Adds a subtle 3D pop */
+    padding: 2px; /* Slight breathing room inside the circle */
+}
+
 .section-heading { font-size: 1.4rem; font-weight: 700; color: var(--primary-dark); margin: 0; }
 
 /* Contact Info Details */
