@@ -4,61 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CDCA | Session 2026-27 Updates</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --accent-color: #e67e22;
-            --bg-color: #fdfbf9;
-            --text-color: #4a4a4a;
-            --btn-hover: #d35400;
+            --primary-color: #1e293b; /* Deep professional slate */
+            --accent-color: #f97316;  /* Warm orange */
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --text-main: #334155;
+            --text-muted: #64748b;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
             margin: 0;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            text-align: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        .container {
-            max-width: 600px;
-            padding: 40px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.06);
-            border-top: 6px solid var(--accent-color);
+        .card-container {
+            max-width: 550px;
+            width: 100%;
+            background: #ffffff;
+            padding: 45px 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+            text-align: center;
             position: relative;
+            overflow: hidden;
+        }
+
+        /* Top Accent Bar */
+        .card-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--accent-color);
+        }
+
+        /* --- LOGO STYLING (Fixed Ratio) --- */
+        .brand-logo {
+            max-width: 130px;      /* Maximum width of the logo */
+            width: 100%;           /* Makes it responsive */
+            height: auto;          /* Strictly maintains aspect ratio */
+            object-fit: contain;   /* Ensures no clipping or stretching */
+            margin: 0 auto 25px auto; 
+            display: block;
         }
 
         .status-badge {
             display: inline-block;
-            background: #fff4e6;
+            background: #fff7ed;
             color: var(--accent-color);
-            padding: 8px 18px;
+            padding: 6px 14px;
             border-radius: 50px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            margin-bottom: 20px;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
+            letter-spacing: 1.5px;
         }
 
         h1 {
             color: var(--primary-color);
-            font-size: 2rem;
-            margin-bottom: 20px;
+            font-size: 1.85rem;
+            font-weight: 700;
+            margin: 0 0 15px 0;
+            letter-spacing: -0.5px;
         }
 
-        p {
-            line-height: 1.8;
-            font-size: 1.1rem;
-            color: #555;
+        p.main-text {
+            line-height: 1.7;
+            font-size: 1.05rem;
+            color: var(--text-main);
+            margin-bottom: 25px;
         }
 
         .highlight {
@@ -67,70 +95,77 @@
         }
 
         .warm-note {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #fafafa;
-            border-radius: 12px;
+            background-color: #f8fafc;
+            border-left: 4px solid var(--accent-color);
+            padding: 18px 20px;
+            border-radius: 0 12px 12px 0;
             font-style: italic;
-            color: #666;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            text-align: left;
+            margin-bottom: 30px;
         }
 
-        /* --- BACK BUTTON UI --- */
+        /* --- PREMIUM BACK BUTTON --- */
         .btn-back {
             display: inline-flex;
             align-items: center;
-            margin-top: 30px;
-            padding: 12px 28px;
+            padding: 12px 26px;
             background-color: var(--primary-color);
-            color: white;
+            color: #ffffff;
             text-decoration: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 500;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(44, 62, 80, 0.2);
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .btn-back:hover {
             background-color: var(--accent-color);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.3);
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.25);
         }
 
         .btn-back span {
-            margin-right: 10px;
+            margin-right: 8px;
+            font-size: 1.1rem;
             transition: transform 0.3s ease;
         }
 
         .btn-back:hover span {
-            transform: translateX(-5px);
+            transform: translateX(-4px);
         }
 
         footer {
-            margin-top: 30px;
-            font-size: 0.85rem;
-            color: #bdc3c7;
+            margin-top: 35px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="status-badge">Notice Board</div>
+    <div class="card-container">
+        <img src="LogoCDCA.png" alt="CDCA Logo" class="brand-logo">
+        
+        <div class="status-badge">Official Notice</div>
         
         <h1>CDCA Calendar 2026-27</h1>
         
-        <p>The official calendar for the <span class="highlight">2026-27 session</span> will be released soon, following our upcoming association meeting.</p>
+        <p class="main-text">The official calendar for the <span class="highlight">2026-27 session</span> will be released shortly following our upcoming association meeting.</p>
         
         <div class="warm-note">
-            "Thank you for your patience as we prepare another exciting year. We are working hard behind the scenes to ensure a smooth and rewarding experience for everyone."
+            "We deeply appreciate your patience and continued support. Our team is working diligently behind the scenes to prepare an exceptional and rewarding year for everyone."
         </div>
 
         <a href="index.html" class="btn-back">
-            <span>&larr;</span> Return Home
+            <span>&larr;</span> Return to Home
         </a>
 
         <footer>
-            &copy; 2026 CDCA Association.
+            &copy; 2026 CDCA Association. All rights reserved.
         </footer>
     </div>
 
