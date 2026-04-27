@@ -10,6 +10,7 @@
             --accent-color: #e67e22;
             --bg-color: #fdfbf9;
             --text-color: #4a4a4a;
+            --btn-hover: #d35400;
         }
 
         body {
@@ -18,6 +19,7 @@
             color: var(--text-color);
             margin: 0;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -28,33 +30,35 @@
             max-width: 600px;
             padding: 40px;
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            border-top: 5px solid var(--accent-color);
-        }
-
-        h1 {
-            color: var(--primary-color);
-            font-size: 1.8rem;
-            margin-bottom: 20px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+            border-top: 6px solid var(--accent-color);
+            position: relative;
         }
 
         .status-badge {
             display: inline-block;
             background: #fff4e6;
             color: var(--accent-color);
-            padding: 8px 16px;
-            border-radius: 20px;
+            padding: 8px 18px;
+            border-radius: 50px;
             font-weight: bold;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 25px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 20px;
         }
 
         p {
-            line-height: 1.6;
+            line-height: 1.8;
             font-size: 1.1rem;
+            color: #555;
         }
 
         .highlight {
@@ -64,14 +68,45 @@
 
         .warm-note {
             margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
+            padding: 20px;
+            background-color: #fafafa;
+            border-radius: 12px;
             font-style: italic;
-            color: #7f8c8d;
+            color: #666;
+        }
+
+        /* --- BACK BUTTON UI --- */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 30px;
+            padding: 12px 28px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(44, 62, 80, 0.2);
+        }
+
+        .btn-back:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.3);
+        }
+
+        .btn-back span {
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-back:hover span {
+            transform: translateX(-5px);
         }
 
         footer {
-            margin-top: 25px;
+            margin-top: 30px;
             font-size: 0.85rem;
             color: #bdc3c7;
         }
@@ -80,18 +115,22 @@
 <body>
 
     <div class="container">
-        <div class="status-badge">Upcoming Session</div>
+        <div class="status-badge">Notice Board</div>
         
         <h1>CDCA Calendar 2026-27</h1>
         
-        <p>The official calendar for the upcoming <span class="highlight">2026-27 session</span> will be released shortly following our scheduled association meeting.</p>
+        <p>The official calendar for the <span class="highlight">2026-27 session</span> will be released soon, following our upcoming association meeting.</p>
         
         <div class="warm-note">
-            <p>We truly appreciate your patience and continued support as we finalize a year full of growth, community, and opportunity. We can't wait to share what's in store for you!</p>
+            "Thank you for your patience as we prepare another exciting year. We are working hard behind the scenes to ensure a smooth and rewarding experience for everyone."
         </div>
 
+        <a href="index.html" class="btn-back">
+            <span>&larr;</span> Return Home
+        </a>
+
         <footer>
-            &copy; 2026 CDCA Association. All rights reserved.
+            &copy; 2026 CDCA Association.
         </footer>
     </div>
 
