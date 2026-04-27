@@ -163,7 +163,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     position: relative; overflow: visible; box-shadow: 0 8px 24px rgba(0,0,0,0.06); 
     border: 1px solid #ffffff; display: flex; flex-direction: column; min-height: 260px;
 }
-.champ-info { flex: 1; z-index: 2; position: relative; max-width: 60%; }
+.champ-info { flex: 1; z-index: 2; position: relative; width: 55%; }
 .champ-name { font-size: 1.6rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem; }
 .champ-title-text { font-size: 0.95rem; color: #475569; margin-bottom: 1.5rem; line-height: 1.4; font-weight: 500; }
 
@@ -173,12 +173,12 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     margin-bottom: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; 
 }
 
-.champ-ratings { display: flex; gap: 1.5rem; margin-top: auto; }
+.champ-ratings { display: flex; gap: 1.5rem; margin-top: auto; flex-wrap: wrap; }
 .rating-item { display: flex; flex-direction: column; align-items: center; gap: 6px; color: #0f172a; font-weight: 700; font-size: 1.05rem; }
 .rating-item svg { width: 22px; height: 22px; color: #475569; }
 
-.champ-img-wrapper { position: absolute; right: -10px; bottom: 0; width: 45%; height: 110%; z-index: 1; display: flex; align-items: flex-end; }
-.champ-img-wrapper img { width: 100%; height: 100%; object-fit: contain; object-position: bottom; filter: drop-shadow(-5px 5px 10px rgba(0,0,0,0.1)); }
+.champ-img-wrapper { position: absolute; right: 0; bottom: 0; width: 45%; max-width: 250px; height: 110%; z-index: 1; display: flex; align-items: flex-end; justify-content: flex-end; }
+.champ-img-wrapper img { width: 100%; height: 100%; object-fit: contain; object-position: bottom right; filter: drop-shadow(-5px 5px 10px rgba(0,0,0,0.1)); }
 
 .district-header { font-size: 1.2rem; color: #1e293b; font-weight: 600; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
 .district-champ-card { background: #ffffff; border-radius: 12px; padding: 1.5rem; display: flex; align-items: center; gap: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; }
@@ -187,6 +187,14 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .dc-name { font-size: 1.4rem; font-weight: 700; color: #0f172a; margin-bottom: 0.2rem; }
 .dc-year { font-size: 0.95rem; color: #94a3b8; font-weight: 500; margin-bottom: 1rem; }
 .dc-ratings { display: flex; gap: 1.5rem; }
+
+/* =========================================
+   RESPONSIVE OVERRIDES (DESKTOP SPECIFIC FIXES)
+========================================= */
+@media (min-width: 993px) {
+    .champ-grid { grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .district-champ-card { max-width: 800px; margin: 0 auto; } /* Prevents awkward stretching on big screens */
+}
 
 /* =========================================
    RESPONSIVE MOBILE OVERRIDES
@@ -199,7 +207,6 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     .main-hero-logo { width: 100%; height: auto; }
     .hero-ctas { justify-content: center; }
     .hero-content p { margin: 0 auto 2rem auto; }
-    .champ-img-wrapper { height: 100%; } 
 }
 
 @media (max-width: 768px) {
@@ -219,9 +226,9 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     .stat-item p { font-size: 0.75rem; }
 
     .champ-card { padding: 1.5rem; min-height: 220px; }
-    .champ-info { max-width: 55%; }
+    .champ-info { width: 55%; }
     .champ-name { font-size: 1.3rem; }
-    .champ-img-wrapper { width: 55%; height: 105%; }
+    .champ-img-wrapper { width: 45%; height: 105%; }
 
     .district-champ-card { flex-direction: column; text-align: center; gap: 1rem; }
     .dc-ratings { justify-content: center; }
@@ -281,4 +288,37 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .modal-close-btn {
     position: absolute; top: 15px; right: 15px; background: none; border: none;
     font-size: 1.5rem; color: #64748b; cursor: pointer; line-height: 1;
+}
+
+/* =========================================
+   FOOTER (NEW)
+========================================= */
+.site-footer {
+    width: 100%;
+    margin-top: auto;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+}
+.footer-graphic {
+    width: 100%;
+    height: 80px; 
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    background-color: #f8fafc;
+}
+.footer-board-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.5; /* Slightly faded so it isn't too distracting */
+}
+.footer-content {
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
 }
