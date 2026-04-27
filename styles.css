@@ -163,8 +163,8 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 
 .bg-piece {
     position: absolute;
-    z-index: 0;
-    opacity: 0.35; /* Perfect watermark opacity */
+    z-index: 0; /* Stays strictly behind cards */
+    opacity: 0.65; /* Bright enough to be seen easily through the 25% transparent cards */
     pointer-events: none; 
     filter: drop-shadow(15px 25px 25px rgba(0,0,0,0.08));
     transition: all 0.3s ease;
@@ -187,7 +187,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 }
 
 /* =========================================
-   MASTER CHAMPIONS LAYOUT
+   MASTER CHAMPIONS LAYOUT (GLASSMORPHISM)
 ========================================= */
 .champions-master-container {
     display: flex;
@@ -198,7 +198,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     padding: 0 5%;
     align-items: stretch;
     position: relative;
-    z-index: 10; 
+    z-index: 10; /* Keeps cards above SVGs */
 }
 .world-section {
     flex: 2;
@@ -209,20 +209,29 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     min-width: 320px;
 }
 
-.champions-header { font-size: 2rem; color: #1e293b; font-weight: 600; margin-bottom: 2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+.champions-header { font-size: 2rem; color: #1e293b; font-weight: 600; margin-bottom: 2rem; border-bottom: 2px solid rgba(226, 232, 240, 0.5); padding-bottom: 10px; }
 .district-specific-header { font-size: 1.4rem; padding-bottom: 18px; margin-bottom: 2rem; }
 
 .champ-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
 .champ-grid-single { display: flex; justify-content: center; height: 100%; width: 100%; }
 
-.champ-card {
-    background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(248,250,252,0.85)); 
-    border-radius: 16px; padding: 2rem; 
-    position: relative; overflow: visible; box-shadow: 0 10px 40px rgba(0,0,0,0.08); 
-    border: 1px solid #ffffff; display: flex; flex-direction: column; min-height: 260px;
-    width: 100%; max-width: none;
-    backdrop-filter: blur(12px); /* Glassmorphism over SVGs */
+/* GLASS CARDS - EXACTLY 25% TRANSPARENCY & BLUR */
+.champ-card, .district-champ-card {
+    background: rgba(255, 255, 255, 0.75); /* Creates the exact 25% transparency */
+    backdrop-filter: blur(12px); /* Creates the beautiful frosted glass effect over the SVGs */
+    -webkit-backdrop-filter: blur(12px); /* Safari support */
+    
+    border-radius: 16px; 
+    padding: 2rem; 
+    position: relative; 
+    overflow: visible; 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08); 
+    border: 1px solid rgba(255,255,255,0.6); /* Soft semi-transparent border */
 }
+
+/* Base resets for card shapes */
+.champ-card { display: flex; flex-direction: column; min-height: 260px; width: 100%; max-width: none; }
+.district-champ-card { display: flex; flex-direction: row; align-items: center; gap: 1.5rem; width: 100%; max-width: 450px; height: fit-content; margin: 0 auto; padding: 1.5rem; }
 
 .champ-info { flex: 1; z-index: 2; position: relative; width: 60%; }
 .champ-name { font-size: 1.6rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem; }
@@ -238,9 +247,6 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .champ-img-wrapper { position: absolute; right: 0; bottom: 0; width: 45%; max-width: 200px; height: 110%; z-index: 1; display: flex; align-items: flex-end; justify-content: flex-end; }
 .champ-img-wrapper img { width: 100%; height: 100%; object-fit: contain; object-position: bottom right; filter: drop-shadow(-5px 5px 10px rgba(0,0,0,0.1)); border-bottom-right-radius: 16px; }
 
-.district-champ-card { 
-    background: rgba(255,255,255,0.95); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: row; align-items: center; gap: 1.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; width: 100%; max-width: 450px; height: fit-content; margin: 0 auto; backdrop-filter: blur(12px);
-}
 .dc-img-wrapper { position: relative; flex-shrink: 0; }
 .dc-img { width: 110px; height: 110px; border-radius: 12px; object-fit: cover; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 .dc-badge { position: absolute; top: -10px; left: -10px; width: 32px; height: 32px; border-radius: 50%; background: #fef3c7; border: 1px solid #fde68a; display: flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
@@ -294,14 +300,13 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     .district-champ-card { flex-direction: column; text-align: center; gap: 1rem; padding: 2rem; }
     .dc-ratings { justify-content: center; width: 100%; }
     
-    /* MODIFIED: Keep SVGs on mobile, but scaled and faded nicely as a watermark */
-    .bg-piece { opacity: 0.12; }
-    .piece-left { left: -15%; top: 10%; height: 60%; }
-    .piece-right { right: -15%; top: 30%; height: 65%; }
+    /* Ensure SVGs are visible on mobile but positioned well */
+    .piece-left { left: -10%; top: 5%; height: 60%; }
+    .piece-right { right: -10%; top: 25%; height: 65%; }
 }
 
 /* =========================================
-   FOOTER (ENHANCED HALF-AND-HALF 3D BOARD)
+   FOOTER (BULLETPROOF NO-CUTOFF FADE)
 ========================================= */
 .site-footer {
     width: 100%;
@@ -313,84 +318,58 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .footer-graphic {
     position: relative;
     width: 100%;
-    height: 550px; 
-    background: transparent !important; 
+    /* Creates a soft, continuous gradient background instead of a sharp 3D cut */
+    background: linear-gradient(to bottom, rgba(248, 250, 252, 0) 0%, rgba(26, 11, 5, 0.8) 80%, #0a0402 100%);
     overflow: hidden;
-    
-    /* FLEX CENTERING places the board exactly in the middle of the container */
     display: flex;
     justify-content: center;
-    align-items: center; 
-    padding-bottom: 0;
+    align-items: flex-end; 
+    padding-bottom: 2rem;
 }
 
-/* 3D Wood Floor locked to exactly the bottom 40% (Horizon Line) */
+/* The Wood Texture perfectly blended using CSS mask-image so there is NO harsh line */
 .footer-graphic::before {
     content: '';
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 40%; 
+    bottom: 0; left: 0; right: 0; top: 35%;
     
-    background-color: #2b1408;
-    background-image: 
-        linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 20%), 
-        repeating-linear-gradient(to right, transparent, transparent 48px, rgba(0,0,0,0.4) 50px);
+    background: repeating-linear-gradient(to right, #2b1408, #2b1408 40px, #1a0b05 40px, #1a0b05 80px);
+    transform: perspective(600px) rotateX(65deg) scale(1.5);
+    transform-origin: bottom center;
     
-    /* Scales from the top edge to keep the horizon perfectly straight */
-    transform: perspective(600px) rotateX(70deg) scale(1.5);
-    transform-origin: top center;
-    
-    box-shadow: inset 0 20px 40px rgba(0,0,0,0.8); 
+    /* This magically fades the hard top edge of the floor out to nothing! */
+    mask-image: linear-gradient(to bottom, transparent 0%, black 50%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 50%);
     z-index: 0;
-}
-
-/* Massive Glowing Backlight to make the board POP and dissolve its white edges */
-.shape-yellow-glow {
-    position: absolute;
-    width: 600px;
-    height: 350px; 
-    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 1) 0%, rgba(255, 240, 180, 0.8) 35%, transparent 70%);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -15%); /* Centered directly behind the board */
-    z-index: 2;
-    border-radius: 50%;
-    filter: blur(25px);
-    pointer-events: none;
 }
 
 .footer-board-img {
     position: relative;
-    z-index: 5;
+    z-index: 5; /* Forces the image IN FRONT of the wooden texture */
     width: 100%;
-    max-width: 600px; /* Bigger on desktop */
+    max-width: 600px;
     object-fit: contain;
     
-    /* Using multiply over the massive white/yellow glow creates incredible contrast 
-       while blending the baked-in white background seamlessly into the design */
+    /* Multiply ensures the white background of the image disappears 
+       while leaving the dark chess pieces bold and visible */
     mix-blend-mode: multiply; 
     
-    /* Shifts the board down so it crosses the horizon perfectly */
-    transform: translateY(12%);
+    /* Drop down slightly for perfect centering */
+    margin-bottom: -1rem;
 }
 
 .footer-content {
     padding: 1.5rem;
     text-align: center;
     font-size: 0.9rem;
-    background-color: #0f0502;
+    background-color: #0a0402;
     color: rgba(255, 255, 255, 0.6);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     z-index: 10;
 }
 
-/* Footer Responsive Tuning */
 @media (max-width: 768px) {
-    .footer-graphic { height: 400px; }
-    .footer-board-img { max-width: 90%; transform: translateY(15%); }
-    .shape-yellow-glow { width: 400px; height: 200px; transform: translate(-50%, 0%); }
-    .footer-graphic::before { height: 35%; } /* Lower horizon on mobile */
+    .footer-graphic { padding-bottom: 1rem; }
+    .footer-board-img { max-width: 90%; }
 }
