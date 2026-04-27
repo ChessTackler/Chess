@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CDCA - Official Webpage</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=3">
+    <link rel="stylesheet" href="styles.css?v=4">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -80,65 +80,102 @@
         <div id="public-announcements" class="news-list"></div>
     </div>
 
-    <div class="champions-master-container" id="champions-display-area">
+    <div class="champions-bg-wrapper">
+        
+        <svg class="bg-piece piece-left" viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="pawn-3d" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="25%" stop-color="#f1f5f9"/>
+                    <stop offset="75%" stop-color="#cbd5e1"/>
+                    <stop offset="100%" stop-color="#94a3b8"/>
+                </linearGradient>
+                <linearGradient id="pawn-shadow" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#e2e8f0"/>
+                    <stop offset="100%" stop-color="#64748b"/>
+                </linearGradient>
+            </defs>
+            <path d="M 100,50 C 120,50 135,65 135,85 C 135,100 125,110 115,115 C 125,120 130,125 130,135 L 70,135 C 70,125 75,120 85,115 C 75,110 65,100 65,85 C 65,65 80,50 100,50 Z" fill="url(#pawn-3d)"/>
+            <path d="M 80,135 L 120,135 C 115,200 130,300 150,330 L 50,330 C 70,300 85,200 80,135 Z" fill="url(#pawn-3d)"/>
+            <path d="M 40,330 L 160,330 C 165,340 170,350 170,370 L 30,370 C 30,350 35,340 40,330 Z" fill="url(#pawn-shadow)"/>
+        </svg>
 
-        <div class="world-section">
-            <h2 class="champions-header">World Chess Champions</h2>
-            <div class="champ-grid">
-                <div class="champ-card" id="open-champ-card">
-                    <div class="champ-info">
-                        <div class="champ-flag-emoji" id="open-champ-flag">🇮🇳</div>
-                        <h3 class="champ-name" id="open-champ-name">Gukesh D</h3>
-                        <p class="champ-title-text" id="open-champ-title">World Chess Champion</p>
-                        <div class="champ-ratings">
-                            <div class="rating-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg><span id="open-champ-std">2777</span></div>
-                            <div class="rating-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span id="open-champ-rap">2654</span></div>
-                            <div class="rating-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span id="open-champ-bli">2615</span></div>
+        <svg class="bg-piece piece-right" viewBox="0 0 200 500" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="queen-3d" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="30%" stop-color="#f8fafc"/>
+                    <stop offset="70%" stop-color="#cbd5e1"/>
+                    <stop offset="100%" stop-color="#94a3b8"/>
+                </linearGradient>
+                <linearGradient id="queen-shadow" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#e2e8f0"/>
+                    <stop offset="100%" stop-color="#475569"/>
+                </linearGradient>
+            </defs>
+            <path d="M 100,40 C 110,40 115,45 115,55 C 115,65 110,70 100,70 C 90,70 85,65 85,55 C 85,45 90,40 100,40 Z" fill="url(#queen-shadow)"/>
+            <path d="M 60,70 C 50,60 40,80 45,95 C 60,130 75,150 85,160 L 115,160 C 125,150 140,130 155,95 C 160,80 150,60 140,70 C 130,80 120,110 100,110 C 80,110 70,80 60,70 Z" fill="url(#queen-3d)"/>
+            <path d="M 75,160 L 125,160 C 135,170 135,180 125,190 L 75,190 C 65,180 65,170 75,160 Z" fill="url(#queen-shadow)"/>
+            <path d="M 85,190 L 115,190 C 110,250 140,360 160,420 L 40,420 C 60,360 90,250 85,190 Z" fill="url(#queen-3d)"/>
+            <path d="M 20,420 L 180,420 C 190,440 190,460 190,480 L 10,480 C 10,460 10,440 20,420 Z" fill="url(#queen-shadow)"/>
+        </svg>
+
+        <div class="champions-master-container" id="champions-display-area">
+            <div class="world-section">
+                <h2 class="champions-header">World Chess Champions</h2>
+                <div class="champ-grid">
+                    <div class="champ-card" id="open-champ-card">
+                        <div class="champ-info">
+                            <div class="champ-flag-emoji" id="open-champ-flag">🇮🇳</div>
+                            <h3 class="champ-name" id="open-champ-name">Gukesh D</h3>
+                            <p class="champ-title-text" id="open-champ-title">World Chess Champion</p>
+                            <div class="champ-ratings">
+                                <div class="rating-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg><span id="open-champ-std">2777</span></div>
+                                <div class="rating-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span id="open-champ-rap">2654</span></div>
+                                <div class="rating-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span id="open-champ-bli">2615</span></div>
+                            </div>
                         </div>
+                        <div class="champ-img-wrapper"><img src="https://i.postimg.cc/k4yQ1P1C/gukesh.png" alt="Champion" id="open-champ-img" onerror="this.style.display='none'"></div>
                     </div>
-                    <div class="champ-img-wrapper"><img src="https://i.postimg.cc/k4yQ1P1C/gukesh.png" alt="Champion" id="open-champ-img" onerror="this.style.display='none'"></div>
+
+                    <div class="champ-card" id="women-champ-card">
+                        <div class="champ-info">
+                            <div class="champ-flag-emoji" id="women-champ-flag">🇨🇳</div>
+                            <h3 class="champ-name" id="women-champ-name">Ju, Wenjun</h3>
+                            <p class="champ-title-text" id="women-champ-title">Women's World Chess Champion</p>
+                            <div class="champ-ratings">
+                                <div class="rating-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg><span id="women-champ-std">2561</span></div>
+                                <div class="rating-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span id="women-champ-rap">2542</span></div>
+                                <div class="rating-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span id="women-champ-bli">2491</span></div>
+                            </div>
+                        </div>
+                        <div class="champ-img-wrapper"><img src="https://i.postimg.cc/QMc0Z6v9/ju.png" alt="Champion" id="women-champ-img" onerror="this.style.display='none'"></div>
+                    </div>
                 </div>
+            </div>
 
-                <div class="champ-card" id="women-champ-card">
-                    <div class="champ-info">
-                        <div class="champ-flag-emoji" id="women-champ-flag">🇨🇳</div>
-                        <h3 class="champ-name" id="women-champ-name">Ju, Wenjun</h3>
-                        <p class="champ-title-text" id="women-champ-title">Women's World Chess Champion</p>
-                        <div class="champ-ratings">
-                            <div class="rating-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg><span id="women-champ-std">2561</span></div>
-                            <div class="rating-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span id="women-champ-rap">2542</span></div>
-                            <div class="rating-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span id="women-champ-bli">2491</span></div>
+            <div class="district-section">
+                <h2 class="champions-header district-specific-header">Current District Champion</h2>
+                <div class="champ-grid-single">
+                    <div class="district-champ-card" id="district-champ-card">
+                        <div class="dc-img-wrapper">
+                            <img src="https://via.placeholder.com/150x150/e2e8f0/475569?text=Champion" alt="District Champion" class="dc-img" id="district-champ-img">
+                            <div class="dc-badge">🏆</div>
+                        </div>
+                        <div class="dc-info">
+                            <h3 class="dc-name" id="district-champ-name">Awaiting Update</h3>
+                            <p class="dc-year" id="district-champ-year">District Champion</p>
+                            <div class="dc-ratings">
+                                <div class="rating-item-sm"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg><span id="district-champ-std">-</span></div>
+                                <div class="rating-item-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span id="district-champ-rap">-</span></div>
+                                <div class="rating-item-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span id="district-champ-bli">-</span></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="champ-img-wrapper"><img src="https://i.postimg.cc/QMc0Z6v9/ju.png" alt="Champion" id="women-champ-img" onerror="this.style.display='none'"></div>
                 </div>
             </div>
         </div>
-
-        <div class="district-section">
-            <h2 class="champions-header district-specific-header">Current District Champion</h2>
-            <div class="champ-grid-single">
-                <div class="district-champ-card" id="district-champ-card">
-                    <div class="dc-img-wrapper">
-                        <img src="https://via.placeholder.com/150x150/e2e8f0/475569?text=Champion" alt="District Champion" class="dc-img" id="district-champ-img">
-                        <div class="dc-badge">🏆</div>
-                    </div>
-                    <div class="dc-info">
-                        <h3 class="dc-name" id="district-champ-name">Awaiting Update</h3>
-                        <p class="dc-year" id="district-champ-year">District Champion</p>
-                        <div class="dc-ratings">
-                            <div class="rating-item-sm"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg><span id="district-champ-std">-</span></div>
-                            <div class="rating-item-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span id="district-champ-rap">-</span></div>
-                            <div class="rating-item-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span id="district-champ-bli">-</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <footer class="site-footer">
+    </div> <footer class="site-footer">
         <div class="footer-graphic">
             <div class="shape-yellow-glow"></div>
             <img src="boardgraphic.png" alt="3D Chess Board" class="footer-board-img" onerror="this.style.display='none'">
