@@ -157,30 +157,31 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .champions-bg-wrapper {
     position: relative;
     width: 100%;
-    overflow: hidden; /* Contains the giant SVGs so they don't break page width */
+    overflow: hidden; 
     padding-top: 2rem;
 }
 
 .bg-piece {
     position: absolute;
     z-index: 0;
-    opacity: 0.4; /* Soft transparency to blend into background */
-    pointer-events: none; /* Allows clicking right through them */
-    filter: drop-shadow(10px 20px 20px rgba(0,0,0,0.05));
+    opacity: 0.35; /* Perfect watermark opacity */
+    pointer-events: none; 
+    filter: drop-shadow(15px 25px 25px rgba(0,0,0,0.08));
+    transition: all 0.3s ease;
 }
 
 .piece-left {
-    left: -8%;
+    left: -5%;
     top: 5%;
-    height: 90%;
+    height: 95%;
     width: auto;
-    max-width: 400px;
+    max-width: 450px;
 }
 
 .piece-right {
     right: -5%;
-    top: -5%;
-    height: 110%;
+    top: 0%;
+    height: 100%;
     width: auto;
     max-width: 450px;
 }
@@ -197,7 +198,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     padding: 0 5%;
     align-items: stretch;
     position: relative;
-    z-index: 10; /* Keeps cards above SVGs */
+    z-index: 10; 
 }
 .world-section {
     flex: 2;
@@ -215,12 +216,12 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .champ-grid-single { display: flex; justify-content: center; height: 100%; width: 100%; }
 
 .champ-card {
-    background: linear-gradient(145deg, #ffffff, #f8fafc); border-radius: 16px; padding: 2rem; 
-    position: relative; overflow: visible; box-shadow: 0 8px 30px rgba(0,0,0,0.08); 
+    background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(248,250,252,0.85)); 
+    border-radius: 16px; padding: 2rem; 
+    position: relative; overflow: visible; box-shadow: 0 10px 40px rgba(0,0,0,0.08); 
     border: 1px solid #ffffff; display: flex; flex-direction: column; min-height: 260px;
-    width: 100%;
-    max-width: none;
-    backdrop-filter: blur(10px); /* Gives slight glass effect over SVG background */
+    width: 100%; max-width: none;
+    backdrop-filter: blur(12px); /* Glassmorphism over SVGs */
 }
 
 .champ-info { flex: 1; z-index: 2; position: relative; width: 60%; }
@@ -238,7 +239,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .champ-img-wrapper img { width: 100%; height: 100%; object-fit: contain; object-position: bottom right; filter: drop-shadow(-5px 5px 10px rgba(0,0,0,0.1)); border-bottom-right-radius: 16px; }
 
 .district-champ-card { 
-    background: #ffffff; border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: row; align-items: center; gap: 1.5rem; box-shadow: 0 8px 30px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; width: 100%; max-width: 450px; height: fit-content; margin: 0 auto;
+    background: rgba(255,255,255,0.95); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: row; align-items: center; gap: 1.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; width: 100%; max-width: 450px; height: fit-content; margin: 0 auto; backdrop-filter: blur(12px);
 }
 .dc-img-wrapper { position: relative; flex-shrink: 0; }
 .dc-img { width: 110px; height: 110px; border-radius: 12px; object-fit: cover; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
@@ -293,12 +294,14 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     .district-champ-card { flex-direction: column; text-align: center; gap: 1rem; padding: 2rem; }
     .dc-ratings { justify-content: center; width: 100%; }
     
-    /* Hide SVGs on very small screens to avoid clutter */
-    .bg-piece { display: none; }
+    /* MODIFIED: Keep SVGs on mobile, but scaled and faded nicely as a watermark */
+    .bg-piece { opacity: 0.12; }
+    .piece-left { left: -15%; top: 10%; height: 60%; }
+    .piece-right { right: -15%; top: 30%; height: 65%; }
 }
 
 /* =========================================
-   FOOTER (PURE CSS 3D WOODY ROOM UPDATE)
+   FOOTER (ENHANCED HALF-AND-HALF 3D BOARD)
 ========================================= */
 .site-footer {
     width: 100%;
@@ -310,76 +313,84 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .footer-graphic {
     position: relative;
     width: 100%;
-    height: 500px; 
+    height: 550px; 
     background: transparent !important; 
     overflow: hidden;
+    
+    /* FLEX CENTERING places the board exactly in the middle of the container */
     display: flex;
     justify-content: center;
-    align-items: flex-end; 
-    padding-bottom: 3rem;
+    align-items: center; 
+    padding-bottom: 0;
 }
 
-/* 3D Wood floor effect with perspective */
+/* 3D Wood Floor locked to exactly the bottom 40% (Horizon Line) */
 .footer-graphic::before {
     content: '';
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 55%; 
-    /* Complex gradient layering to mimic wood planks */
-    background-color: #3e1f0e;
-    background-image: 
-        linear-gradient(rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 25%), /* Shadow drop from top edge */
-        repeating-linear-gradient(to right, transparent, transparent 38px, rgba(0,0,0,0.5) 40px), /* The plank lines */
-        radial-gradient(ellipse at center, rgba(255, 180, 100, 0.15) 0%, rgba(0, 0, 0, 0.7) 100%); /* Center lighting */
+    height: 40%; 
     
-    /* The 3D CSS magic */
-    transform: perspective(500px) rotateX(65deg) scaleX(1.5);
-    transform-origin: bottom center;
+    background-color: #2b1408;
+    background-image: 
+        linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 20%), 
+        repeating-linear-gradient(to right, transparent, transparent 48px, rgba(0,0,0,0.4) 50px);
+    
+    /* Scales from the top edge to keep the horizon perfectly straight */
+    transform: perspective(600px) rotateX(70deg) scale(1.5);
+    transform-origin: top center;
+    
     box-shadow: inset 0 20px 40px rgba(0,0,0,0.8); 
     z-index: 0;
 }
 
-/* Central glowing spot on the floor */
+/* Massive Glowing Backlight to make the board POP and dissolve its white edges */
 .shape-yellow-glow {
     position: absolute;
-    width: 500px;
-    height: 150px; 
-    background: radial-gradient(ellipse at center, rgba(255, 230, 180, 0.6) 0%, rgba(255, 200, 100, 0.2) 40%, transparent 70%);
-    bottom: 2rem;
+    width: 600px;
+    height: 350px; 
+    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 1) 0%, rgba(255, 240, 180, 0.8) 35%, transparent 70%);
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -15%); /* Centered directly behind the board */
     z-index: 2;
     border-radius: 50%;
-    filter: blur(20px);
+    filter: blur(25px);
     pointer-events: none;
 }
 
 .footer-board-img {
     position: relative;
     z-index: 5;
-    max-height: 420px; 
-    width: auto;
-    max-width: 90%;
+    width: 100%;
+    max-width: 600px; /* Bigger on desktop */
     object-fit: contain;
-    transform-origin: bottom center;
+    
+    /* Using multiply over the massive white/yellow glow creates incredible contrast 
+       while blending the baked-in white background seamlessly into the design */
     mix-blend-mode: multiply; 
+    
+    /* Shifts the board down so it crosses the horizon perfectly */
+    transform: translateY(12%);
 }
 
 .footer-content {
     padding: 1.5rem;
     text-align: center;
     font-size: 0.9rem;
-    background-color: #0a0402;
+    background-color: #0f0502;
     color: rgba(255, 255, 255, 0.6);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     z-index: 10;
 }
 
+/* Footer Responsive Tuning */
 @media (max-width: 768px) {
-    .footer-graphic { height: 350px; padding-bottom: 2rem; }
-    .footer-board-img { max-height: 240px; }
-    .shape-yellow-glow { width: 300px; height: 80px; bottom: 1.5rem; }
+    .footer-graphic { height: 400px; }
+    .footer-board-img { max-width: 90%; transform: translateY(15%); }
+    .shape-yellow-glow { width: 400px; height: 200px; transform: translate(-50%, 0%); }
+    .footer-graphic::before { height: 35%; } /* Lower horizon on mobile */
 }
