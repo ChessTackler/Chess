@@ -29,9 +29,9 @@
 
     <main class="article-wrapper" id="article-wrapper">
         
-        <div class="loader-container" id="loading-state">
-            <div class="spinner"></div>
-            <p>Loading premium content...</p>
+        <div id="loading-state" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; padding: 10rem 0;">
+            <div class="hourglass-loader" style="--c1: #2563EB; --c2: #0f172a;"></div>
+            <div class="text-loader" style="background: linear-gradient(to right, #2563EB, #0f172a); -webkit-text-fill-color: transparent; -webkit-background-clip: text;">loading premium content...</div>
         </div>
         
         <article id="article-content" style="display: none;">
@@ -66,7 +66,6 @@
     </div>
 
     <script>
-        // Reading Progress Bar
         window.onscroll = function() {
             let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -74,16 +73,15 @@
             document.getElementById("progress-bar").style.width = scrolled + "%";
         };
 
-        // Lightbox Functions
         window.openLightbox = function(src) {
             document.getElementById('lightbox-img').src = src;
             document.getElementById('image-lightbox').style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // Stop background scrolling
+            document.body.style.overflow = 'hidden'; 
         };
         
         window.closeLightbox = function() {
             document.getElementById('image-lightbox').style.display = 'none';
-            document.body.style.overflow = 'auto'; // Restore scrolling
+            document.body.style.overflow = 'auto'; 
         };
 
         document.addEventListener('DOMContentLoaded', async () => {
@@ -91,7 +89,7 @@
             const articleId = urlParams.get('id');
 
             if (!articleId || !window.supabaseClient) {
-                document.getElementById('loading-state').innerHTML = "<h3>Article not found.</h3>";
+                document.getElementById('loading-state').innerHTML = "<h3 style='text-align:center;'>Article not found.</h3>";
                 return;
             }
 
@@ -102,7 +100,7 @@
                 .single();
 
             if (error || !article) {
-                document.getElementById('loading-state').innerHTML = "<h3>Error loading article.</h3>";
+                document.getElementById('loading-state').innerHTML = "<h3 style='text-align:center;'>Error loading article.</h3>";
                 return;
             }
 
@@ -127,10 +125,8 @@
                 document.getElementById('detail-hero-img').src = article.image_url;
             }
 
-            // TEXT FORMATTING ENGINE
             if (article.content) {
                 let rawText = window.escapeHTML(article.content);
-                
                 rawText = rawText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 rawText = rawText.replace(/(?<!\*)\*(?!\*)(.*?)\*/g, '<em>$1</em>');
                 rawText = rawText.replace(/^&gt; (.*$)/gim, '<blockquote>$1</blockquote>');
@@ -143,7 +139,6 @@
                     if (!cleanP) return '';
                     if (cleanP.startsWith('<h') || cleanP.startsWith('<blockquote')) return cleanP;
                     
-                    // Drop-Cap Fix: Check if paragraph starts with an English/Devanagari letter before applying drop-cap. Ignores emojis.
                     const textWithoutHTML = cleanP.replace(/<[^>]*>?/gm, '').trim();
                     const startsWithLetter = /^[\p{L}]/u.test(textWithoutHTML); 
 
@@ -156,7 +151,6 @@
                 document.getElementById('detail-body').innerHTML = formattedHTML;
             }
 
-            // Gallery Generation with click handlers
             if (article.additional_images && Array.isArray(article.additional_images) && article.additional_images.length > 0) {
                 const galleryContainer = document.getElementById('additional-gallery');
                 galleryContainer.innerHTML = '<h3 class="gallery-heading">Attached Media Gallery</h3><div class="gallery-grid" id="gallery-grid-inner"></div>';
@@ -166,7 +160,7 @@
                     const imgEl = document.createElement('img');
                     imgEl.src = imgUrl;
                     imgEl.className = 'gallery-item';
-                    imgEl.onclick = function() { openLightbox(this.src); }; // Lightbox trigger
+                    imgEl.onclick = function() { openLightbox(this.src); };
                     imgEl.onerror = function() { this.style.display = 'none'; };
                     innerGrid.appendChild(imgEl);
                 });
