@@ -128,7 +128,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .stat-item p { font-size: 0.85rem; color: #6b7280; margin: 0; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; }
 
 /* =========================================
-   TABLES & NEWS
+   TABLES & NEWS (Grids)
 ========================================= */
 .container { padding: 3rem 5%; max-width: 1200px; margin: 0 auto; width: 100%; flex: 1; box-sizing: border-box; }
 .news-section { margin-top: 1rem; margin-bottom: 4rem; }
@@ -152,95 +152,117 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 .news-list-item:hover .news-list-title { color: var(--primary-blue); }
 
 /* =========================================
+   UIVERSE LOADERS
+========================================= */
+.loader-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 5rem 0;
+}
+
+/* From Uiverse.io by doniaskima */
+.hourglass-loader {
+  --c1: #0f172a; 
+  --c2: #d0a756; 
+  width: 40px;
+  height: 80px;
+  border-top: 4px solid var(--c1);
+  border-bottom: 4px solid var(--c1);
+  background: linear-gradient(90deg, var(--c1) 2px, var(--c2) 0 5px,var(--c1) 0) 50%/7px 8px no-repeat;
+  display: grid;
+  overflow: hidden;
+  animation: l5-0 2s infinite linear;
+}
+
+.hourglass-loader::before,
+.hourglass-loader::after {
+  content: ""; grid-area: 1/1; width: 75%; height: calc(50% - 4px); margin: 0 auto;
+  border: 2px solid var(--c1); border-top: 0; box-sizing: content-box; border-radius: 0 0 40% 40%;
+  -webkit-mask: linear-gradient(#000 0 0) bottom/4px 2px no-repeat, linear-gradient(#000 0 0);
+  -webkit-mask-composite: destination-out; mask-composite: exclude;
+  background: linear-gradient(var(--d,0deg),var(--c2) 50%,#0000 0) bottom /100% 205%, linear-gradient(var(--c2) 0 0) center/0 100%;
+  background-repeat: no-repeat; animation: inherit; animation-name: l5-1;
+}
+
+.hourglass-loader::after { transform-origin: 50% calc(100% + 2px); transform: scaleY(-1); --s: 3px; --d: 180deg; }
+
+@keyframes l5-0 { 80% { transform: rotate(0) } 100% { transform: rotate(0.5turn) } }
+@keyframes l5-1 { 10%,70% { background-size: 100% 205%,var(--s,0) 100% } 70%,100% { background-position: top,center } }
+
+/* From Uiverse.io by omar-alghaish */ 
+@keyframes animate8345 { 0%,100% { filter: hue-rotate(0deg); } 50% { filter: hue-rotate(360deg); } }
+
+.text-loader {
+  color: rgb(0, 0, 0);
+  background: linear-gradient(to right, #0f172a, #d0a756);
+  font-size: 24px;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  animation: animate8345 5s linear infinite;
+  font-weight: 800;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* =========================================
+   HOMEPAGE SLIDESHOW (LATEST 4 POSTS)
+========================================= */
+.slideshow-container { max-width: 100%; position: relative; margin: auto; border-radius: 12px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+.mySlides { display: none; position: relative; }
+.fade-anim { animation-name: slideFade; animation-duration: 1.5s; }
+@keyframes slideFade { from {opacity: .4} to {opacity: 1} }
+
+.slider-prev, .slider-next {
+    cursor: pointer; position: absolute; top: 50%; width: auto;
+    padding: 16px; margin-top: -22px; color: white; font-weight: bold; font-size: 18px;
+    transition: 0.6s ease; border-radius: 0 3px 3px 0; user-select: none;
+    background-color: rgba(0,0,0,0.3); backdrop-filter: blur(4px); z-index: 10;
+}
+.slider-next { right: 0; border-radius: 3px 0 0 3px; }
+.slider-prev:hover, .slider-next:hover { background-color: rgba(0,0,0,0.8); }
+
+.slider-dots-wrapper { text-align: center; margin-top: 15px; }
+.slider-dot { cursor: pointer; height: 10px; width: 10px; margin: 0 5px; background-color: #cbd5e1; border-radius: 50%; display: inline-block; transition: background-color 0.6s ease; }
+.active-dot, .slider-dot:hover { background-color: #0f172a; transform: scale(1.2); }
+
+.slider-card-hero {
+    position: relative; border-radius: 12px; overflow: hidden; min-height: 450px; display: flex; flex-direction: column; justify-content: flex-end; padding: 30px; text-decoration: none; background-size: cover; background-position: center;
+}
+.slider-card-hero::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.05) 100%); }
+
+
+/* =========================================
    WRAPPER & SVG BACKGROUND PIECES
 ========================================= */
-.champions-bg-wrapper {
-    position: relative;
-    width: 100%;
-    overflow: hidden; 
-    padding-top: 2rem;
-}
-
-.bg-piece {
-    position: absolute;
-    z-index: 0; /* Stays strictly behind cards */
-    opacity: 0.65; /* Bright enough to be seen easily through the 25% transparent cards */
-    pointer-events: none; 
-    filter: drop-shadow(15px 25px 25px rgba(0,0,0,0.08));
-    transition: all 0.3s ease;
-}
-
-.piece-left {
-    left: -5%;
-    top: 5%;
-    height: 95%;
-    width: auto;
-    max-width: 450px;
-}
-
-.piece-right {
-    right: -5%;
-    top: 0%;
-    height: 100%;
-    width: auto;
-    max-width: 450px;
-}
+.champions-bg-wrapper { position: relative; width: 100%; overflow: hidden; padding-top: 2rem; }
+.bg-piece { position: absolute; z-index: 0; opacity: 0.65; pointer-events: none; filter: drop-shadow(15px 25px 25px rgba(0,0,0,0.08)); transition: all 0.3s ease; }
+.piece-left { left: -5%; top: 5%; height: 95%; width: auto; max-width: 450px; }
+.piece-right { right: -5%; top: 0%; height: 100%; width: auto; max-width: 450px; }
 
 /* =========================================
    MASTER CHAMPIONS LAYOUT (GLASSMORPHISM)
 ========================================= */
-.champions-master-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 3rem;
-    max-width: 1250px;
-    margin: 0 auto 5rem auto;
-    padding: 0 5%;
-    align-items: stretch;
-    position: relative;
-    z-index: 10; /* Keeps cards above SVGs */
-}
-.world-section {
-    flex: 2;
-    min-width: 320px;
-}
-.district-section {
-    flex: 1;
-    min-width: 320px;
-}
-
+.champions-master-container { display: flex; flex-wrap: wrap; gap: 3rem; max-width: 1250px; margin: 0 auto 5rem auto; padding: 0 5%; align-items: stretch; position: relative; z-index: 10; }
+.world-section { flex: 2; min-width: 320px; }
+.district-section { flex: 1; min-width: 320px; }
 .champions-header { font-size: 2rem; color: #1e293b; font-weight: 600; margin-bottom: 2rem; border-bottom: 2px solid rgba(226, 232, 240, 0.5); padding-bottom: 10px; }
 .district-specific-header { font-size: 1.4rem; padding-bottom: 18px; margin-bottom: 2rem; }
 
 .champ-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
 .champ-grid-single { display: flex; justify-content: center; height: 100%; width: 100%; }
 
-/* GLASS CARDS - EXACTLY 25% TRANSPARENCY & BLUR */
-.champ-card, .district-champ-card {
-    background: rgba(255, 255, 255, 0.75); /* Creates the exact 25% transparency */
-    backdrop-filter: blur(12px); /* Creates the beautiful frosted glass effect over the SVGs */
-    -webkit-backdrop-filter: blur(12px); /* Safari support */
-    
-    border-radius: 16px; 
-    padding: 2rem; 
-    position: relative; 
-    overflow: visible; 
-    box-shadow: 0 10px 40px rgba(0,0,0,0.08); 
-    border: 1px solid rgba(255,255,255,0.6); /* Soft semi-transparent border */
-}
-
-/* Base resets for card shapes */
+.champ-card, .district-champ-card { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 16px; padding: 2rem; position: relative; overflow: visible; box-shadow: 0 10px 40px rgba(0,0,0,0.08); border: 1px solid rgba(255,255,255,0.6); }
 .champ-card { display: flex; flex-direction: column; min-height: 260px; width: 100%; max-width: none; }
 .district-champ-card { display: flex; flex-direction: row; align-items: center; gap: 1.5rem; width: 100%; max-width: 450px; height: fit-content; margin: 0 auto; padding: 1.5rem; }
 
 .champ-info { flex: 1; z-index: 2; position: relative; width: 60%; }
 .champ-name { font-size: 1.6rem; font-weight: 800; color: #0f172a; margin-bottom: 0.4rem; }
 .champ-title-text { font-size: 0.95rem; color: #475569; margin-bottom: 1.5rem; line-height: 1.4; font-weight: 500; }
-.champ-flag-emoji { 
-    width: 36px; height: 36px; border-radius: 50%; background: #ffffff; 
-    display: flex; align-items: center; justify-content: center; font-size: 1.3rem; 
-    margin-bottom: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; 
-}
+.champ-flag-emoji { width: 36px; height: 36px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
 .champ-ratings { display: flex; gap: 1.5rem; margin-top: auto; flex-wrap: wrap; }
 .rating-item { display: flex; flex-direction: column; align-items: center; gap: 6px; color: #0f172a; font-weight: 700; font-size: 1.05rem; }
 .rating-item svg { width: 22px; height: 22px; color: #475569; }
@@ -260,11 +282,7 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
 /* =========================================
    RESPONSIVE MOBILE OVERRIDES
 ========================================= */
-@media (max-width: 1024px) {
-    .champions-master-container { flex-direction: column; gap: 3rem; }
-    .district-specific-header { font-size: 2rem; }
-}
-
+@media (max-width: 1024px) { .champions-master-container { flex-direction: column; gap: 3rem; } .district-specific-header { font-size: 2rem; } }
 @media (max-width: 992px) {
     .modern-hero { min-height: auto; padding-bottom: 3rem; }
     .hero-container { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative; }
@@ -274,102 +292,31 @@ nav#main-nav a:hover:not(.btn-orange):not(.nav-auth-btn)::after { width: 100%; }
     .hero-ctas { justify-content: center; }
     .hero-content p { margin: 0 auto 2rem auto; }
 }
-
 @media (max-width: 768px) {
     .chess-graphic-nav { padding: 1rem 5%; }
     .nav-toggle { margin-right: 0; transform: scale(0.85); }
     .logo-wrapper { position: absolute; left: 50%; transform: translateX(-50%); gap: 8px; }
-    .brand-logo { height: 32px; }
-    .logo-divider { height: 22px; }
-
+    .brand-logo { height: 32px; } .logo-divider { height: 22px; }
     #main-nav { display: none !important; }
-
     .modern-hero { padding: 3rem 5% 2rem 5%; }
     .hero-content h1 { font-size: 2.2rem; margin-top: 1rem; }
     .hero-stats { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 1.5rem; padding-top: 1.5rem; }
-    .stat-item h3 { font-size: 1.5rem; }
-    .stat-item p { font-size: 0.75rem; }
-
+    .stat-item h3 { font-size: 1.5rem; } .stat-item p { font-size: 0.75rem; }
     .champ-grid { grid-template-columns: 1fr; }
-
     .champ-card { padding: 1.5rem; min-height: 220px; max-width: 100%; }
-    .champ-info { width: 55%; }
-    .champ-name { font-size: 1.3rem; }
+    .champ-info { width: 55%; } .champ-name { font-size: 1.3rem; }
     .champ-img-wrapper { width: 45%; height: 105%; max-width: 150px; }
-
     .district-champ-card { flex-direction: column; text-align: center; gap: 1rem; padding: 2rem; }
     .dc-ratings { justify-content: center; width: 100%; }
-    
-    /* Ensure SVGs are visible on mobile but positioned well */
-    .piece-left { left: -10%; top: 5%; height: 60%; }
-    .piece-right { right: -10%; top: 25%; height: 65%; }
+    .piece-left { left: -10%; top: 5%; height: 60%; } .piece-right { right: -10%; top: 25%; height: 65%; }
 }
 
 /* =========================================
-   FOOTER (BULLETPROOF NO-CUTOFF FADE)
+   FOOTER 
 ========================================= */
-.site-footer {
-    width: 100%;
-    margin-top: auto;
-    display: flex;
-    flex-direction: column;
-}
-
-.footer-graphic {
-    position: relative;
-    width: 100%;
-    /* Creates a soft, continuous gradient background instead of a sharp 3D cut */
-    background: linear-gradient(to bottom, rgba(248, 250, 252, 0) 0%, rgba(26, 11, 5, 0.8) 80%, #0a0402 100%);
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end; 
-    padding-bottom: 2rem;
-}
-
-/* The Wood Texture perfectly blended using CSS mask-image so there is NO harsh line */
-.footer-graphic::before {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0; top: 35%;
-    
-    background: repeating-linear-gradient(to right, #2b1408, #2b1408 40px, #1a0b05 40px, #1a0b05 80px);
-    transform: perspective(600px) rotateX(65deg) scale(1.5);
-    transform-origin: bottom center;
-    
-    /* This magically fades the hard top edge of the floor out to nothing! */
-    mask-image: linear-gradient(to bottom, transparent 0%, black 50%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 50%);
-    z-index: 0;
-}
-
-.footer-board-img {
-    position: relative;
-    z-index: 5; /* Forces the image IN FRONT of the wooden texture */
-    width: 100%;
-    max-width: 600px;
-    object-fit: contain;
-    
-    /* Multiply ensures the white background of the image disappears 
-       while leaving the dark chess pieces bold and visible */
-    mix-blend-mode: multiply; 
-    
-    /* Drop down slightly for perfect centering */
-    margin-bottom: -1rem;
-}
-
-.footer-content {
-    padding: 1.5rem;
-    text-align: center;
-    font-size: 0.9rem;
-    background-color: #0a0402;
-    color: rgba(255, 255, 255, 0.6);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    position: relative;
-    z-index: 10;
-}
-
-@media (max-width: 768px) {
-    .footer-graphic { padding-bottom: 1rem; }
-    .footer-board-img { max-width: 90%; }
-}
+.site-footer { width: 100%; margin-top: auto; display: flex; flex-direction: column; }
+.footer-graphic { position: relative; width: 100%; background: linear-gradient(to bottom, rgba(248, 250, 252, 0) 0%, rgba(26, 11, 5, 0.8) 80%, #0a0402 100%); overflow: hidden; display: flex; justify-content: center; align-items: flex-end; padding-bottom: 2rem; }
+.footer-graphic::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; top: 35%; background: repeating-linear-gradient(to right, #2b1408, #2b1408 40px, #1a0b05 40px, #1a0b05 80px); transform: perspective(600px) rotateX(65deg) scale(1.5); transform-origin: bottom center; mask-image: linear-gradient(to bottom, transparent 0%, black 50%); -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 50%); z-index: 0; }
+.footer-board-img { position: relative; z-index: 5; width: 100%; max-width: 600px; object-fit: contain; mix-blend-mode: multiply; margin-bottom: -1rem; }
+.footer-content { padding: 1.5rem; text-align: center; font-size: 0.9rem; background-color: #0a0402; color: rgba(255, 255, 255, 0.6); border-top: 1px solid rgba(255, 255, 255, 0.1); position: relative; z-index: 10; }
+@media (max-width: 768px) { .footer-graphic { padding-bottom: 1rem; } .footer-board-img { max-width: 90%; } }
