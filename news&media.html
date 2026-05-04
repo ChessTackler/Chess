@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Media - CDCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+</head>
+<body>
+
+    <header class="chess-graphic-nav">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration: none; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Back
+            </a>
+        </div>
+        <div class="logo-wrapper" style="position: absolute; left: 50%; transform: translateX(-50%); pointer-events: none;">
+            <span class="logo-text" style="font-family: 'Playfair Display', serif; font-size:1.5rem; color:#0f172a; font-weight:800;">CDCA Vault</span>
+        </div>
+        <div></div> </header>
+
+    <div class="container" style="margin-top: 50px; min-height: 70vh;">
+        
+        <div id="media-page-loader" class="loader-wrapper">
+            <div class="hourglass-loader"></div>
+            <div class="text-loader">loading media...</div>
+        </div>
+
+        <div id="media-content" style="display: none;">
+            <div class="news-header"><div class="header-line"></div><h2>All Headlines</h2></div>
+            <div id="media-headlines-grid" class="news-grid"></div>
+
+            <div class="news-header" style="margin-top: 4rem;"><div class="header-line"></div><h2>All Announcements</h2></div>
+            <div id="media-announcements-list" class="news-list" style="margin-bottom: 5rem;"></div>
+        </div>
+
+    </div>
+
+</body>
+</html>
