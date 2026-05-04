@@ -59,7 +59,7 @@
 
         /* --- Main Layout Fixed --- */
         .ranking-container {
-            width: 100%; /* Strictly lock width */
+            width: 100%; 
             max-width: 1100px;
             margin: 2rem auto 5rem auto;
             padding: 0 15px;
@@ -94,13 +94,13 @@
             border: 1px solid #e2e8f0;
             box-shadow: 0 4px 6px rgba(0,0,0,0.02);
             width: 100%;
-            overflow: hidden; /* CRITICAL: Traps the table */
+            overflow: hidden; 
         }
 
         .table-wrapper {
             width: 100%;
             max-height: 70vh;
-            overflow-x: auto; /* CRITICAL: Enables horizontal scroll */
+            overflow-x: auto; 
             overflow-y: auto; 
             -webkit-overflow-scrolling: touch;
             display: block;
@@ -109,7 +109,7 @@
         .ranking-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 750px; /* CRITICAL: Forces table to be wide, creating the scroll */
+            min-width: 750px; 
             text-align: left;
         }
 
@@ -124,8 +124,8 @@
             font-weight: 800;
             letter-spacing: 0.5px;
             border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap; 
             z-index: 10;
-            white-space: nowrap; /* Stops text wrapping */
         }
 
         .ranking-table td {
@@ -133,16 +133,16 @@
             border-bottom: 1px solid #e2e8f0;
             font-size: 0.95rem;
             color: #1e293b;
-            font-weight: 600;
+            font-weight: 500;
             vertical-align: middle;
-            white-space: nowrap; /* Stops text wrapping */
+            white-space: nowrap; 
         }
 
         .ranking-table tr:last-child td { border-bottom: none; }
         .ranking-table tr:hover td { background: #fefce8; }
 
         .ranking-table tr.top-1 td { background: linear-gradient(90deg, rgba(253, 230, 138, 0.4) 0%, transparent 100%); }
-        .ranking-table tr.top-2 td { background: linear-gradient(90deg, rgba(226, 232, 240, 0.6) 0%, transparent 100%); }
+        .ranking-table tr.top-2 td { background: linear-gradient(90deg, rgba(226, 232, 240, 0.3) 0%, transparent 100%); }
         .ranking-table tr.top-3 td { background: linear-gradient(90deg, rgba(254, 215, 170, 0.4) 0%, transparent 100%); }
 
         .rank-number { font-weight: 700; color: #64748b; font-size: 1.15rem;}
@@ -189,7 +189,7 @@
         <div class="ranking-top-bar">
             <div class="ranking-info">
                 <h2>Bihar State Rankings</h2>
-                <p>2025-26 Season • Active Federation Players</p>
+                <p>Active Federation Players</p>
             </div>
 
             <div class="search-container">
@@ -219,6 +219,7 @@
     </div>
 
     <script>
+        // Meticulously transcribed from your images
         const rankingData = [
             { rank: 1, title: "AIM", name: "Vijay, Kumar", district: "Patna", rating: 1935 },
             { rank: 2, title: "", name: "Ashutosh, Kumar", district: "Patna", rating: 1911 },
@@ -230,9 +231,9 @@
             { rank: 8, title: "", name: "Divyanshu, Kumar Singh", district: "Kishanganj", rating: 1770 },
             { rank: 9, title: "", name: "Shiv, Priya Bhardwaj", district: "Lakhisarai", rating: 1709 },
             { rank: 10, title: "AIM", name: "Jayesh, Mishra", district: "Darbhanga", rating: 1701 },
-            { rank: 11, title: "", name: "Rahul, Kumar", district: "Patna", rating: 1851 },
+            { rank: 11, title: "AIM", name: "Rahul, Kumar", district: "Patna", rating: 1851 },
             { rank: 12, title: "", name: "Deobrat, Singh", district: "Munger", rating: 1936 },
-            { rank: 13, title: "", name: "Piyush, Kumar Mishra", district: "Patna", rating: 1623 },
+            { rank: 13, title: "", name: "Piyush, Kumar Mishra", district: "Patna", rating: 1622 },
             { rank: 14, title: "AGM", name: "Harsh, Himanshu", district: "Patna", rating: 1799 },
             { rank: 15, title: "", name: "Kartikeya, Nandan", district: "Patna", rating: 1560 },
             { rank: 16, title: "AIM", name: "Shashi, Nand Kumar", district: "Patna", rating: 1713 },
