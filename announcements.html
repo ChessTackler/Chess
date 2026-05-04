@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article - CDCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="news-detail.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+</head>
+<body>
+
+    <header class="chess-graphic-nav">
+        <a href="index.html" class="logo-wrapper">
+            <span class="logo-text">CDCA Media</span>
+        </a>
+    </header>
+
+    <main class="article-container" id="article-wrapper">
+        <div class="loader-container" id="loading-state">
+            <div class="loader"></div>
+            <p>Loading article...</p>
+        </div>
+        
+        <div id="article-content" style="display: none;">
+            <div class="article-header">
+                <div class="tags-container" id="detail-tags"></div>
+                <h1 class="article-title" id="detail-title"></h1>
+                <div class="article-meta">
+                    By <strong id="detail-author"></strong> <span class="meta-dot">•</span> <span id="detail-date"></span>
+                </div>
+            </div>
+
+            <div class="article-hero-image" id="detail-hero-wrapper" style="display: none;">
+                <img id="detail-hero-img" src="" alt="Article Cover">
+            </div>
+
+            <div class="article-body" id="detail-body"></div>
+
+            <div id="additional-gallery" class="gallery-grid"></div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const articleId = urlParams.get('id');
+
+            if (!articleId || !window.supabaseClient) {
+                document.getElementById('loading-state').innerHTML = "<h3>Article not found or system offline.</h3>";
+                return;
+            }
+
+            const { data: article, error } = await window.supabaseClient
+                .from('news_articles')
+                .select('*')
+                .eq('id', articleId)
+                .single();
+
+            if (error || !article) {
+                document.getElementById('loading-state').innerHTML = "<h3>Error loading article.</h3>";
+                return;
+            }
+
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('article-content').style.display = 'block';
+
+            document.title = `${article.title} - CDCA`;
+            document.getElementById('detail-title').innerText = article.title;
+            document.getElementById('detail-author').innerText = article.author || 'CDCA Admin';
+            
+            const dateObj = new Date(article.created_at);
+            document.getElementById('detail-date').innerText = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+            if (article.tags) {
+                const tagsHtml = article.tags.split(',').map(tag => `<span class="badge badge-im">${tag.trim()}</span>`).join('');
+                document.getElementById('detail-tags').innerHTML = tagsHtml;
+            }
+
+            if (article.image_url) {
+                const heroWrapper = document.getElementById('detail-hero-wrapper');
+                heroWrapper.style.display = 'block';
+                document.getElementById('detail-hero-img').src = article.image_url;
+            }
+
+            const formattedContent = window.escapeHTML(article.content || '').replace(/\n/g, '<br>');
+            document.getElementById('detail-body').innerHTML = formattedContent;
+
+            if (article.additional_images && Array.isArray(article.additional_images) && article.additional_images.length > 0) {
+                const galleryContainer = document.getElementById('additional-gallery');
+                article.additional_images.forEach(imgUrl => {
+                    const imgEl = document.createElement('img');
+                    imgEl.src = imgUrl;
+                    imgEl.className = 'gallery-img';
+                    imgEl.onerror = function() { this.style.display = 'none'; };
+                    galleryContainer.appendChild(imgEl);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
