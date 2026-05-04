@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>National Chess Rankings 2025-26 - CDCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* =========================================
+           RANKING PAGE SPECIFIC STYLES
+        ========================================= */
+        body {
+            background-color: #f8fafc;
+            background-image: radial-gradient(circle at 50% 0%, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 70%);
+            padding-top: 80px;
+        }
+
+        .ranking-header-section {
+            text-align: center;
+            padding: 3rem 1rem 2rem 1rem;
+        }
+
+        .ranking-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: #0f172a;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .ranking-subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* --- Table Container & Card --- */
+        .ranking-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            margin-bottom: 4rem;
+        }
+
+        .table-toolbar {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: #ffffff;
+        }
+
+        .table-responsive {
+            width: 100%;
+            max-height: 70vh;
+            overflow-y: auto;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 #f1f5f9;
+        }
+
+        .table-responsive::-webkit-scrollbar { width: 8px; height: 8px; }
+        .table-responsive::-webkit-scrollbar-track { background: #f1f5f9; }
+        .table-responsive::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
+
+        /* --- The Table --- */
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .ranking-table th {
+            position: sticky;
+            top: 0;
+            background: #f8fafc;
+            padding: 1.2rem 1.5rem;
+            text-align: left;
+            font-size: 0.85rem;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e2e8f0;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .ranking-table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+            color: #1e293b;
+            font-weight: 600;
+            vertical-align: middle;
+        }
+
+        .ranking-table tr:hover td { background: #fefce8; }
+
+        /* --- Top 3 Podium Colors --- */
+        .rank-1 { background: linear-gradient(90deg, rgba(253, 230, 138, 0.4) 0%, transparent 100%); }
+        .rank-2 { background: linear-gradient(90deg, rgba(226, 232, 240, 0.6) 0%, transparent 100%); }
+        .rank-3 { background: linear-gradient(90deg, rgba(254, 215, 170, 0.4) 0%, transparent 100%); }
+
+        .rank-num { font-size: 1.15rem; font-weight: 800; color: #0f172a; }
+        .rank-1 .rank-num { color: #b45309; } 
+        .rank-2 .rank-num { color: #475569; } 
+        .rank-3 .rank-num { color: #9a3412; } 
+
+        .rating-box {
+            font-family: monospace;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #2563EB;
+            background: #eff6ff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid #bfdbfe;
+            display: inline-block;
+        }
+
+        /* --- FIDE Title Badges --- */
+        .fide-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: inline-block; min-width: 45px; text-align: center;}
+        .badge-gm { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: white; border: 1px solid #b45309; }
+        .badge-im { background: linear-gradient(135deg, #94a3b8 0%, #475569 100%); color: white; border: 1px solid #334155; }
+        .badge-fm { background: linear-gradient(135deg, #fdba74 0%, #c2410c 100%); color: white; border: 1px solid #9a3412; }
+        .badge-cm { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+        .badge-none { background: transparent; color: #94a3b8; font-weight: 500; box-shadow: none; border: 1px dashed #cbd5e1;}
+
+        .search-wrap { width: 100%; max-width: 350px; margin: 0; }
+
+        @media (max-width: 600px) {
+            .table-toolbar { flex-direction: column; align-items: stretch; }
+            .search-wrap { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="chess-graphic-nav" style="background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);">
+        <div class="nav-left">
+            <a href="index.html" style="text-decoration: none; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Back
+            </a>
+        </div>
+        <div class="logo-wrapper" style="position: absolute; left: 50%; transform: translateX(-50%); pointer-events: none;">
+            <span class="logo-text" style="font-family: 'Playfair Display', serif; font-size:1.5rem; color:#0f172a; font-weight:800;">Rankings</span>
+        </div>
+        <div></div>
+    </header>
+
+    <div class="container">
+        
+        <div class="ranking-header-section">
+            <h1 class="ranking-title">National Ranking List</h1>
+            <p class="ranking-subtitle">Active Federation Players • 2025-26 Season</p>
+        </div>
+
+        <div class="ranking-card">
+            
+            <div class="table-toolbar">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <h3 style="margin:0; color:#0f172a; font-size:1.2rem;">Official Standings</h3>
+                </div>
+                
+                <div class="textInputWrapper search-wrap">
+                    <input type="text" id="rankingSearch" placeholder="Search by Player Name..." class="textInput" onkeyup="filterRankings()">
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px; text-align: center;">Rank</th>
+                            <th style="width: 100px;">Title</th>
+                            <th>Player Name</th>
+                            <th style="text-align: right;">Std. Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ranking-tbody">
+                        </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Completely Transcribed Dataset (Ranks 1 to 117)
+        const rankingData = [
+            { rank: 1, title: "GM", name: "Iniyan P", rating: 2599 },
+            { rank: 2, title: "IM", name: "Goutham Krishna H", rating: 2418 },
+            { rank: 3, title: "GM", name: "Sasikiran Krishnan", rating: 2528 },
+            { rank: 4, title: "IM", name: "Ayush Sharma", rating: 2457 },
+            { rank: 5, title: "IM", name: "Aronyak Ghosh", rating: 2514 },
+            { rank: 6, title: "GM", name: "Gupta Abhijeet", rating: 2511 },
+            { rank: 7, title: "", name: "Vignesh Advaith Vemula", rating: 2431 },
+            { rank: 8, title: "GM", name: "Lalit Babu M R", rating: 2502 },
+            { rank: 9, title: "GM", name: "Deepan Chakkravarthy J.", rating: 2407 },
+            { rank: 10, title: "IM", name: "Viani Antonio Dcunha", rating: 2355 },
+            { rank: 11, title: "IM", name: "Rohith Krishna S", rating: 2503 },
+            { rank: 12, title: "GM", name: "Srihari L R", rating: 2481 },
+            { rank: 13, title: "", name: "Gaikwad Manas", rating: 2112 },
+            { rank: 14, title: "GM", name: "Prraneeth Vuppala", rating: 2475 },
+            { rank: 15, title: "IM", name: "Nitin S.", rating: 2316 },
+            { rank: 16, title: "IM", name: "Sidhant Mohapatra", rating: 2384 },
+            { rank: 17, title: "", name: "Mojumder Shreyan", rating: 2161 },
+            { rank: 18, title: "IM", name: "Das Arghyadip", rating: 2353 },
+            { rank: 19, title: "IM", name: "Audi Ameya", rating: 2430 },
+            { rank: 20, title: "GM", name: "Sengupta Deep", rating: 2490 },
+            { rank: 21, title: "IM", name: "Aaditya Dhingra", rating: 2391 },
+            { rank: 22, title: "IM", name: "Ravi Teja S.", rating: 2410 },
+            { rank: 23, title: "GM", name: "Ganguly Surya Shekhar", rating: 2573 },
+            { rank: 24, title: "GM", name: "Sethuraman S.P.", rating: 2572 },
+            { rank: 25, title: "FM", name: "Navalgund Niranjan", rating: 2185 },
+            { rank: 26, title: "IM", name: "Soham Kamotra", rating: 2414 },
+            { rank: 27, title: "IM", name: "Jain Kashish Manoj", rating: 2398 },
+            { rank: 28, title: "CM", name: "Harshit Ranjan Sahu", rating: 2258 },
+            { rank: 29, title: "", name: "Sharnarthi Viresh", rating: 2281 },
+            { rank: 30, title: "IM", name: "Ritviz Parab", rating: 2372 },
+            { rank: 31, title: "IM", name: "Manish Anto Cristiano F", rating: 2368 },
+            { rank: 32, title: "FM", name: "Ankit Ray", rating: 2221 },
+            { rank: 33, title: "IM", name: "Utsab Chatterjee", rating: 2299 },
+            { rank: 34, title: "IM", name: "Dhulipalla Bala Chandra Prasad", rating: 2446 },
+            { rank: 35, title: "CM", name: "Mukund Hemant Agarwal", rating: 2169 },
+            { rank: 36, title: "", name: "Arnav Agrawal", rating: 2191 },
+            { rank: 37, title: "FM", name: "Kshatriya Nitin Vekhande", rating: 2285 },
+            { rank: 38, title: "GM", name: "Das Sayantan", rating: 2435 },
+            { rank: 39, title: "IM", name: "Panda Sambit", rating: 2368 },
+            { rank: 40, title: "CM", name: "Vedant Rupeshbhai Varasada", rating: 2044 },
+            { rank: 41, title: "AIM", name: "Premshankar B.U.", rating: 1944 },
+            { rank: 42, title: "FM", name: "Ajay Santhosh Parvathareddy", rating: 2482 },
+            { rank: 43, title: "", name: "Bhoir Paras Dilip", rating: 2219 },
+            { rank: 44, title: "", name: "Esshan Wadhawan", rating: 2207 },
+            { rank: 45, title: "IM", name: "Srihari L", rating: 2373 },
+            { rank: 46, title: "IM", name: "Abhishek Kelkar", rating: 2172 },
+            { rank: 47, title: "FM", name: "Mahitosh Dey", rating: 2233 },
+            { rank: 48, title: "GM", name: "Sriram Jha", rating: 2322 },
+            { rank: 49, title: "", name: "Surendran N", rating: 2158 },
+            { rank: 50, title: "IM", name: "Harsh Suresh", rating: 2443 },
+            { rank: 51, title: "", name: "Challa Saharsha", rating: 2014 },
+            { rank: 52, title: "FM", name: "Nayak Rajesh", rating: 2352 },
+            { rank: 53, title: "CM", name: "Kumaresh A", rating: 2256 },
+            { rank: 54, title: "", name: "Arshpreet Singh", rating: 2123 },
+            { rank: 55, title: "CM", name: "Chidvilash Sai Surapaneni", rating: 2124 },
+            { rank: 56, title: "", name: "Abhishek T M", rating: 2077 },
+            { rank: 57, title: "", name: "Druvesh Dondapati", rating: 2011 },
+            { rank: 58, title: "FM", name: "Aditya Varun Gampa", rating: 2273 },
+            { rank: 59, title: "", name: "Nirvan Bhamidi", rating: 2098 },
+            { rank: 60, title: "", name: "Badole Shaurak", rating: 2086 },
+            { rank: 61, title: "IM", name: "Sharma Dinesh K.", rating: 2192 },
+            { rank: 62, title: "", name: "Sharnarthi Shlok", rating: 2046 },
+            { rank: 63, title: "", name: "Jihan Tejas Shah", rating: 2109 },
+            { rank: 64, title: "CM", name: "Yohan Yadav Tarala", rating: 2246 },
+            { rank: 65, title: "", name: "Naga Sai Sarthak Karanam", rating: 1948 },
+            { rank: 66, title: "FM", name: "Setumadhav Yellamahanthi", rating: 2230 },
+            { rank: 67, title: "", name: "Agnivo Chakraborty", rating: 1983 },
+            { rank: 68, title: "", name: "Chukka Vineel Radha Karthik", rating: 1889 },
+            { rank: 69, title: "CM", name: "Vandan Alankar Sawai", rating: 2086 },
+            { rank: 70, title: "AIM", name: "Barik Hrishikesh Kumar", rating: 2053 },
+            { rank: 71, title: "IM", name: "Mohota Nisha", rating: 2153 },
+            { rank: 72, title: "AIM", name: "Vivaan Sardana", rating: 2008 },
+            { rank: 73, title: "", name: "Borkhatariya Devarsh M", rating: 2040 },
+            { rank: 74, title: "", name: "Dubey Sanchay", rating: 1929 },
+            { rank: 75, title: "", name: "Abhinav Raj", rating: 2015 },
+            { rank: 76, title: "", name: "Gyana Sai Santhosh M", rating: 2098 },
+            { rank: 77, title: "AIM", name: "Aadik Theophane Lenin", rating: 2108 },
+            { rank: 78, title: "", name: "Ayaan Garg", rating: 2091 },
+            { rank: 79, title: "", name: "Haridev S", rating: 2147 },
+            { rank: 80, title: "IM", name: "Deshmukh Anup", rating: 2099 },
+            { rank: 81, title: "", name: "Vedant Garg", rating: 2140 },
+            { rank: 82, title: "CM", name: "Joel Paul Ganta", rating: 2050 },
+            { rank: 83, title: "IM", name: "Subhayan Kundu", rating: 2352 },
+            { rank: 84, title: "IM", name: "Sangma Rahul", rating: 2122 },
+            { rank: 85, title: "", name: "Jagesia Daksh", rating: 1975 },
+            { rank: 86, title: "", name: "Sharma Sai", rating: 2004 },
+            { rank: 87, title: "", name: "Pranay Akula", rating: 2075 },
+            { rank: 88, title: "", name: "Alluri Bhaskara Ratna Shanmukha", rating: 2097 },
+            { rank: 89, title: "FM", name: "Ramakrishna J.", rating: 2028 },
+            { rank: 90, title: "", name: "Malvin Joshua", rating: 1966 },
+            { rank: 91, title: "AIM", name: "Adhiraj Mitra", rating: 2064 },
+            { rank: 92, title: "AIM", name: "Gade Sharanya", rating: 1788 },
+            { rank: 93, title: "AGM", name: "Gopal Krishna Maheshwari", rating: 1996 },
+            { rank: 94, title: "", name: "Sharsha Backer", rating: 2011 },
+            { rank: 95, title: "", name: "Singh Pritam", rating: 1933 },
+            { rank: 96, title: "", name: "Saisarvesh S", rating: 1977 },
+            { rank: 97, title: "WFM", name: "Aamuktha Guntaka", rating: 2102 },
+            { rank: 98, title: "", name: "Lavyaajyoti Routray", rating: 1946 },
+            { rank: 99, title: "CM", name: "Vyom Malhotra", rating: 1974 },
+            { rank: 100, title: "", name: "Mrittika Mallick", rating: 2024 },
+            { rank: 101, title: "", name: "Umashankar A", rating: 1971 },
+            { rank: 102, title: "", name: "Swain Ashirwad", rating: 2087 },
+            { rank: 103, title: "CM", name: "Akshit Kumar J", rating: 2074 },
+            { rank: 104, title: "", name: "Arush A", rating: 2105 },
+            { rank: 105, title: "", name: "Kherdekar Arnav", rating: 1885 },
+            { rank: 106, title: "GM", name: "Neelotpal Das", rating: 2371 },
+            { rank: 107, title: "AIM", name: "Venkatesh Das", rating: 2013 },
+            { rank: 108, title: "FM", name: "Swarna Nihal", rating: 2305 },
+            { rank: 109, title: "", name: "Tata Keerthi Rana", rating: 2029 },
+            { rank: 110, title: "", name: "Meetansh Dixit", rating: 1926 },
+            { rank: 111, title: "", name: "Sundar Divji P", rating: 1867 },
+            { rank: 112, title: "", name: "Karan J P", rating: 2035 },
+            { rank: 113, title: "WCM", name: "Modipalli Deekshitha", rating: 1934 },
+            { rank: 114, title: "", name: "Utkrisht Tuli", rating: 2006 },
+            { rank: 115, title: "", name: "Rahul Ramakrishnan", rating: 1976 },
+            { rank: 116, title: "", name: "Shourya Paul", rating: 2090 },
+            { rank: 117, title: "", name: "Guru Prakash", rating: 2055 }
+        ];
+
+        function getTitleBadge(title) {
+            if (!title) return `<span class="fide-badge badge-none">-</span>`;
+            
+            const upperTitle = title.toUpperCase();
+            let badgeClass = 'badge-none';
+            
+            // Logic properly categorizes standard & women's/arena equivalents
+            if (upperTitle === 'GM' || upperTitle === 'WGM') badgeClass = 'badge-gm';
+            else if (upperTitle === 'IM' || upperTitle === 'WIM') badgeClass = 'badge-im';
+            else if (upperTitle === 'FM' || upperTitle === 'WFM') badgeClass = 'badge-fm';
+            else if (upperTitle === 'CM' || upperTitle === 'WCM' || upperTitle === 'AIM' || upperTitle === 'AGM') badgeClass = 'badge-cm';
+            
+            return `<span class="fide-badge ${badgeClass}">${upperTitle}</span>`;
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('ranking-tbody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 3rem; color: #64748b;">No players found matching your search.</td></tr>`;
+                return;
+            }
+
+            data.forEach(player => {
+                let rowClass = "";
+                let rankDisplay = player.rank;
+
+                if (player.rank === 1) { rowClass = "rank-1"; rankDisplay = "🥇 1"; }
+                else if (player.rank === 2) { rowClass = "rank-2"; rankDisplay = "🥈 2"; }
+                else if (player.rank === 3) { rowClass = "rank-3"; rankDisplay = "🥉 3"; }
+
+                const tr = document.createElement('tr');
+                if (rowClass) tr.className = rowClass;
+
+                tr.innerHTML = `
+                    <td style="text-align: center;"><span class="rank-num">${rankDisplay}</span></td>
+                    <td>${getTitleBadge(player.title)}</td>
+                    <td>${player.name}</td>
+                    <td style="text-align: right;"><span class="rating-box">${player.rating}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterRankings() {
+            const query = document.getElementById('rankingSearch').value.toLowerCase();
+            const filtered = rankingData.filter(p => p.name.toLowerCase().includes(query));
+            renderTable(filtered);
+        }
+
+        // Initialize table on load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTable(rankingData);
+        });
+
+    </script>
+</body>
+</html>
