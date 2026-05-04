@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Not Found - CDCA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
     
     <style>
         /* =========================================
@@ -27,7 +27,7 @@
             background-size: 20px 20px;
             background-position: 0 0, 10px 10px;
             font-family: 'Inter', sans-serif;
-            color: #0f172a; /* Dark Slate Text */
+            color: #0f172a; 
             text-align: center;
             overflow: hidden;
         }
@@ -35,11 +35,10 @@
         .error-container {
             background: #ffffff;
             border: 1px solid #e2e8f0;
-            padding: 3.5rem 2.5rem;
-            border-radius: 24px;
-            max-width: 500px;
-            width: 90%;
-            /* Professional shadow for white theme */
+            padding: 3rem 2rem 3.5rem 2rem;
+            border-radius: 20px;
+            max-width: 550px; /* Widened to allow a larger central image */
+            width: 92%;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
             animation: floatUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
@@ -51,48 +50,50 @@
 
         /* --- STRICT ANTI-DOWNLOAD CSS --- */
         .no-interact {
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE10+/Edge */
-            user-select: none; /* Standard */
-            -webkit-user-drag: none; /* Prevents dragging to desktop */
-            pointer-events: none; /* Kills ALL hover/click events */
+            -webkit-user-select: none; 
+            -moz-user-select: none; 
+            -ms-user-select: none; 
+            user-select: none; 
+            -webkit-user-drag: none; 
+            pointer-events: none; 
         }
 
-        /* The Error Image Container */
+        /* The Error Image Container (LARGE CENTRAL FOCUS) */
         .image-secure-wrap {
             position: relative;
-            display: inline-block;
+            display: block;
+            width: 100%;
             margin-bottom: 1.5rem;
         }
 
         .error-image {
             width: 100%;
-            max-width: 250px;
+            max-width: 420px; /* Much larger central focus */
             height: auto;
-            /* Anti-copy/drag applied via JS and Class below */
+            object-fit: contain;
         }
 
+        /* Minimal Small Texts */
         .error-title {
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
+            font-size: 1.5rem; /* Shrunk to be minimal */
             font-weight: 700;
-            color: #d0a756; /* CDCA Gold Accent */
-            margin: 0 0 10px 0;
+            color: #d0a756; 
+            margin: 0 0 8px 0;
             line-height: 1.2;
         }
 
         .error-message {
-            color: #475569; /* Muted slate text */
-            font-size: 1.05rem;
-            line-height: 1.6;
-            margin-bottom: 2.5rem;
-            max-width: 400px;
+            color: #64748b; 
+            font-size: 0.9rem; /* Shrunk to be minimal */
+            line-height: 1.5;
+            margin-bottom: 2rem;
+            max-width: 80%;
             margin-left: auto;
             margin-right: auto;
         }
 
-        /* Return Button (Premium CDCA Gold) */
+        /* Return Button */
         .return-btn {
             display: inline-flex;
             align-items: center;
@@ -101,10 +102,10 @@
             background: linear-gradient(135deg, #d0a756 0%, #b4883a 100%);
             color: #ffffff;
             text-decoration: none;
-            padding: 14px 28px;
+            padding: 12px 24px;
             border-radius: 8px;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: all 0.2s ease;
@@ -120,18 +121,6 @@
         .return-btn:active {
             transform: translateY(0);
         }
-
-        .redirect-text {
-            display: block;
-            margin-top: 2rem;
-            font-size: 0.85rem;
-            color: #64748b;
-        }
-
-        .redirect-text span {
-            color: #d0a756;
-            font-weight: 700;
-        }
     </style>
 </head>
 <body>
@@ -139,49 +128,34 @@
     <div class="error-container">
         
         <div class="image-secure-wrap">
-            <img src="error404.png" alt="Page Under Construction" class="error-image no-interact" id="secureImage" draggable="false" onerror="this.style.display='none'">
+            <img src="error404.png" alt="404 Error" class="error-image no-interact" id="secureImage" draggable="false" onerror="this.style.display='none'">
         </div>
         
         <h1 class="error-title">Page Under Construction</h1>
-        <p class="error-message">The digital board is still being set up. The page you are looking for hasn't been coded yet or was moved off the board.</p>
+        <p class="error-message">The digital board is still being set up. This module hasn't been coded yet.</p>
         
         <a href="index.html" class="return-btn">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            Return to Portal
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            Return to Homepage
         </a>
 
-        <span class="redirect-text">Redirecting to homepage in <span id="countdown">5</span>s</span>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            
             // ── Strict Anti-Right-Click for the image ──
             const secureImg = document.getElementById('secureImage');
             
             // Re-confirming pointer-events via JS just in case CSS fails
-            secureImg.style.pointerEvents = 'none';
+            if (secureImg) {
+                secureImg.style.pointerEvents = 'none';
 
-            // Catch any context menu attempts (right-click) specifically on the image
-            secureImg.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-                return false;
-            });
-
-
-            // ── Redirection Countdown ──
-            let timeLeft = 5;
-            const countdownElement = document.getElementById('countdown');
-
-            const timer = setInterval(() => {
-                timeLeft--;
-                countdownElement.textContent = timeLeft;
-
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    window.location.href = 'index.html'; // Redirects to homepage
-                }
-            }, 1000);
+                // Catch any context menu attempts (right-click) specifically on the image
+                secureImg.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    return false;
+                });
+            }
         });
     </script>
 </body>
