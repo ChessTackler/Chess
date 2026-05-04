@@ -23,7 +23,8 @@
                 <span>Back to Portal</span>
             </a>
             <div class="nav-brand">CDCA Media</div>
-            <div style="width: 100px;"></div> </div>
+            <div style="width: 100px;"></div>
+        </div>
     </header>
 
     <main class="article-wrapper" id="article-wrapper">
@@ -34,7 +35,6 @@
         </div>
         
         <article id="article-content" style="display: none;">
-            
             <header class="article-header">
                 <div class="article-tags" id="detail-tags"></div>
                 <h1 class="article-title" id="detail-title"></h1>
@@ -51,23 +51,39 @@
             </header>
 
             <figure class="article-hero" id="detail-hero-wrapper" style="display: none;">
-                <img id="detail-hero-img" src="" alt="Article Cover Image">
+                <img id="detail-hero-img" src="" alt="Article Cover Image" onclick="openLightbox(this.src)">
             </figure>
 
             <div class="article-body" id="detail-body"></div>
 
             <div id="additional-gallery" class="gallery-section"></div>
-            
         </article>
     </main>
 
+    <div id="image-lightbox" class="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+    </div>
+
     <script>
-        // Reading Progress Bar Logic
+        // Reading Progress Bar
         window.onscroll = function() {
             let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             let scrolled = (winScroll / height) * 100;
             document.getElementById("progress-bar").style.width = scrolled + "%";
+        };
+
+        // Lightbox Functions
+        window.openLightbox = function(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('image-lightbox').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Stop background scrolling
+        };
+        
+        window.closeLightbox = function() {
+            document.getElementById('image-lightbox').style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restore scrolling
         };
 
         document.addEventListener('DOMContentLoaded', async () => {
@@ -100,49 +116,47 @@
             const dateObj = new Date(article.created_at);
             document.getElementById('detail-date').innerText = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' • Read Article';
 
-            // Render Tags
             if (article.tags) {
                 const tagsHtml = article.tags.split(',').map(tag => `<span class="tag-pill">${tag.trim()}</span>`).join('');
                 document.getElementById('detail-tags').innerHTML = tagsHtml;
             }
 
-            // Render Hero Image
             if (article.image_url) {
                 const heroWrapper = document.getElementById('detail-hero-wrapper');
                 heroWrapper.style.display = 'block';
                 document.getElementById('detail-hero-img').src = article.image_url;
             }
 
-            // --- ADVANCED TEXT FORMATTING ENGINE ---
+            // TEXT FORMATTING ENGINE
             if (article.content) {
                 let rawText = window.escapeHTML(article.content);
                 
-                // Bold: **text**
                 rawText = rawText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                // Italics: *text*
                 rawText = rawText.replace(/(?<!\*)\*(?!\*)(.*?)\*/g, '<em>$1</em>');
-                // Blockquotes: > text
                 rawText = rawText.replace(/^&gt; (.*$)/gim, '<blockquote>$1</blockquote>');
-                // Headings: ## text
                 rawText = rawText.replace(/^### (.*$)/gim, '<h3>$1</h3>');
                 rawText = rawText.replace(/^## (.*$)/gim, '<h2>$1</h2>');
 
-                // Paragraph creation (Splits by double line breaks)
                 const paragraphs = rawText.split(/\n\s*\n/);
                 const formattedHTML = paragraphs.map((p, index) => {
                     let cleanP = p.replace(/\n/g, '<br>').trim();
                     if (!cleanP) return '';
                     if (cleanP.startsWith('<h') || cleanP.startsWith('<blockquote')) return cleanP;
                     
-                    // The first paragraph gets a special drop-cap style
-                    if (index === 0) return `<p class="first-paragraph">${cleanP}</p>`;
+                    // Drop-Cap Fix: Check if paragraph starts with an English/Devanagari letter before applying drop-cap. Ignores emojis.
+                    const textWithoutHTML = cleanP.replace(/<[^>]*>?/gm, '').trim();
+                    const startsWithLetter = /^[\p{L}]/u.test(textWithoutHTML); 
+
+                    if (index === 0 && startsWithLetter) {
+                        return `<p class="first-paragraph">${cleanP}</p>`;
+                    }
                     return `<p>${cleanP}</p>`;
                 }).join('');
                 
                 document.getElementById('detail-body').innerHTML = formattedHTML;
             }
 
-            // Render Image Gallery
+            // Gallery Generation with click handlers
             if (article.additional_images && Array.isArray(article.additional_images) && article.additional_images.length > 0) {
                 const galleryContainer = document.getElementById('additional-gallery');
                 galleryContainer.innerHTML = '<h3 class="gallery-heading">Attached Media Gallery</h3><div class="gallery-grid" id="gallery-grid-inner"></div>';
@@ -152,6 +166,7 @@
                     const imgEl = document.createElement('img');
                     imgEl.src = imgUrl;
                     imgEl.className = 'gallery-item';
+                    imgEl.onclick = function() { openLightbox(this.src); }; // Lightbox trigger
                     imgEl.onerror = function() { this.style.display = 'none'; };
                     innerGrid.appendChild(imgEl);
                 });
