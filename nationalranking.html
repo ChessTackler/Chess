@@ -57,9 +57,8 @@
             flex: 1;
         }
 
-        /* --- Main Layout Fixed --- */
         .ranking-container {
-            width: 100%; /* Strictly lock width */
+            width: 100%; 
             max-width: 1000px;
             margin: 2rem auto 5rem auto;
             padding: 0 15px;
@@ -87,21 +86,20 @@
         .search-input:focus { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
         .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
 
-        /* --- Data Table CSS OVERHAUL FOR MOBILE SCROLL --- */
         .table-card {
             background: #ffffff;
             border-radius: 12px;
             border: 1px solid #e2e8f0;
             box-shadow: 0 4px 6px rgba(0,0,0,0.02);
             width: 100%;
-            overflow: hidden; /* CRITICAL: Traps the table from expanding the page */
+            overflow: hidden; 
         }
 
         .table-wrapper {
             width: 100%;
             max-height: 70vh;
-            overflow-x: auto; /* CRITICAL: Enables horizontal scroll inside the card */
-            overflow-y: auto; /* Enables vertical scroll */
+            overflow-x: auto; 
+            overflow-y: auto; 
             -webkit-overflow-scrolling: touch;
             display: block;
         }
@@ -109,7 +107,7 @@
         .ranking-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 650px; /* CRITICAL: Forces table to be wide, creating the scroll */
+            min-width: 650px; 
             text-align: left;
         }
 
@@ -125,7 +123,7 @@
             letter-spacing: 0.5px;
             border-bottom: 2px solid #e2e8f0;
             z-index: 10;
-            white-space: nowrap; /* Stops text wrapping */
+            white-space: nowrap; 
         }
 
         .ranking-table td {
@@ -135,7 +133,7 @@
             color: #1e293b;
             font-weight: 600;
             vertical-align: middle;
-            white-space: nowrap; /* Stops text wrapping */
+            white-space: nowrap; 
         }
 
         .ranking-table tr:last-child td { border-bottom: none; }
@@ -191,7 +189,7 @@
         <div class="ranking-top-bar">
             <div class="ranking-info">
                 <h2>National Ranking List</h2>
-                <p>2025-26 Season • Active Federation Players</p>
+                <p>Active Federation Players</p>
             </div>
 
             <div class="search-container">
@@ -220,15 +218,16 @@
     </div>
 
     <script>
+        // Meticulously corrected dataset based on the exact image provided
         const rankingData = [
-            { rank: 1, title: "GM", name: "Iniyan P", rating: 2599 },
+            { rank: 1, title: "GM", name: "Iniyan Pa", rating: 2599 },
             { rank: 2, title: "IM", name: "Goutham Krishna H", rating: 2418 },
             { rank: 3, title: "GM", name: "Sasikiran Krishnan", rating: 2528 },
             { rank: 4, title: "IM", name: "Ayush Sharma", rating: 2457 },
             { rank: 5, title: "IM", name: "Aronyak Ghosh", rating: 2514 },
             { rank: 6, title: "GM", name: "Gupta Abhijeet", rating: 2511 },
             { rank: 7, title: "", name: "Vignesh Advaith Vemula", rating: 2431 },
-            { rank: 8, title: "GM", name: "Lalit Babu M R", rating: 2502 },
+            { rank: 8, title: "GM", name: "Lalith Babu M R", rating: 2502 },
             { rank: 9, title: "GM", name: "Deepan Chakkravarthy J.", rating: 2407 },
             { rank: 10, title: "IM", name: "Viani Antonio Dcunha", rating: 2355 },
             { rank: 11, title: "IM", name: "Rohith Krishna S", rating: 2503 },
@@ -393,6 +392,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderTable(rankingData);
         });
+
     </script>
 </body>
 </html>
