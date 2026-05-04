@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - CDCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           CDCA PREMIUM 404 THEME
+        ========================================= */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #0f172a; /* Deep Slate Background */
+            background-image: 
+              linear-gradient(45deg, #1e293b 25%, transparent 25%, transparent 75%, #1e293b 75%, #1e293b),
+              linear-gradient(45deg, #1e293b 25%, transparent 25%, transparent 75%, #1e293b 75%, #1e293b);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            font-family: 'Inter', sans-serif;
+            color: #f8fafc;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .error-container {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 3.5rem 2.5rem;
+            border-radius: 24px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            animation: floatUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes floatUp {
+            from { opacity: 0; transform: translateY(40px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* --- ANTI-DOWNLOAD / ANTI-DRAG CSS --- */
+        .no-interact {
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+/Edge */
+            user-select: none; /* Standard */
+            -webkit-user-drag: none; /* Prevents dragging to desktop */
+            pointer-events: none; /* Kills ALL right-clicks and hover events */
+        }
+
+        .error-vector {
+            width: 100%;
+            max-width: 280px;
+            height: auto;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4));
+        }
+
+        .error-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #d0a756; /* CDCA Gold */
+            margin: 0 0 12px 0;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+
+        .error-message {
+            color: #94a3b8;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Return Button */
+        .return-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #d0a756 0%, #b4883a 100%);
+            color: #020617;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(208, 167, 86, 0.25);
+        }
+
+        .return-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(208, 167, 86, 0.4);
+            background: linear-gradient(135deg, #dfb767 0%, #c49646 100%);
+        }
+
+        .return-btn:active {
+            transform: translateY(0);
+        }
+
+        .redirect-text {
+            display: block;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .redirect-text span {
+            color: #d0a756;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="error-container">
+        
+        <svg class="error-vector no-interact" draggable="false" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#fef08a" />
+                    <stop offset="50%" stop-color="#d0a756" />
+                    <stop offset="100%" stop-color="#92400e" />
+                </linearGradient>
+                <linearGradient id="slateGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#475569" />
+                    <stop offset="100%" stop-color="#1e293b" />
+                </linearGradient>
+            </defs>
+            
+            <text x="150" y="140" font-family="'Inter', sans-serif" font-weight="800" font-size="120" fill="#1e293b" text-anchor="middle" letter-spacing="-5">404</text>
+            
+            <g transform="translate(150, 160) rotate(75) scale(0.8)">
+                <path d="M-30,0 L30,0 L20,-20 C20,-40 10,-60 15,-80 C18,-90 10,-95 0,-95 C-10,-95 -18,-90 -15,-80 C-10,-60 -20,-40 -20,-20 Z" fill="url(#goldGrad)"/>
+                <ellipse cx="0" cy="-95" rx="18" ry="18" fill="url(#goldGrad)"/>
+                <path d="M-25,-20 L25,-20" stroke="#fef08a" stroke-width="3" opacity="0.5"/>
+                <path d="M-15,-75 L15,-75" stroke="#92400e" stroke-width="4" opacity="0.6"/>
+                <ellipse cx="-40" cy="15" rx="40" ry="8" fill="#020617" opacity="0.6" transform="rotate(-75)"/>
+            </g>
+        </svg>
+
+        <h1 class="error-title">Move Not Found</h1>
+        <p class="error-message">The digital board is still being set up. The page you are looking for hasn't been coded yet or was moved off the board.</p>
+        
+        <a href="index.html" class="return-btn">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            Return to Portal
+        </a>
+
+        <span class="redirect-text">Auto-redirecting to homepage in <span id="countdown">5</span>s</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let timeLeft = 5;
+            const countdownElement = document.getElementById('countdown');
+
+            const timer = setInterval(() => {
+                timeLeft--;
+                countdownElement.textContent = timeLeft + "s";
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    window.location.href = 'index.html'; // Redirects to homepage
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
