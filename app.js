@@ -98,7 +98,7 @@ async function updateNavbar() {
         const { data: { session } } = await window.supabaseClient.auth.getSession();
         if (session) {
             const { data: profile } = await window.supabaseClient.from('profiles').select('is_admin').eq('id', session.user.id).single();
-            
+
             let adminLinkDesktop = profile && profile.is_admin ? `<a href="adminportal.html" style="color: var(--accent-orange); font-weight:700;">Admin Portal</a>` : "";
             let adminLinkSidebar = profile && profile.is_admin ? `<a href="adminportal.html" class="sidebar-btn sidebar-btn-admin">Admin Portal</a>` : "";
 
@@ -114,7 +114,6 @@ async function updateNavbar() {
     }
 }
 
-// Stylish Logout Confirmation utilizing Custom Modal
 window.handleLogout = function() { 
     if (!window.supabaseClient) return; 
     window.uiConfirm('🚪 End Session', 'Are you sure you want to securely log out of your account?', 'Yes, Logout', async () => {
@@ -239,7 +238,6 @@ window.addPlayer = async function(event) {
     }
 }
 
-// UPGRADED PLAYER EDIT HTML - Now uses textInputWrapper styles!
 window.openEditModal = function(id) {
     const player = window.currentPlayersList.find(p => p.id === id);
     if(!player) return;
@@ -293,7 +291,7 @@ window.openEditModal = function(id) {
     `;
 
     const footerHTML = `<button class="modal-btn modal-btn-cancel" id="modal-edit-cancel">Cancel</button><button class="modal-btn modal-btn-confirm" id="modal-edit-save">Save Changes</button>`;
-    
+
     window.showModal('✏️ Edit Player', bodyHTML, footerHTML);
 
     document.getElementById('modal-edit-cancel').addEventListener('click', window.closeModal);
@@ -342,6 +340,21 @@ window.timeSince = function(dateString) {
     interval = seconds / 60;
     if (interval > 1) return Math.floor(interval) + " minutes ago";
     return "Just now";
+}
+
+window.addAdditionalImageField = function(containerId, initialValue = "") {
+    const container = document.getElementById(containerId);
+    const wrapper = document.createElement('div');
+    wrapper.style.display = 'flex';
+    wrapper.style.gap = '10px';
+    wrapper.style.alignItems = 'center';
+    wrapper.innerHTML = `
+        <div class="textInputWrapper" style="margin:0; flex:1;">
+            <input type="url" class="textInput dynamic-img" value="${initialValue}" placeholder="Additional Image URL">
+        </div>
+        <button type="button" onclick="this.parentElement.remove()" style="background:#ef4444; color:white; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; font-weight:bold;">X</button>
+    `;
+    container.appendChild(wrapper);
 }
 
 window.fetchPublicNews = async function() {
@@ -414,15 +427,14 @@ window.fetchAdminNews = async function() {
         const badge = item.category === 'Headline' ? '<span class="badge badge-im">Headline</span>' : '<span class="badge badge-default">Announcement</span>';
         const dateObj = new Date(item.created_at);
         const formattedDate = dateObj.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-        const formattedTime = dateObj.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-
+        
         tr.innerHTML = `
             <td>
                 <strong style="color:var(--text-dark); display:block; font-size:1.05rem; margin-bottom:5px;">${window.escapeHTML(item.title)}</strong>
                 <div style="display:flex; gap:10px; align-items:center; flex-wrap: wrap;">${badge} <span style="font-size:0.8rem; color:#64748b;">Tags: ${window.escapeHTML(item.tags)}</span></div>
             </td>
             <td style="color:#475569; font-size:0.9rem;">
-                <strong>${formattedDate}</strong><br>${formattedTime}
+                <strong>${formattedDate}</strong>
             </td>
             <td style="text-align: right;">
                 <div style="display:flex; gap:0.5rem; justify-content:flex-end;">
@@ -442,23 +454,29 @@ window.addNews = async function(event) {
     let dateVal = document.getElementById('news_date').value;
     let timeVal = document.getElementById('news_time').value;
     let finalDate = new Date(); 
-    
+
     if (dateVal) {
         if (!timeVal) timeVal = new Date().toTimeString().substring(0,5); 
         finalDate = new Date(`${dateVal}T${timeVal}:00`);
     }
 
+    const additionalImages = Array.from(document.querySelectorAll('#add-images-container .dynamic-img'))
+                                  .map(input => input.value.trim())
+                                  .filter(val => val !== '');
+
     const newArticle = {
         title: document.getElementById('news_title').value.trim(),
         category: document.getElementById('news_category').value,
         tags: document.getElementById('news_tags').value.trim(),
+        content: document.getElementById('news_content').value.trim(),
         image_url: document.getElementById('news_image').value.trim() || null,
+        additional_images: additionalImages,
         author: 'CDCA Admin',
         created_at: finalDate.toISOString()
     };
 
     if(newArticle.category === 'Headline' && !newArticle.image_url) {
-        return window.uiAlert('Missing Image', 'Headlines require a valid Image URL.', true);
+        return window.uiAlert('Missing Image', 'Headlines require a primary Cover Image URL.', true);
     }
 
     const { error } = await window.supabaseClient.from('news_articles').insert([newArticle]);
@@ -467,11 +485,11 @@ window.addNews = async function(event) {
     } else {
         window.uiAlert('Success', 'Article published!');
         document.getElementById('add-news-form').reset();
+        document.getElementById('add-images-container').innerHTML = '';
         window.fetchAdminNews();
     }
 }
 
-// UPGRADED NEWS EDIT HTML - Fixes the overlapping inputs shown in your screenshot
 window.openEditNewsModal = function(id) {
     const article = window.currentNewsList.find(a => a.id === id);
     if(!article) return;
@@ -481,7 +499,7 @@ window.openEditNewsModal = function(id) {
     const timeStr = dateObj.toTimeString().substring(0,5);
 
     const bodyHTML = `
-        <div style="display: flex; flex-direction: column; width: 100%;">
+        <div style="display: flex; flex-direction: column; width: 100%; max-height: 60vh; overflow-y: auto; padding-right: 10px;">
             <div>
                 <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">Article Title</label>
                 <div class="textInputWrapper" style="margin: 4px 0 10px 0;"><input type="text" class="textInput" id="edit_news_title" value="${window.escapeHTML(article.title)}" required></div>
@@ -503,6 +521,13 @@ window.openEditNewsModal = function(id) {
                 </div>
             </div>
 
+            <div>
+                <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">Content</label>
+                <div class="textInputWrapper" style="margin: 4px 0 10px 0;">
+                    <textarea id="edit_news_content" class="textInput" rows="5" style="resize:vertical; font-family:inherit;">${window.escapeHTML(article.content || '')}</textarea>
+                </div>
+            </div>
+
             <div class="responsive-grid-2">
                 <div>
                     <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">Date</label>
@@ -515,15 +540,26 @@ window.openEditNewsModal = function(id) {
             </div>
 
             <div>
-                <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">Image URL</label>
-                <div class="textInputWrapper" style="margin: 4px 0 0 0;"><input type="url" class="textInput" id="edit_news_image" value="${window.escapeHTML(article.image_url || '')}"></div>
+                <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">Primary Image URL</label>
+                <div class="textInputWrapper" style="margin: 4px 0 10px 0;"><input type="url" class="textInput" id="edit_news_image" value="${window.escapeHTML(article.image_url || '')}"></div>
             </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 10px;">
+                <label style="font-size: 0.85rem; font-weight: 700; color: #64748b;">Additional Images</label>
+                <button type="button" onclick="window.addAdditionalImageField('edit-images-container')" style="background:var(--bg-dark); color:white; border:none; padding:4px 8px; border-radius:4px; font-size:0.75rem; cursor:pointer;">+ ADD IMAGE</button>
+            </div>
+            <div id="edit-images-container" style="display:flex; flex-direction:column; gap:8px; margin-top:8px;"></div>
         </div>
     `;
 
     const footerHTML = `<button class="modal-btn modal-btn-cancel" id="modal-editnews-cancel">Cancel</button><button class="modal-btn modal-btn-confirm" id="modal-editnews-save">Save Changes</button>`;
-    
+
     window.showModal('✏️ Edit Article', bodyHTML, footerHTML);
+
+    const editImagesContainer = document.getElementById('edit-images-container');
+    if (article.additional_images && Array.isArray(article.additional_images)) {
+        article.additional_images.forEach(imgUrl => window.addAdditionalImageField('edit-images-container', imgUrl));
+    }
 
     document.getElementById('modal-editnews-cancel').addEventListener('click', window.closeModal);
     document.getElementById('modal-editnews-save').addEventListener('click', async () => {
@@ -531,11 +567,17 @@ window.openEditNewsModal = function(id) {
         let eTime = document.getElementById('edit_news_time').value;
         let eFinalDate = new Date(`${eDate}T${eTime}:00`);
 
+        const additionalImagesEdit = Array.from(document.querySelectorAll('#edit-images-container .dynamic-img'))
+                                          .map(input => input.value.trim())
+                                          .filter(val => val !== '');
+
         const updateData = { 
             title: document.getElementById('edit_news_title').value.trim(), 
             category: document.getElementById('edit_news_category').value, 
             tags: document.getElementById('edit_news_tags').value.trim(),
+            content: document.getElementById('edit_news_content').value.trim(),
             image_url: document.getElementById('edit_news_image').value.trim() || null,
+            additional_images: additionalImagesEdit,
             created_at: eFinalDate.toISOString()
         };
 
