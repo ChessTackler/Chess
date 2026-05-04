@@ -322,9 +322,11 @@ window.deletePlayer = async function(id) {
 }
 
 // ==========================================
-// NEWS ENGINE
+// NEWS ENGINE & HOMEPAGE SLIDESHOW
 // ==========================================
 window.currentNewsList = []; 
+window.slideIndex = 0;
+window.sliderTimer = null;
 
 window.timeSince = function(dateString) {
     const date = new Date(dateString);
@@ -342,6 +344,44 @@ window.timeSince = function(dateString) {
     return "Just now";
 }
 
+// SLIDER FUNCTIONS
+window.initSlider = function() {
+    window.showSlides(0);
+    window.sliderTimer = setInterval(() => window.plusSlides(1), 5000); // Auto change every 5s
+};
+
+window.plusSlides = function(n) {
+    clearInterval(window.sliderTimer);
+    window.showSlides(window.slideIndex += n);
+    window.sliderTimer = setInterval(() => window.plusSlides(1), 5000);
+};
+
+window.currentSlide = function(n) {
+    clearInterval(window.sliderTimer);
+    window.showSlides(window.slideIndex = n);
+    window.sliderTimer = setInterval(() => window.plusSlides(1), 5000);
+};
+
+window.showSlides = function(n) {
+    let slides = document.getElementsByClassName("mySlides");
+    let dots = document.getElementsByClassName("slider-dot");
+    if (slides.length === 0) return;
+    
+    if (n >= slides.length) {window.slideIndex = 0}
+    if (n < 0) {window.slideIndex = slides.length - 1}
+    
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    for (let i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active-dot", "");
+    }
+    
+    slides[window.slideIndex].style.display = "block";
+    if(dots.length > 0) dots[window.slideIndex].className += " active-dot";
+};
+
+// DYNAMIC IMAGE FIELD GENERATOR (For Admin Panel)
 window.addAdditionalImageField = function(containerId, initialValue = "") {
     const container = document.getElementById(containerId);
     const wrapper = document.createElement('div');
@@ -357,54 +397,109 @@ window.addAdditionalImageField = function(containerId, initialValue = "") {
     container.appendChild(wrapper);
 }
 
+// FETCH & RENDER PUBLIC NEWS
 window.fetchPublicNews = async function() {
     if (!window.supabaseClient) return;
     const { data: news, error } = await window.supabaseClient.from('news_articles').select('*').order('created_at', { ascending: false });
     if (error) return;
 
-    const headlinesContainer = document.getElementById('public-headlines');
-    const announcementsContainer = document.getElementById('public-announcements');
+    // Element references
+    const indexLoader = document.getElementById('index-news-loader');
+    const sliderContainer = document.getElementById('public-headlines-slider');
+    const sliderContent = document.getElementById('slider-content-injection');
+    const sliderDots = document.getElementById('slider-dots');
+    const indexAnnouncements = document.getElementById('public-announcements');
 
-    if(headlinesContainer) headlinesContainer.innerHTML = '';
-    if(announcementsContainer) announcementsContainer.innerHTML = '';
+    const mediaPageLoader = document.getElementById('media-page-loader');
+    const mediaPageContent = document.getElementById('media-content');
+    const fullGrid = document.getElementById('media-headlines-grid');
+    const fullList = document.getElementById('media-announcements-list');
 
-    if (!news || news.length === 0) {
-        if(headlinesContainer) headlinesContainer.innerHTML = '<p style="color: var(--text-muted);">No news available.</p>';
-        return;
+    const headlines = news.filter(n => n.category === 'Headline');
+    const announcements = news.filter(n => n.category === 'Announcement');
+
+    // 1. Logic for HOMEPAGE (index.html) Slider (Max 4)
+    if (sliderContainer && sliderContent) {
+        if(indexLoader) indexLoader.style.display = 'none';
+        sliderContainer.style.display = 'block';
+        sliderDots.style.display = 'block';
+
+        const top4 = headlines.slice(0, 4);
+        
+        if (top4.length === 0) {
+            sliderContent.innerHTML = '<p style="padding: 20px; text-align:center;">No headlines currently available.</p>';
+        } else {
+            let slidesHTML = "";
+            let dotsHTML = "";
+            
+            top4.forEach((item, index) => {
+                const timeAgo = window.timeSince(item.created_at);
+                const tagsArray = item.tags ? window.escapeHTML(item.tags).split(',') : [];
+                const tagsHtml = tagsArray.map(tag => `<span class="tag-red">${tag.trim()}</span>`).join('');
+                
+                slidesHTML += `
+                    <div class="mySlides fade-anim">
+                        <a href="headlines.html?id=${item.id}" class="slider-card-hero" style="background-image: url('${item.image_url || 'https://via.placeholder.com/800x450?text=News'}');">
+                            <div class="news-content">
+                                <div class="news-tags">${tagsHtml}</div>
+                                <h3 class="news-title" style="font-size:2rem;">${window.escapeHTML(item.title)}</h3>
+                                <div class="news-meta">
+                                    <strong>${window.escapeHTML(item.author)}</strong>
+                                    <span>${timeAgo}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                `;
+                dotsHTML += `<span class="slider-dot" onclick="currentSlide(${index})"></span>`;
+            });
+            
+            sliderContent.innerHTML = slidesHTML;
+            sliderDots.innerHTML = dotsHTML;
+            window.initSlider();
+        }
+
+        // Show top 5 announcements on homepage
+        if(indexAnnouncements) {
+            const top5Ann = announcements.slice(0, 5);
+            indexAnnouncements.innerHTML = top5Ann.map(item => `
+                <a href="headlines.html?id=${item.id}" class="news-list-item">
+                    <div class="news-list-tags">${item.tags ? window.escapeHTML(item.tags) : 'Announcement'}</div>
+                    <h3 class="news-list-title">${window.escapeHTML(item.title)}</h3>
+                </a>
+            `).join('');
+        }
     }
 
-    news.forEach(item => {
-        const timeAgo = window.timeSince(item.created_at);
-        const tagsArray = item.tags ? window.escapeHTML(item.tags).split(',') : [];
-        const tagsHtml = tagsArray.map(tag => `<span class="tag-red">${tag.trim()}</span>`).join('');
-        const listTagsHtml = tagsArray.map(tag => tag.trim()).join(' · ');
-        const safeTitle = window.escapeHTML(item.title);
-        const safeAuthor = window.escapeHTML(item.author);
+    // 2. Logic for NEWS & MEDIA PAGE (news&media.html) Full Grids
+    if (mediaPageContent && fullGrid && fullList) {
+        if(mediaPageLoader) mediaPageLoader.style.display = 'none';
+        mediaPageContent.style.display = 'block';
 
-        if (item.category === 'Headline') {
-            const html = `
+        fullGrid.innerHTML = headlines.map(item => {
+            const tagsArray = item.tags ? window.escapeHTML(item.tags).split(',') : [];
+            const tagsHtml = tagsArray.map(tag => `<span class="tag-red">${tag.trim()}</span>`).join('');
+            return `
                 <a href="headlines.html?id=${item.id}" class="news-card-hero" style="background-image: url('${item.image_url || 'https://via.placeholder.com/600x400?text=No+Image'}');">
                     <div class="news-content">
                         <div class="news-tags">${tagsHtml}</div>
-                        <h3 class="news-title">${safeTitle}</h3>
+                        <h3 class="news-title">${window.escapeHTML(item.title)}</h3>
                         <div class="news-meta">
-                            <strong>${safeAuthor}</strong>
-                            <span>${timeAgo}</span>
+                            <strong>${window.escapeHTML(item.author)}</strong>
+                            <span>${window.timeSince(item.created_at)}</span>
                         </div>
                     </div>
                 </a>
             `;
-            if(headlinesContainer) headlinesContainer.insertAdjacentHTML('beforeend', html);
-        } else {
-            const html = `
-                <a href="announcements.html?id=${item.id}" class="news-list-item">
-                    <div class="news-list-tags">${listTagsHtml}</div>
-                    <h3 class="news-list-title">${safeTitle}</h3>
-                </a>
-            `;
-            if(announcementsContainer) announcementsContainer.insertAdjacentHTML('beforeend', html);
-        }
-    });
+        }).join('') || '<p style="grid-column: 1/-1; text-align:center;">No headlines found.</p>';
+
+        fullList.innerHTML = announcements.map(item => `
+            <a href="headlines.html?id=${item.id}" class="news-list-item">
+                <div class="news-list-tags">${item.tags ? window.escapeHTML(item.tags) : 'Announcement'}</div>
+                <h3 class="news-list-title">${window.escapeHTML(item.title)}</h3>
+            </a>
+        `).join('') || '<p style="text-align:center; padding: 2rem;">No announcements found.</p>';
+    }
 }
 
 window.fetchAdminNews = async function() {
@@ -638,5 +733,7 @@ window.toggleAdmin = async function(id, currentStatus) {
 document.addEventListener('DOMContentLoaded', () => {
     updateNavbar();
     if (document.getElementById('public-tbody')) window.fetchPlayers('public-tbody', false);
-    if (document.getElementById('public-headlines')) window.fetchPublicNews();
+    if (document.getElementById('public-headlines-slider') || document.getElementById('media-content')) {
+        window.fetchPublicNews();
+    }
 });
