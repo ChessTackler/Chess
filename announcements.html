@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Article - CDCA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+    <title>CDCA Media</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="news-detail.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -12,36 +12,30 @@
 </head>
 <body>
 
-    <header class="chess-graphic-nav">
+    <header class="editorial-header">
         <a href="index.html" class="logo-wrapper">
-            <span class="logo-text">CDCA Media</span>
+            <span class="logo-text">guardian<span style="color:#c50000;">.cdca</span></span>
         </a>
     </header>
 
     <main class="article-container" id="article-wrapper">
         <div class="loader-container" id="loading-state">
             <div class="loader"></div>
-            <p>Loading article...</p>
+            <p>Fetching article...</p>
         </div>
         
         <div id="article-content" style="display: none;">
-            <a href="index.html" class="back-link">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                Back to Portal
-            </a>
-
+            
             <div class="article-header">
+                <a href="index.html" class="back-link">« Back to News</a>
+                
                 <div class="tags-container" id="detail-tags"></div>
                 <h1 class="article-title" id="detail-title"></h1>
                 
                 <div class="article-meta-box">
-                    <div class="author-avatar">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                    </div>
-                    <div class="meta-details">
-                        <span class="meta-author" id="detail-author"></span>
-                        <span class="meta-date" id="detail-date"></span>
-                    </div>
+                    <span class="meta-author">By <strong id="detail-author"></strong></span>
+                    <span class="meta-divider">|</span>
+                    <span class="meta-date" id="detail-date"></span>
                 </div>
             </div>
 
@@ -61,7 +55,7 @@
             const articleId = urlParams.get('id');
 
             if (!articleId || !window.supabaseClient) {
-                document.getElementById('loading-state').innerHTML = "<h3>Article not found or system offline.</h3>";
+                document.getElementById('loading-state').innerHTML = "<h3>Article not found.</h3>";
                 return;
             }
 
@@ -76,45 +70,60 @@
                 return;
             }
 
-            // Populate UI
             document.getElementById('loading-state').style.display = 'none';
             document.getElementById('article-content').style.display = 'block';
 
-            document.title = `${article.title} - CDCA`;
+            document.title = `${article.title} - CDCA News`;
             document.getElementById('detail-title').innerText = article.title;
             document.getElementById('detail-author').innerText = article.author || 'CDCA Admin';
             
             const dateObj = new Date(article.created_at);
-            document.getElementById('detail-date').innerText = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('detail-date').innerText = dateObj.toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-            // Render Tags Beautifully
+            // Tags
             if (article.tags) {
-                const tagsHtml = article.tags.split(',').map(tag => `<span class="premium-badge">${tag.trim()}</span>`).join('');
+                const tagsHtml = article.tags.split(',').map(tag => `<span class="category-tag">${tag.trim()}</span>`).join('');
                 document.getElementById('detail-tags').innerHTML = tagsHtml;
             }
 
-            // Main Cover Image
+            // Image
             if (article.image_url) {
                 const heroWrapper = document.getElementById('detail-hero-wrapper');
                 heroWrapper.style.display = 'block';
                 document.getElementById('detail-hero-img').src = article.image_url;
             }
 
-            // PROPER PARAGRAPH PARSING (Fixes the ugly text in the screenshot)
-            // This splits by double line breaks to create real <p> tags, and single line breaks into <br>
+            // --- TEXT FORMATTING ENGINE (MARKDOWN) ---
             if (article.content) {
-                const paragraphs = article.content.split(/\n\s*\n/);
-                const formattedHTML = paragraphs.map(p => {
-                    const cleanP = window.escapeHTML(p.trim()).replace(/\n/g, '<br>');
+                let rawText = window.escapeHTML(article.content);
+                
+                // 1. Process Bold & Italics
+                rawText = rawText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                rawText = rawText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                
+                // 2. Process Subheadings
+                rawText = rawText.replace(/^### (.*$)/gim, '<h3 class="article-subhead">$1</h3>');
+                rawText = rawText.replace(/^## (.*$)/gim, '<h2 class="article-subhead">$1</h2>');
+
+                // 3. Process Paragraphs
+                const paragraphs = rawText.split(/\n\s*\n/);
+                const formattedHTML = paragraphs.map((p, index) => {
+                    let cleanP = p.replace(/\n/g, '<br>');
+                    // Give the very first paragraph a special "standfirst" class to make it bold and larger
+                    if (index === 0 && !cleanP.startsWith('<h')) {
+                        return `<p class="standfirst">${cleanP}</p>`;
+                    }
+                    if (cleanP.startsWith('<h')) return cleanP;
                     return `<p>${cleanP}</p>`;
                 }).join('');
+                
                 document.getElementById('detail-body').innerHTML = formattedHTML;
             }
 
-            // Render Additional Gallery
+            // Gallery
             if (article.additional_images && Array.isArray(article.additional_images) && article.additional_images.length > 0) {
                 const galleryContainer = document.getElementById('additional-gallery');
-                galleryContainer.innerHTML = '<h3 class="gallery-title">Attached Media</h3>';
+                galleryContainer.innerHTML = '<h3 class="gallery-title">In Pictures</h3>';
                 article.additional_images.forEach(imgUrl => {
                     const imgEl = document.createElement('img');
                     imgEl.src = imgUrl;
