@@ -1,109 +1,190 @@
+/* =========================================
+   ARTICLE DETAIL PAGE STYLES
+========================================= */
+
 body {
     background-color: #f8fafc;
-    color: #334155;
-    padding-top: 80px;
+    color: #1e293b;
+    padding-top: 80px; /* Offset for fixed nav */
 }
 
+/* Header */
 .chess-graphic-nav { 
-    display: flex; justify-content: center; padding: 1.2rem; background: rgba(255,255,255,0.95); 
-    backdrop-filter: blur(10px); position: fixed; width: 100%; top: 0; z-index: 1000; 
-    border-bottom: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    display: flex; justify-content: center; align-items: center; padding: 1rem; 
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); 
+    position: fixed; width: 100%; top: 0; z-index: 1000; 
+    border-bottom: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
 }
 
 .logo-wrapper { text-decoration: none; }
-.logo-text { font-family: 'Playfair Display', serif; font-weight: 700; color: #0f172a; font-size: 1.5rem; }
+.logo-text { font-family: 'Playfair Display', serif; font-weight: 800; color: #0f172a; font-size: 1.5rem; letter-spacing: 0.5px;}
 
+/* Container */
 .article-container {
-    max-width: 800px;
-    margin: 3rem auto 5rem auto;
+    max-width: 760px;
+    margin: 2rem auto 5rem auto;
     padding: 0 20px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    border: 1px solid #f1f5f9;
+    padding-bottom: 3rem;
 }
 
-.loader-container {
-    text-align: center;
-    padding: 5rem 0;
+/* Back Link */
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     color: #64748b;
+    text-decoration: none;
     font-weight: 600;
+    font-size: 0.9rem;
+    margin: 2rem 0 1.5rem 0;
+    transition: color 0.2s;
 }
+.back-link:hover { color: #2563EB; }
+
+/* Loader */
+.loader-container { text-align: center; padding: 5rem 0; color: #64748b; font-weight: 600; }
 .loader { margin: 0 auto 1rem auto; width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: #2563EB; border-radius: 50%; animation: spin 1s linear infinite; }
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
-.article-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
+/* Header & Typography */
+.article-header { margin-bottom: 2rem; }
 
 .tags-container {
     display: flex;
-    justify-content: center;
     gap: 8px;
     margin-bottom: 1rem;
     flex-wrap: wrap;
 }
 
-.badge {
-    padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+.premium-badge {
+    background: #e0f2fe; 
+    color: #0369a1; 
+    padding: 4px 12px; 
+    border-radius: 6px; 
+    font-size: 0.75rem; 
+    font-weight: 800; 
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid #bae6fd;
 }
-.badge-im { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
 
 .article-title {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-size: clamp(1.8rem, 5vw, 3rem); /* Scales beautifully on mobile */
     color: #0f172a;
-    line-height: 1.2;
-    margin-bottom: 1rem;
+    line-height: 1.25;
+    margin-bottom: 1.5rem;
+    font-weight: 800;
 }
 
-.article-meta {
-    font-size: 0.95rem;
-    color: #64748b;
+/* Meta Data Box (Author & Date) */
+.article-meta-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
 }
-.meta-dot { margin: 0 8px; color: #cbd5e1; }
 
+.author-avatar {
+    width: 42px;
+    height: 42px;
+    background: #f1f5f9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    border: 1px solid #e2e8f0;
+}
+
+.meta-details { display: flex; flex-direction: column; }
+.meta-author { font-weight: 700; color: #1e293b; font-size: 0.95rem; }
+.meta-date { font-size: 0.85rem; color: #64748b; font-weight: 500;}
+
+/* Main Hero Image */
 .article-hero-image {
     width: 100%;
-    border-radius: 16px;
-    overflow: hidden;
     margin-bottom: 2.5rem;
-    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 15px 30px -10px rgba(0,0,0,0.15); /* Soft premium shadow */
+    border: 1px solid #e2e8f0;
 }
 
 .article-hero-image img {
     width: 100%;
-    max-height: 500px;
-    object-fit: cover;
+    max-height: 450px;
+    object-fit: cover; /* Prevents stretching */
     display: block;
 }
 
+/* Article Body Content */
 .article-body {
-    font-size: 1.15rem;
-    line-height: 1.8;
-    color: #1e293b;
-    margin-bottom: 3rem;
+    font-size: 1.1rem;
+    line-height: 1.8; /* High readability line-height */
+    color: #334155;
 }
 
 .article-body p {
     margin-bottom: 1.5rem;
 }
 
+.article-body strong, .article-body b {
+    color: #0f172a;
+    font-weight: 700;
+}
+
+/* Dynamic Gallery */
+.gallery-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: #0f172a;
+    margin-bottom: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+    grid-column: 1 / -1; /* Spans full width of grid */
+}
+
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 15px;
-    margin-top: 3rem;
-    border-top: 1px solid #e2e8f0;
-    padding-top: 2rem;
+    margin-top: 1rem;
 }
 
 .gallery-img {
     width: 100%;
-    height: 200px;
+    height: 220px;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 10px;
     border: 1px solid #e2e8f0;
-    transition: transform 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .gallery-img:hover {
-    transform: scale(1.02);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+    .article-container {
+        margin-top: 1rem;
+        padding: 0 15px 2rem 15px;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+    }
+    .article-title {
+        font-size: 2rem;
+    }
+    .article-hero-image img {
+        max-height: 300px; /* Shorter on mobile so text is visible sooner */
+    }
 }
