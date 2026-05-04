@@ -48,7 +48,7 @@
     </div>
 
     <main id="admin-content" style="display: none;" class="workspace">
-        
+
         <div id="tab-news" class="tab-content active">
             <div class="header-flex"><h2>Publishing Desk</h2></div>
             <div class="split-layout">
@@ -59,8 +59,24 @@
                         <div class="textInputWrapper"><input type="text" id="news_title" required class="textInput"></div>
 
                         <div class="grid-2">
-                            <div><label>Category</label><div class="textInputWrapper"><select id="news_category" class="textInput" style="padding: 11px;"><option value="Announcement">Announcement</option><option value="Headline">Headline</option></select></div></div>
-                            <div><label>Tags</label><div class="textInputWrapper"><input type="text" id="news_tags" placeholder="e.g. U-14, State" class="textInput"></div></div>
+                            <div>
+                                <label>Category</label>
+                                <div class="textInputWrapper">
+                                    <select id="news_category" class="textInput" style="padding: 11px;">
+                                        <option value="Headline">Headline</option>
+                                        <option value="Announcement">Announcement</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label>Tags</label>
+                                <div class="textInputWrapper"><input type="text" id="news_tags" placeholder="e.g. U-14, State" class="textInput"></div>
+                            </div>
+                        </div>
+
+                        <label>Article Content</label>
+                        <div class="textInputWrapper" style="margin-top: 10px;">
+                            <textarea id="news_content" required class="textInput" rows="6" placeholder="Write the full details here..." style="resize: vertical; font-family: inherit;"></textarea>
                         </div>
 
                         <div class="grid-2">
@@ -68,10 +84,16 @@
                             <div><label>Time</label><div class="textInputWrapper"><input type="time" id="news_time" class="textInput"></div></div>
                         </div>
 
-                        <label>Image URL</label>
+                        <label>Cover Image URL (Required for Headlines)</label>
                         <div class="textInputWrapper"><input type="url" id="news_image" placeholder="https://..." class="textInput"></div>
 
-                        <button type="submit" class="button" style="width: 100%; margin-top: 15px;"><div class="text">PUBLISH</div></button>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 15px;">
+                            <label>Additional Gallery Images</label>
+                            <button type="button" onclick="window.addAdditionalImageField('add-images-container')" style="background: var(--bg-dark); color: var(--gold); border: none; padding: 4px 10px; border-radius: 4px; font-weight: 700; cursor: pointer; font-size: 0.8rem;">+ ADD IMAGE</button>
+                        </div>
+                        <div id="add-images-container" style="display:flex; flex-direction:column; gap:8px; margin-top:8px;"></div>
+
+                        <button type="submit" class="button" style="width: 100%; margin-top: 20px;"><div class="text">PUBLISH ARTICLE</div></button>
                     </form>
                 </div>
                 <div class="data-card">
