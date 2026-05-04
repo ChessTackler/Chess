@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>State Rankings - Bihar CDCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* =========================================
+           CLEAN, PROFESSIONAL THEME
+        ========================================= */
+        body {
+            background-color: #f4f7f6; /* Clean light gray */
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            padding-top: 70px; /* Space for fixed header */
+        }
+
+        /* --- Sleek Chess Pattern Header --- */
+        .chess-header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            height: 70px;
+            background-color: #0f172a; /* Deep Slate */
+            /* Subtle Checkered Pattern */
+            background-image: 
+              linear-gradient(45deg, #1e293b 25%, transparent 25%, transparent 75%, #1e293b 75%, #1e293b),
+              linear-gradient(45deg, #1e293b 25%, transparent 25%, transparent 75%, #1e293b 75%, #1e293b);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .header-back {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+            width: 80px; 
+        }
+        .header-back:hover { color: #ffffff; }
+
+        .header-title {
+            color: #ffffff;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin: 0;
+            text-align: center;
+            flex: 1;
+        }
+
+        /* --- Main Layout --- */
+        .ranking-container {
+            max-width: 1100px; /* Made slightly wider to fit District column */
+            margin: 2rem auto 5rem auto;
+            padding: 0 15px;
+        }
+
+        .ranking-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .ranking-info h2 {
+            margin: 0 0 5px 0;
+            color: #0f172a;
+            font-size: 1.5rem;
+        }
+        .ranking-info p {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* --- Sleek Search Input --- */
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 10px 15px 10px 35px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #ffffff;
+        }
+        .search-input:focus {
+            border-color: #2563EB;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        /* --- Professional Data Table --- */
+        .table-card {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            overflow: hidden;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+            text-align: left;
+        }
+
+        .ranking-table th {
+            background: #f8fafc;
+            padding: 1rem 1.5rem;
+            font-size: 0.8rem;
+            color: #475569;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .ranking-table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+            color: #1e293b;
+            font-weight: 500;
+            vertical-align: middle;
+        }
+
+        .ranking-table tr:last-child td { border-bottom: none; }
+        .ranking-table tr:hover { background-color: #fcfcfc; }
+
+        /* --- Clean Podium Row Highlighting --- */
+        .ranking-table tr.top-1 td { background-color: rgba(253, 230, 138, 0.2); }
+        .ranking-table tr.top-2 td { background-color: rgba(226, 232, 240, 0.3); }
+        .ranking-table tr.top-3 td { background-color: rgba(254, 215, 170, 0.2); }
+
+        .rank-number {
+            font-weight: 700;
+            color: #64748b;
+        }
+        .top-1 .rank-number { color: #d97706; } 
+        .top-2 .rank-number { color: #64748b; } 
+        .top-3 .rank-number { color: #b45309; } 
+
+        .rating-text {
+            font-family: monospace;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #2563EB;
+        }
+        
+        .unrated-text {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .district-text {
+            color: #475569;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* --- FIDE Badges (Solid, Flat Colors) --- */
+        .title-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-align: center;
+            min-width: 40px;
+        }
+        .bg-gm { background: #f59e0b; color: #fff; }
+        .bg-im { background: #64748b; color: #fff; }
+        .bg-fm { background: #ef4444; color: #fff; }
+        .bg-cm { background: #e2e8f0; color: #475569; }
+        .bg-none { color: #94a3b8; }
+
+        @media (max-width: 600px) {
+            .ranking-top-bar { flex-direction: column; align-items: flex-start; }
+            .search-container { max-width: 100%; }
+            .header-title { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="chess-header">
+        <a href="index.html" class="header-back">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            Back
+        </a>
+        <h1 class="header-title">State Rankings</h1>
+        <div style="width: 80px;"></div>
+    </header>
+
+    <div class="ranking-container">
+        
+        <div class="ranking-top-bar">
+            <div class="ranking-info">
+                <h2>Bihar State Rankings</h2>
+                <p>2025-26 Season • Active Federation Players</p>
+            </div>
+
+            <div class="search-container">
+                <svg class="search-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35"></path></svg>
+                <input type="text" id="rankingSearch" class="search-input" placeholder="Search player name..." onkeyup="filterRankings()">
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div class="table-wrapper">
+                <table class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px; text-align: center;">Rank</th>
+                            <th style="width: 80px;">Title</th>
+                            <th>Player Name</th>
+                            <th>District / City</th>
+                            <th style="text-align: right;">Std. Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ranking-tbody">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Transcribed Dataset (Ranks 1 to 94 exactly from the provided image)
+        const rankingData = [
+            { rank: 1, title: "AIM", name: "Vijay, Kumar", district: "Patna", rating: 1935 },
+            { rank: 2, title: "", name: "Ashutosh, Kumar", district: "Patna", rating: 1911 },
+            { rank: 3, title: "", name: "Vipul, Subhashi", district: "Patna", rating: 1976 },
+            { rank: 4, title: "", name: "Marium, Fatima", district: "Muzaffarpur", rating: 1921 },
+            { rank: 5, title: "", name: "Rupesh, B Ramchandra", district: "Patna", rating: 1856 },
+            { rank: 6, title: "", name: "Piyush, Kumar", district: "Patna", rating: 1887 },
+            { rank: 7, title: "", name: "Prem, Kumar", district: "Chapra", rating: 1736 },
+            { rank: 8, title: "", name: "Divyanshu, Kumar Singh", district: "Kishanganj", rating: 1770 },
+            { rank: 9, title: "", name: "Shiv, Priya Bhardwaj", district: "Lakhisarai", rating: 1709 },
+            { rank: 10, title: "AIM", name: "Jayesh, Mishra", district: "Darbhanga", rating: 1701 },
+            { rank: 11, title: "", name: "Rahul, Kumar", district: "Patna", rating: 1851 },
+            { rank: 12, title: "", name: "Deobrat, Singh", district: "Munger", rating: 1936 },
+            { rank: 13, title: "", name: "Piyush, Kumar Mishra", district: "Patna", rating: 1623 },
+            { rank: 14, title: "AGM", name: "Harsh, Himanshu", district: "Patna", rating: 1799 },
+            { rank: 15, title: "", name: "Kartikeya, Nandan", district: "Patna", rating: 1560 },
+            { rank: 16, title: "AIM", name: "Shashi, Nand Kumar", district: "Patna", rating: 1713 },
+            { rank: 17, title: "", name: "Md, Tabsheer Alam", district: "Patna", rating: 1795 },
+            { rank: 18, title: "", name: "Sinha, Sushil Kumar", district: "Patna", rating: 1825 },
+            { rank: 19, title: "", name: "Shubham, Kumar", district: "Khagaria", rating: 1877 },
+            { rank: 20, title: "AFM", name: "Arth, Bhardwaj", district: "Begusarai", rating: 1621 },
+            { rank: 21, title: "", name: "Devansh, Keshri", district: "Patna", rating: 1677 },
+            { rank: 22, title: "ACM", name: "Arpita, Singh", district: "Bhojpur", rating: 1598 },
+            { rank: 23, title: "", name: "Sanjeev, Kumar Jha", district: "Samastipur", rating: 1472 },
+            { rank: 24, title: "", name: "Bhardwaj, Anurag", district: "Lakhisarai", rating: 1427 },
+            { rank: 25, title: "", name: "Aekansh, Kumar Bhardwaj", district: "Patna", rating: 1504 },
+            { rank: 26, title: "", name: "Ashish, Maurya", district: "Bhagalpur", rating: 1507 },
+            { rank: 27, title: "", name: "Manoj, Choudhary", district: "Banka", rating: 1576 },
+            { rank: 28, title: "", name: "Kishan, Kumar", district: "Begusarai", rating: 2002 },
+            { rank: 29, title: "AGM", name: "Avyay, Sharma", district: "Patna", rating: 1623 },
+            { rank: 30, title: "", name: "Prakash, Bhardwaj", district: "Gaya", rating: 1552 },
+            { rank: 31, title: "AFM", name: "Avinash, Kumar", district: "Patna", rating: 1517 },
+            { rank: 32, title: "", name: "Shahid, Husain", district: "W.Champaran", rating: 1474 },
+            { rank: 33, title: "", name: "Shivansh, Baranwal", district: "W.Champaran", rating: 0 },
+            { rank: 34, title: "", name: "Aayush Vaibhav.", district: "Nawada", rating: 0 },
+            { rank: 35, title: "", name: "Vishnudev.", district: "Nalanda", rating: 1526 },
+            { rank: 36, title: "", name: "Uday, Shankar Singh", district: "Patna", rating: 0 },
+            { rank: 37, title: "", name: "Srivastava, Y.P.", district: "Chapra", rating: 1871 },
+            { rank: 38, title: "", name: "Yashu, Yashasvee", district: "Nalanda", rating: 1430 },
+            { rank: 39, title: "", name: "Shalini, Srivastava", district: "Patna", rating: 1664 },
+            { rank: 40, title: "", name: "Manas.", district: "Patna", rating: 1435 },
+            { rank: 41, title: "", name: "Jaif, Hussain", district: "Chapra", rating: 1601 },
+            { rank: 42, title: "", name: "Ajay Kumar.", district: "Nalanda", rating: 0 },
+            { rank: 43, title: "AFM", name: "Raj, Aryan", district: "Muzaffarpur", rating: 1662 },
+            { rank: 44, title: "", name: "Abhimanyu, Kumar", district: "Patna", rating: 0 },
+            { rank: 45, title: "", name: "Apoorav, Singh", district: "Patna", rating: 0 },
+            { rank: 46, title: "", name: "Sunil, Kumar Sinha", district: "Patna", rating: 2139 },
+            { rank: 47, title: "", name: "Divyansh Kumar.", district: "Patna", rating: 0 },
+            { rank: 48, title: "", name: "Shashi, Prakash", district: "E.Champaran", rating: 1410 },
+            { rank: 49, title: "", name: "Aarush, Kumar", district: "Patna", rating: 0 },
+            { rank: 50, title: "", name: "Akarsh, Anand", district: "Patna", rating: 1411 },
+            { rank: 51, title: "", name: "Abhishek Nand Bharti.", district: "Vaishali", rating: 0 },
+            { rank: 52, title: "", name: "Arnam, Modi", district: "Patna", rating: 0 },
+            { rank: 53, title: "", name: "Amber Srivastava.", district: "Chapra", rating: 0 },
+            { rank: 54, title: "", name: "Sanjeet, Kumar Saurav", district: "Patna", rating: 1412 },
+            { rank: 55, title: "", name: "Simanth, Abhishek", district: "Banka", rating: 0 },
+            { rank: 56, title: "", name: "Abhijeet Bharti.", district: "Sheikhpura", rating: 0 },
+            { rank: 57, title: "", name: "Parthavah.", district: "Patna", rating: 1428 },
+            { rank: 58, title: "", name: "Aradhya.", district: "Nalanda", rating: 0 },
+            { rank: 59, title: "", name: "Abhishek, Kumar", district: "Sheikhpura", rating: 0 },
+            { rank: 60, title: "", name: "Abhay, Kumar Rajak", district: "Muzaffarpur", rating: 0 },
+            { rank: 61, title: "", name: "Siddharth, Shandilya", district: "Muzaffarpur", rating: 1486 },
+            { rank: 62, title: "", name: "Amrit Raj Patel.", district: "Jehanabad", rating: 0 },
+            { rank: 63, title: "", name: "Paswan, Ramesh", district: "W.Champaran", rating: 1439 },
+            { rank: 64, title: "", name: "Naitik, Mishra", district: "Muzaffarpur", rating: 1522 },
+            { rank: 65, title: "", name: "Prabal, Singh", district: "W.Champaran", rating: 0 },
+            { rank: 66, title: "", name: "Priyadarshi, Alok", district: "Patna", rating: 1636 },
+            { rank: 67, title: "", name: "Satyam Kumar.", district: "Nalanda", rating: 0 },
+            { rank: 68, title: "", name: "Yuvraj Adyan.", district: "Patna", rating: 0 },
+            { rank: 69, title: "", name: "Devisha, Anand", district: "Patna", rating: 0 },
+            { rank: 70, title: "", name: "Sanskar, Bhai", district: "Patna", rating: 0 },
+            { rank: 71, title: "", name: "Sahir, Sinha", district: "Patna", rating: 0 },
+            { rank: 72, title: "", name: "Rishika Sinha.", district: "Patna", rating: 0 },
+            { rank: 73, title: "", name: "Mihir, Ketuman", district: "Khagaria", rating: 0 },
+            { rank: 74, title: "", name: "Parth, Patel", district: "Patna", rating: 0 },
+            { rank: 75, title: "", name: "Rishit Sinha.", district: "Patna", rating: 0 },
+            { rank: 76, title: "", name: "Adarsh Kumar.", district: "Saharsha", rating: 0 },
+            { rank: 77, title: "", name: "Shailendra, Kumar", district: "Aurangabad", rating: 0 },
+            { rank: 78, title: "", name: "Ani, Parmar", district: "Khagaria", rating: 0 },
+            { rank: 79, title: "", name: "Phulchand Kumar.", district: "Nalanda", rating: 0 },
+            { rank: 80, title: "", name: "Arfeen Ul Haque.", district: "Patna", rating: 0 },
+            { rank: 81, title: "", name: "Priyansh Sinha.", district: "Patna", rating: 0 },
+            { rank: 82, title: "", name: "Krishna K.", district: "Lakhisarai", rating: 0 },
+            { rank: 83, title: "AGM", name: "Vijay, Kumar", district: "Muzaffarpur", rating: 1956 },
+            { rank: 84, title: "", name: "Ravi, Kumar", district: "Saran", rating: 1549 },
+            { rank: 85, title: "", name: "Harsh Ranjan.", district: "Muzaffarpur", rating: 0 },
+            { rank: 86, title: "", name: "Pragati, Rukhayar", district: "Patna", rating: 0 },
+            { rank: 87, title: "", name: "Siddharth Shresth.", district: "Muzaffarpur", rating: 0 },
+            { rank: 88, title: "", name: "Tejas Raj Modi.", district: "Jamui", rating: 0 },
+            { rank: 89, title: "", name: "Anil Kumar Anal.", district: "Saharsha", rating: 0 },
+            { rank: 90, title: "", name: "Harshit, Raj", district: "Jamui", rating: 0 },
+            { rank: 91, title: "AIM", name: "Ankita, Raj", district: "Patna", rating: 0 },
+            { rank: 92, title: "", name: "Ayush, Raj", district: "Patna", rating: 1479 },
+            { rank: 93, title: "", name: "Prabhakar Kumar.", district: "Sheikhpura", rating: 0 },
+            { rank: 94, title: "", name: "Avinash, Kumar Yadav", district: "Patna", rating: 1535 }
+        ];
+
+        function getTitleBadge(title) {
+            if (!title) return `<span class="title-badge bg-none">-</span>`;
+            
+            const upperTitle = title.toUpperCase();
+            let badgeClass = 'bg-none';
+            
+            if (upperTitle === 'GM' || upperTitle === 'WGM') badgeClass = 'bg-gm';
+            else if (upperTitle === 'IM' || upperTitle === 'WIM') badgeClass = 'bg-im';
+            else if (upperTitle === 'FM' || upperTitle === 'WFM') badgeClass = 'bg-fm';
+            else if (upperTitle === 'CM' || upperTitle === 'WCM' || upperTitle === 'AIM' || upperTitle === 'AGM' || upperTitle === 'AFM' || upperTitle === 'ACM') badgeClass = 'bg-cm';
+            
+            return `<span class="title-badge ${badgeClass}">${upperTitle}</span>`;
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('ranking-tbody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem; color: #64748b;">No players found.</td></tr>`;
+                return;
+            }
+
+            data.forEach(player => {
+                let rowClass = "";
+                let rankDisplay = player.rank;
+
+                // Subtle Top 3 styling
+                if (player.rank === 1) { rowClass = "top-1"; rankDisplay = "🥇 1"; }
+                else if (player.rank === 2) { rowClass = "top-2"; rankDisplay = "🥈 2"; }
+                else if (player.rank === 3) { rowClass = "top-3"; rankDisplay = "🥉 3"; }
+
+                // Format Rating (0 becomes Unrated)
+                const ratingDisplay = player.rating === 0 
+                    ? `<span class="unrated-text">Unrated</span>` 
+                    : `<span class="rating-text">${player.rating}</span>`;
+
+                const tr = document.createElement('tr');
+                if (rowClass) tr.className = rowClass;
+
+                tr.innerHTML = `
+                    <td style="text-align: center;"><span class="rank-number">${rankDisplay}</span></td>
+                    <td>${getTitleBadge(player.title)}</td>
+                    <td>${player.name}</td>
+                    <td><span class="district-text">${player.district}</span></td>
+                    <td style="text-align: right;">${ratingDisplay}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterRankings() {
+            const query = document.getElementById('rankingSearch').value.toLowerCase();
+            const filtered = rankingData.filter(p => p.name.toLowerCase().includes(query) || p.district.toLowerCase().includes(query));
+            renderTable(filtered);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTable(rankingData);
+        });
+    </script>
+</body>
+</html>
