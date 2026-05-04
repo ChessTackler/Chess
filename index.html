@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CDCA - Official Webpage</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=6">
+    <link rel="stylesheet" href="styles.css?v=7">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -35,9 +35,18 @@
                     <details class="nav-details"><summary class="radio-label"><div class="radio-circle"></div><span class="radio-text">Information</span></summary>
                         <div class="sub-menu"><a href="officials.html" class="sub-link">Office Bearers</a><a href="Committees.html" class="sub-link">Committees</a><a href="contact.html" class="sub-link">Contact</a></div>
                     </details>
-                    <a href="#" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">Archive</span></a>
-                    <a href="#" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">Rankings</span></a>
-                    <a href="#" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">News & Media</span></a>
+                    
+                    <details class="nav-details"><summary class="radio-label"><div class="radio-circle"></div><span class="radio-text">Rankings</span></summary>
+                        <div class="sub-menu">
+                            <a href="nationalranking.html" class="sub-link">National Ranking</a>
+                            <a href="stateranking.html" class="sub-link">State Ranking</a>
+                            <a href="districtranking.html" class="sub-link">District Ranking</a>
+                            <a href="worldranking.html" class="sub-link">World Ranking</a>
+                        </div>
+                    </details>
+
+                    <a href="news&media.html" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">News & Media</span></a>
+                    <a href="archive.html" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">Archive</span></a>
                 </div>
                 <div id="sidebar-auth" class="sidebar-auth-section"></div>
             </nav>
@@ -73,15 +82,32 @@
     </section>
 
     <div class="container news-section">
-        <div class="news-header"><div class="header-line"></div><h2>Headlines</h2></div>
-        <div id="public-headlines" class="news-grid"><p style="color: var(--text-muted);">Loading headlines...</p></div>
+        <div class="news-header" style="justify-content: space-between;">
+            <div style="display:flex; align-items:center; gap:15px;">
+                <div class="header-line"></div><h2>Headlines</h2>
+            </div>
+            <a href="news&media.html" style="font-size:0.9rem; font-weight:700; color:var(--primary-blue); text-decoration:none;">View All →</a>
+        </div>
 
-        <div class="news-header" style="margin-top: 4rem;"><div class="header-line"></div><h2>Announcements</h2></div>
+        <div id="index-news-loader" class="loader-wrapper">
+            <div class="hourglass-loader"></div>
+            <div class="text-loader">loading...</div>
+        </div>
+
+        <div id="public-headlines-slider" class="slideshow-container" style="display:none;">
+            <a class="slider-prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="slider-next" onclick="plusSlides(1)">&#10095;</a>
+            <div id="slider-content-injection"></div>
+        </div>
+        <div id="slider-dots" class="slider-dots-wrapper" style="display:none;"></div>
+
+        <div class="news-header" style="margin-top: 4rem;">
+            <div class="header-line"></div><h2>Latest Announcements</h2>
+        </div>
         <div id="public-announcements" class="news-list"></div>
     </div>
 
     <div class="champions-bg-wrapper">
-        
         <svg class="bg-piece piece-left" viewBox="0 0 200 500" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <linearGradient id="king-base" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -188,7 +214,9 @@
                 </div>
             </div>
         </div>
-    </div> <footer class="site-footer">
+    </div> 
+    
+    <footer class="site-footer">
         <div class="footer-graphic">
             <img src="boardgraphic.png" alt="3D Chess Board" class="footer-board-img" onerror="this.style.display='none'">
         </div>
