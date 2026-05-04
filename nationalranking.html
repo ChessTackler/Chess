@@ -8,9 +8,6 @@
     <link rel="stylesheet" href="styles.css">
     
     <style>
-        /* =========================================
-           CLEAN, PROFESSIONAL THEME
-        ========================================= */
         body {
             background-color: #f4f7f6;
             font-family: 'Inter', sans-serif;
@@ -19,7 +16,6 @@
             padding-top: 70px;
         }
 
-        /* --- Sleek Chess Pattern Header --- */
         .chess-header {
             position: fixed;
             top: 0; left: 0; width: 100%;
@@ -61,11 +57,13 @@
             flex: 1;
         }
 
-        /* --- Main Layout --- */
+        /* --- Main Layout Fixed --- */
         .ranking-container {
+            width: 100%; /* Strictly lock width */
             max-width: 1000px;
             margin: 2rem auto 5rem auto;
             padding: 0 15px;
+            box-sizing: border-box;
         }
 
         .ranking-top-bar {
@@ -77,70 +75,41 @@
             gap: 15px;
         }
 
-        .ranking-info h2 {
-            margin: 0 0 5px 0;
-            color: #0f172a;
-            font-size: 1.5rem;
-        }
-        .ranking-info p {
-            margin: 0;
-            color: #64748b;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
+        .ranking-info h2 { margin: 0 0 5px 0; color: #0f172a; font-size: 1.5rem; }
+        .ranking-info p { margin: 0; color: #64748b; font-size: 0.9rem; font-weight: 500; }
 
-        /* --- Sleek Search Input --- */
-        .search-container {
-            position: relative;
-            width: 100%;
-            max-width: 300px;
-        }
+        .search-container { position: relative; width: 100%; max-width: 300px; }
         .search-input {
-            width: 100%;
-            padding: 10px 15px 10px 35px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-family: inherit;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            background: #ffffff;
+            width: 100%; padding: 10px 15px 10px 35px; border: 1px solid #cbd5e1;
+            border-radius: 8px; font-size: 0.95rem; font-family: inherit; outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s; background: #ffffff;
         }
-        .search-input:focus {
-            border-color: #2563EB;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-        .search-icon {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #94a3b8;
-        }
+        .search-input:focus { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
 
-        /* --- Professional Data Table (MOBILE SCROLL FIXED) --- */
+        /* --- Data Table CSS OVERHAUL FOR MOBILE SCROLL --- */
         .table-card {
             background: #ffffff;
             border-radius: 12px;
             border: 1px solid #e2e8f0;
             box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            /* Removed overflow:hidden to prevent scrolling conflicts */
+            width: 100%;
+            overflow: hidden; /* CRITICAL: Traps the table from expanding the page */
         }
 
         .table-wrapper {
-            display: block; /* CRITICAL FOR MOBILE SCROLL */
             width: 100%;
             max-height: 70vh;
-            overflow-x: auto;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch; /* Smooth iOS scrolling */
-            border-radius: 12px;
+            overflow-x: auto; /* CRITICAL: Enables horizontal scroll inside the card */
+            overflow-y: auto; /* Enables vertical scroll */
+            -webkit-overflow-scrolling: touch;
+            display: block;
         }
 
         .ranking-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 600px; /* Forces scroll on small devices */
+            min-width: 650px; /* CRITICAL: Forces table to be wide, creating the scroll */
             text-align: left;
         }
 
@@ -149,7 +118,6 @@
             top: 0;
             background: #f8fafc;
             padding: 1.2rem 1.5rem;
-            text-align: left;
             font-size: 0.85rem;
             color: #64748b;
             text-transform: uppercase;
@@ -157,8 +125,7 @@
             letter-spacing: 0.5px;
             border-bottom: 2px solid #e2e8f0;
             z-index: 10;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-            white-space: nowrap;
+            white-space: nowrap; /* Stops text wrapping */
         }
 
         .ranking-table td {
@@ -168,13 +135,12 @@
             color: #1e293b;
             font-weight: 600;
             vertical-align: middle;
-            white-space: nowrap; /* Prevents text from squishing */
+            white-space: nowrap; /* Stops text wrapping */
         }
 
         .ranking-table tr:last-child td { border-bottom: none; }
         .ranking-table tr:hover td { background: #fefce8; }
 
-        /* --- Top 3 Podium Colors --- */
         .ranking-table tr.rank-1 td { background: linear-gradient(90deg, rgba(253, 230, 138, 0.4) 0%, transparent 100%); }
         .ranking-table tr.rank-2 td { background: linear-gradient(90deg, rgba(226, 232, 240, 0.6) 0%, transparent 100%); }
         .ranking-table tr.rank-3 td { background: linear-gradient(90deg, rgba(254, 215, 170, 0.4) 0%, transparent 100%); }
@@ -196,13 +162,12 @@
             display: inline-block;
         }
 
-        /* --- FIDE Title Badges --- */
-        .fide-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: inline-block; min-width: 45px; text-align: center;}
+        .fide-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; min-width: 45px; text-align: center;}
         .badge-gm { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: white; border: 1px solid #b45309; }
         .badge-im { background: linear-gradient(135deg, #94a3b8 0%, #475569 100%); color: white; border: 1px solid #334155; }
         .badge-fm { background: linear-gradient(135deg, #fdba74 0%, #c2410c 100%); color: white; border: 1px solid #9a3412; }
         .badge-cm { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
-        .badge-none { background: transparent; color: #94a3b8; font-weight: 500; box-shadow: none; border: 1px dashed #cbd5e1;}
+        .badge-none { background: transparent; color: #94a3b8; font-weight: 500; border: 1px dashed #cbd5e1;}
 
         @media (max-width: 600px) {
             .ranking-top-bar { flex-direction: column; align-items: flex-start; }
@@ -428,7 +393,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderTable(rankingData);
         });
-
     </script>
 </body>
 </html>
