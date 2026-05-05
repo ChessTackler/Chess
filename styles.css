@@ -49,12 +49,18 @@ body::before {
 .brand-logo:hover { transform: scale(1.05); }
 .logo-divider { width: 2px; height: 30px; background-color: #E2E8F0; border-radius: 2px; }
 
+/* Desktop injected main-nav styles */
+.desktop-main-nav { display: flex; align-items: center; gap: 1.5rem; }
+.desktop-main-nav a { text-decoration: none; font-weight: 600; font-size: 0.95rem; color: var(--text-dark); transition: color 0.2s; }
+.desktop-main-nav a:hover { color: var(--primary-blue); }
+
 /* Mobile Header Clean Layout */
 @media (max-width: 768px) {
     .chess-graphic-nav { padding: 0.8rem 1.5rem; justify-content: flex-start; gap: 1rem; }
     .logo-wrapper { justify-content: flex-start; }
     .brand-logo { height: 28px; }
     .logo-divider { height: 20px; }
+    .desktop-main-nav { display: none !important; } /* Hide injected desktop nav on mobile */
 }
 
 /* Hamburger Menu Logic */
@@ -71,7 +77,6 @@ body::before {
 #nav-checkbox:checked + .nav-toggle #bar2 { transform: scaleX(0); }
 #nav-checkbox:checked + .nav-toggle #bar1 { width: 100%; transform: rotate(45deg); }
 #nav-checkbox:checked + .nav-toggle #bar3 { width: 100%; transform: rotate(-45deg); }
-
 
 /* Sidebar Layout */
 .sidebar-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); z-index: 998; opacity: 0; visibility: hidden; transition: 0.3s ease; }
@@ -92,6 +97,23 @@ body::before {
 .sub-link { text-decoration: none; color: #475569; font-size: 0.95rem; font-weight: 500; padding: 8px 12px; border-radius: 6px; }
 .sub-link:hover { color: var(--accent-orange); background: #fffbeb; }
 
+/* Fix for direct links being blue/underlined */
+.direct-link { text-decoration: none !important; color: inherit !important; }
+.direct-link .radio-text { color: var(--text-dark); }
+
+/* Restored Sidebar Auth Logic */
+.sidebar-auth-section { 
+    display: flex; flex-direction: column; gap: 10px; margin-top: 1.5rem; 
+    padding-top: 1.5rem; border-top: 1px solid var(--border-color); 
+}
+.sidebar-auth-section a { 
+    display: block; width: 100%; text-align: center; padding: 10px; 
+    border-radius: 8px; font-weight: 600; text-decoration: none; 
+    font-size: 0.95rem; transition: 0.2s;
+    background-color: #f8fafc; color: var(--primary-blue); border: 1px solid #e2e8f0;
+}
+.sidebar-auth-section a:hover { background-color: #e2e8f0; }
+
 /* =========================================
    NEW PREMIUM HERO SECTION
 ========================================= */
@@ -99,7 +121,7 @@ body::before {
     position: relative;
     background-color: #ffffff;
     width: 100%;
-    padding: 6rem 5% 12rem 5%; /* Generous bottom padding to clear stats and badges */
+    padding: 6rem 5% 12rem 5%; 
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -197,7 +219,7 @@ body::before {
 
 /* PERFECT MOBILE HERO LAYOUT OVERRIDES */
 @media (max-width: 992px) {
-    .premium-hero { padding: 3rem 5% 4rem 5%; }
+    .premium-hero { padding: 3rem 5% 2rem 5%; } /* Reduced bottom padding */
     .hero-main-container { flex-direction: column; text-align: center; gap: 2rem; }
     .hero-bg-watermark { left: 50%; top: 0; transform: translateX(-50%); }
     .hero-text-content { align-items: center; }
@@ -208,7 +230,7 @@ body::before {
     .hero-image-content { width: 100%; justify-content: center; margin-top: 1rem; }
     .hero-3d-image { max-width: 75%; }
     
-    .hero-stats-wrapper { position: relative; bottom: 0; transform: none; left: 0; margin-top: 3rem; padding: 0; }
+    .hero-stats-wrapper { position: relative; bottom: 0; transform: none; left: 0; margin-top: 2rem; padding: 0; }
     .hero-stats-card { flex-direction: column; padding: 2rem; gap: 2rem; }
     .premium-stat-box { flex-direction: column; gap: 0.8rem; text-align: center; }
     .p-stat-divider { width: 80%; height: 1px; margin: 0; }
@@ -220,6 +242,12 @@ body::before {
 ========================================= */
 .container { padding: 3rem 5%; max-width: 1200px; margin: 0 auto; width: 100%; flex: 1; box-sizing: border-box; }
 .news-section { margin-top: 5rem; margin-bottom: 4rem; position: relative; z-index: 5;} 
+
+/* Reduced margin strictly for mobile to pull the headline up closer to the badges */
+@media (max-width: 992px) {
+    .news-section { margin-top: 2rem; } 
+}
+
 .news-header { display: flex; align-items: center; gap: 15px; margin-bottom: 1.5rem; margin-top: 3rem; }
 .header-line { width: 35px; height: 4px; background-color: #dc2626; border-radius: 2px; }
 .news-header h2 { font-size: 1.8rem; color: #111827; font-weight: 800; letter-spacing: -0.02em; }
@@ -311,14 +339,11 @@ body::before {
 .rating-item-sm { display: flex; align-items: center; gap: 5px; color: #0f172a; font-weight: 700; font-size: 0.95rem; }
 .rating-item-sm svg { width: 18px; height: 18px; color: #475569; }
 
-
-/* PERFECT MOBILE CHAMPIONS LAYOUT OVERRIDES (Fixing Image 3) */
 @media (max-width: 1024px) { 
     .champions-master-container { flex-direction: column; gap: 3rem; } 
     .district-specific-header { font-size: 2rem; } 
 }
 @media (max-width: 768px) {
-    /* Mute Background pieces on mobile so they don't break layout */
     .piece-left { left: -15%; top: 2%; height: 40%; opacity: 0.15; }
     .piece-right { right: -15%; top: 40%; height: 40%; opacity: 0.15; }
 
@@ -331,7 +356,7 @@ body::before {
         flex-direction: column;
         align-items: center;
         text-align: center;
-        overflow: hidden; /* Prevent text spilling out */
+        overflow: hidden; 
     }
     
     .champ-info { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 1rem; }
@@ -340,14 +365,7 @@ body::before {
     .champ-title-text { margin-bottom: 1rem; }
     .champ-ratings { justify-content: center; width: 100%; }
     
-    /* Change image to sit inside the card without absolute overlap */
-    .champ-img-wrapper { 
-        position: relative; 
-        width: 100%; 
-        height: auto; 
-        max-width: 220px; 
-        margin-top: 1.5rem;
-    }
+    .champ-img-wrapper { position: relative; width: 100%; height: auto; max-width: 220px; margin-top: 1.5rem; }
     .champ-img-wrapper img { object-position: bottom center; filter: none; border-bottom-right-radius: 0; }
 
     .district-champ-card { flex-direction: column; text-align: center; gap: 1.5rem; padding: 2rem; }
