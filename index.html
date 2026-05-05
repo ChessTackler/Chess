@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CDCA - Official Webpage</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=8">
+    <link rel="stylesheet" href="styles.css?v=9">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -60,7 +60,7 @@
         <div id="main-nav"></div>
     </header>
 
-    <section class="modern-hero">
+    <section class="modern-hero" id="hero-section">
         <div class="hero-watermark">
             <img src="LogoCDCA.png" alt="Watermark" onerror="this.style.display='none'">
         </div>
@@ -297,6 +297,32 @@
                 });
             }
         } catch(e) { console.error("Could not fetch champions", e); }
+    });
+    </script>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const navToggle = document.querySelector('.nav-toggle');
+        const heroSection = document.getElementById('hero-section');
+        
+        function handleNavScroll() {
+            // Only apply behavior on screens larger than mobile breakpoints
+            if (window.innerWidth > 768) {
+                // If the user scrolls past the bottom of the hero section minus header buffer
+                if (window.scrollY > (heroSection.offsetHeight - 80)) {
+                    navToggle.classList.add('scrolled-active');
+                } else {
+                    navToggle.classList.remove('scrolled-active');
+                }
+            } else {
+                // Keep it active permanently on mobile
+                navToggle.classList.add('scrolled-active');
+            }
+        }
+
+        window.addEventListener('scroll', handleNavScroll);
+        window.addEventListener('resize', handleNavScroll);
+        handleNavScroll(); // Run once on load
     });
     </script>
 </body>
