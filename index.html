@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CDCA - Official Webpage</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=13">
+    <link rel="stylesheet" href="styles.css?v=14">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -19,7 +19,8 @@
                 <div class="bars" id="bar3"></div>
             </label>
 
-            <div class="sidebar-overlay" onclick="document.getElementById('nav-checkbox').checked = false;"></div>
+            <div class="sidebar-overlay" id="sidebar-overlay" onclick="document.getElementById('nav-checkbox').checked = false;"></div>
+            
             <nav class="sidebar-menu">
                 <div class="sidebar-header-flex">
                     <div class="menu-header">Menu</div>
@@ -44,9 +45,12 @@
                         </div>
                     </details>
                     <a href="news&media.html" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">News & Media</span></a>
+                    <a href="arbiters.html" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">Arbiters</span></a>
                     <a href="archive.html" class="radio-label direct-link"><div class="radio-circle"></div><span class="radio-text">Archive</span></a>
                 </div>
-                </nav>
+                
+                <div id="sidebar-auth" class="sidebar-auth-section"></div>
+            </nav>
         </div>
 
         <a href="index.html" class="logo-wrapper">
@@ -55,7 +59,8 @@
             <img src="LogoABCA.png" alt="ABCA Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x42?text=ABCA'">
         </a>
         
-        </header>
+        <div id="main-nav" class="desktop-main-nav"></div>
+    </header>
 
     <section class="premium-hero">
         <div class="hero-bg-watermark"></div>
@@ -264,6 +269,14 @@
 
     <script src="app.js"></script>
     <script>
+    // Smooth auto-close sidebar on scroll
+    window.addEventListener('scroll', () => {
+        const navCheckbox = document.getElementById('nav-checkbox');
+        if (navCheckbox && navCheckbox.checked) {
+            navCheckbox.checked = false;
+        }
+    }, { passive: true });
+
     document.addEventListener('DOMContentLoaded', async () => {
         if(!window.supabaseClient) return; 
         try {
